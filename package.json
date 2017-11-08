@@ -1,0 +1,26 @@
+{
+  "name": "feedbot-new",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "github:hydrabolt/discord.js",
+    "enmap": "^0.4.2",
+    "enmap-level": "^1.0.0",
+    "fs-nextra": "^0.3.2",
+    "klaw": "^2.1.0",
+    "path": "^0.12.7",
+    "promisify": "0.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  },
+  "description": ""
+}
