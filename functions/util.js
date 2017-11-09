@@ -9,11 +9,12 @@ module.exports = (client) => {
     text = text
       .replace(/`/g, '`' + String.fromCharCode(8203))
       .replace(/@/g, '@' + String.fromCharCode(8203))
-      .replace(client.token, 'token? lol');
+      .replace(client.config.token, 'token? lol');
 
     return text;
   };
 
+  // Console log mofified
   client.log = (type, msg, title) => {
     if (!title) title = 'Log';
     console.log(`[${type}] [${title}] ${msg}`);

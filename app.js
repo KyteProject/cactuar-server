@@ -27,6 +27,7 @@ require('./functions/util.js')(client);
 
 client.config = config;
 
+// commands TODO: command handler
 client.commands = new Discord.Collection();
 client.commands.set('eval', require('./commands/eval.js'));
 client.commands.set('botstat', require('./commands/botstat.js'));
