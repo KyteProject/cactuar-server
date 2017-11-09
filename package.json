@@ -14,6 +14,10 @@
     "enmap-level": "^1.0.0",
     "fs-nextra": "^0.3.2",
     "klaw": "^2.1.0",
+    "log-prefix": "0.0.0",
+    "log-timestamp": "https://github.com/KyteProject/node-log-timestamp/tarball/master",
+    "moment": "^2.19.1",
+    "moment-duration-format": "^1.3.0",
     "path": "^0.12.7",
     "promisify": "0.0.3"
   },
@@ -22,5 +26,14 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0"
   },
-  "description": ""
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/KyteProject/feedbot-new.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/KyteProject/feedbot-new/issues"
+  },
+  "homepage": "https://gitlab.com/KyteProject/feedbot-new#README",
+  "description": "",
+  "optionalDependencies": {}
 }
