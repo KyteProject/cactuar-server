@@ -11,32 +11,41 @@ TODO: feedback master role
 
 if (process.version.slice(1).split('.')[0] < 8) throw new Error('Node 8.0.0 or higher is required. Update Node on your system.');
 
+const { Client } = require('discord.js');
 const Discord = require('discord.js');
-const config = require('./config.js');
 const timestamp = require('log-timestamp');
 const {readdir} = require('fs-nextra');
 const klaw = require('klaw');
 const path = require('path');
+const sql = require('sqlite');
 
-const client = new Discord.Client({
+
+class FeedBot extends Client {
+  constructor(options) {
+    super(options);
+    this.config = require('./config.js');
+  }
+}
+
+const client = new FeedBot({
   fetchAllMembers: true,
   disabledEvents: ['TYPING_START'],
 });
 
+sql.open('./score.sqlite');
+
 require('./functions/util.js')(client);
 
-client.config = config;
-
-// commands TODO: command handler
-client.commands = new Discord.Collection();
-client.commands.set('eval', require('./commands/eval.js'));
-client.commands.set('botstat', require('./commands/botstat.js'));
-client.commands.set('ping', require('./commands/ping.js'));
-client.commands.set('rick', require('./commands/rick.js'));
-client.commands.set('say', require('./commands/rick.js'));
-client.commands.set('serverinfo', require('./commands/serverinfo.js'));
-
 const init = async () => {
+
+  // commands TODO: command handler
+  client.commands = new Discord.Collection();
+  client.commands.set('eval', require('./commands/eval.js'));
+  client.commands.set('botstat', require('./commands/botstat.js'));
+  client.commands.set('ping', require('./commands/ping.js'));
+  client.commands.set('rick', require('./commands/rick.js'));
+  client.commands.set('say', require('./commands/rick.js'));
+  client.commands.set('serverinfo', require('./commands/serverinfo.js'));
 
   const eventFiles = await readdir('./events/');
   eventFiles.forEach(file => {
