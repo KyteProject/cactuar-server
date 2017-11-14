@@ -12,7 +12,7 @@ TODO: feedback master role
 if (process.version.slice(1).split('.')[0] < 8) throw new Error('Node 8.0.0 or higher is required. Update Node on your system.');
 
 const { Client } = require('discord.js');
-const Discord = require('discord.js');
+const { Collection } = require('discord.js');
 const timestamp = require('log-timestamp');
 const {readdir} = require('fs-nextra');
 const klaw = require('klaw');
@@ -32,14 +32,14 @@ const client = new FeedBot({
   disabledEvents: ['TYPING_START'],
 });
 
-sql.open('./score.sqlite');
-
 require('./functions/util.js')(client);
+
+if (sql.open('./score.sqlite')) {client.log('Database', 'SQL DB loaded.');}
 
 const init = async () => {
 
   // commands TODO: command handler
-  client.commands = new Discord.Collection();
+  client.commands = new Collection();
   client.commands.set('eval', require('./commands/eval.js'));
   client.commands.set('botstat', require('./commands/botstat.js'));
   client.commands.set('ping', require('./commands/ping.js'));
