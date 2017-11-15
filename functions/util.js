@@ -14,12 +14,6 @@ module.exports = (client) => {
     return text;
   };
 
-  // Console log mofified
-  client.log = (type, msg, title) => {
-    if (!title) title = 'Log';
-    console.log(`[${type}] [${title}] ${msg}`);
-  };  
-
   // Pluralise string
   String.prototype.toPlural = function() {
     return this.replace(/((?:\D|^)1 .+?)s/g, '$1');

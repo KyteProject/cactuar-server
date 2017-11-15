@@ -24,8 +24,8 @@ exports.conf = {
 };
 
 exports.help = {
-  name: 'stats',
+  name: 'botstat',
   category: 'System',
   description: 'Provides statistics on the bot',
-  usage: 'stats'
+  usage: 'botstat'
 };
