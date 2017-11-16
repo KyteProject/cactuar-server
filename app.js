@@ -93,7 +93,7 @@ const client = new FeedBot({
 });
 
 require('./functions/util.js')(client);
-if (sql.open('./score.sqlite')) {client.log('Database', 'SQL DB loaded.');}
+if (sql.open('./database/feedbot.sqlite')) {client.log('Database', 'SQL DB loaded.');}
 
 const init = async () => {
 
