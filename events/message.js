@@ -31,7 +31,18 @@ module.exports = (client, message) => {
   while (args[0] && args[0][0] === '-') {
     message.flags.push(args.shift().slice(1));
   }
+
   // If the command exists, **AND** the user has permission, run it.
-  client.log('Command', `${client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) ran command ${cmd.help.name}`, 'CMD');
-  cmd.run(client, message, args, level);
+  client.log('log', `${client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) ran command ${cmd.help.name}`, 'CMD');
+
+  if (message.channel.type === 'text') {
+    const mPerms = client.permCheck(message, cmd.conf.botPerms);
+    if (mPerms.length) return message.channel.send(`The bot does not have the following permissions \`${mPerms.join(', ')}\``);
+  }
+  
+  cmd.run(client, message, args, level).catch(error => {
+    console.log(error);
+    message.channel.send(error);
+  });
+
 };

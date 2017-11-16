@@ -12,7 +12,8 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: 'Moderator'
+  permLevel: 'Moderator',
+  botPerms: ['MANAGE_MESSAGES']
 };
 
 exports.help = {

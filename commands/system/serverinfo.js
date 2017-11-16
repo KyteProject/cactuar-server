@@ -21,7 +21,8 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
-  permLevel: 'User'
+  permLevel: 'User',
+  botPerms: ['EMBED_LINKS','BAN_MEMBERS']
 };
 
 exports.help = {
