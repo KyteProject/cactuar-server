@@ -1,9 +1,14 @@
 exports.run = async (client, message, args, level) => {
-  await message.reply('Bot is shutting down.');
-  client.commands.forEach( async cmd => {
-    await client.unloadCommand(cmd);
-  });
-  process.exit(1);
+  try {
+    await message.reply('Bot is shutting down.');
+    client.commands.forEach( async cmd => {
+      await client.unloadCommand(cmd);
+    });
+    process.exit(1);
+  } 
+  catch (e) {
+    console.log(e); 
+  }
 };
 
 exports.conf = {

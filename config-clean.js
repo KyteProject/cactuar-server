@@ -21,7 +21,8 @@ const config = {
     'pointCost': 10,
     'deleteSwitch' : 1,                   // true - Toggles auto moderation of messages
     'response' : '*brrp* Don\'t be such a morty... Have you thought about *burp* giving feedback to others before asking for feedback yourself?',  // Sets bots response
-    'pinMessage' : 1                      // true  - Toggles auto message pin
+    'pinMessage' : 1,                     // true  - Toggles auto message pin
+    'welcomeMessage': 1                   // true  - Toggles auto message pin
   },
 
   permLevels: [

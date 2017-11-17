@@ -1,11 +1,23 @@
-exports.run = (client, message, args, level) => {
-  if (args.length < 1) throw 'Bot needs a message';
+exports.run = async (client, message, args, level) => {
+  if (args.length < 1) throw 'Please provide a message for the bot to say.';
+  try {
+    const channelid = await client.verifyChannel(message, args[0]);
+    if (channelid !== message.channel.id) {
+      args.shift();
+    }
+    const channel = message.guild.channels.get(channelid);
+    if (!message.member.permissionsIn(channel).has(['SEND_MESSAGES', 'READ_MESSAGES'])) throw 'You do not have permission to `say` in that channel.';
+    
+    message.delete();
 
-  message.delete().catch(err => {
-    client.log('Command', err, 'Error');
-  });
-  
-  message.channel.send(args.join(''));
+    channel.startTyping();
+    setTimeout(() => {
+      channel.send(args.join(' '));
+      channel.stopTyping(true);
+    }, 100 * args.join(' ').length / 2);
+  } catch (error) {
+    throw error;
+  }
 };
 
 exports.conf = {

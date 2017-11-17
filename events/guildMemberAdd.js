@@ -1,10 +1,18 @@
-module.exports = (client, member) => {
-  // TODO: Welcome message (PM?) on how the bot works, commands, options .etc
+const sql = require('sqlite');
+// const helpMessage = require('../resources/helpMessage.js');
+
+module.exports = async (client, member) => {
   client.log('Event', `${member.user.tag} (${member.id}) has joined ${member.guild.name} (${member.guild.id})`);
-  const welcomeChannel = member.guild.channels.find('name', 'welcome');
-  if (welcomeChannel) {
-    welcomeChannel.send(`Please welcome ${member.user.tag} to our wonderful guild!`);
-  }
+
+  await sql.get(`SELECT * FROM guild_config WHERE gID = "${member.guild.id}"`).then(settings => {
+    if (settings.welcomeMessage) {
+      // send help/welcome message
+      console.error;
+    }})
+    .catch(() => {
+      console.error;
+      client.log('Row does not exist.');
+    });
 
   // TODO: Set up user in DB
 };

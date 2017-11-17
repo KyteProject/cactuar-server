@@ -1,5 +1,4 @@
 /*
-TODO: Set up DB
 TODO: link submission to system
 TODO: If link is youtube check to see if the word 'feedback' appears in teh same message, if so perform a check that requires y/n input from user.
 TODO: React to sccessfull link
@@ -93,6 +92,7 @@ const client = new FeedBot({
 });
 
 require('./functions/util.js')(client);
+require('./functions/query.js')(client);
 if (sql.open('./database/feedbot.sqlite')) {client.log('Database', 'SQL DB loaded.');}
 
 const init = async () => {

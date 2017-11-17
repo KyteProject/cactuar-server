@@ -1,5 +1,47 @@
 module.exports = (client) => {
 
+  client.verifyUser = async (user) => {
+    try {
+      const match = /(?:<@!?)?([0-9]{17,20})>?/gi.exec(user);
+      if (!match) throw 'Invalid user';
+      const id = match[1];
+      const check = await this.client.fetchUser(id);
+      if (check.username !== undefined) return check;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  client.verifyMember = async (guild, member) => {
+    const user = await this.verifyUser(member);
+    const target = await guild.fetchMember(user);
+    return target;
+  };
+
+  client.verifyMessage = async (message, msgid) => {
+    try {
+      const match = /([0-9]{17,20})/.exec(msgid);
+      if (!match) throw 'Invalid message id.';
+      const id = match[1];
+      const check = await message.channel.fetchMessage(id);
+      if (check.cleanContent !== undefined) return id;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  client.verifyChannel = async (message, chanid) => {
+    try {
+      const match = /([0-9]{17,20})/.exec(chanid);
+      if (!match) return message.channel.id;
+      const id = match[1];
+      const check = await message.guild.channels.get(id);
+      if (check.name !== undefined && check.type === 'text') return id;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   //Clean text input
   client.clean = async (client, text) => {
     if (text && text.constructor.name == 'Promise')
