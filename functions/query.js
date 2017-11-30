@@ -1,9 +1,17 @@
 const sql = require('sqlite');
 
-module.exports = (client) => {
+module.exports = (client, member) => {
 
   client.createGuild = async () => {
     await sql.run('CREATE TABLE IF NOT EXISTS guild_config (gID TEXT NOT NULL UNIQUE, prefix TEXT NOT NULL, feedbackChannel TEXT NOT NULL, botLogEnable INTEGER NOT NULL, modRole TEXT NOT NULL, adminRole TEXT NOT NULL, enableBadges INTEGER NOT NULL, badgeNotice INTEGER NOT NULL, scoreTime INTEGER NOT NULL, pointsReward INTEGER NOT NULL, minPoints INTEGER NOT NULL, maxPoints INTEGER NOT NULL, pointCost INTEGER NOT NULL, deleteSwitch INTEGER NOT NULL, response TEXT NOT NULL, pinMessage INTEGER NOT NULL, welcomeMessage INTEGER NOT NULL, PRIMARY KEY(`gID`))');
+  };
+
+  client.createMessage = async () => {
+    await sql.run('CREATE TABLE IF NOT EXISTS guild_message (gID TEXT NOT NULL UNIQUE, channelID TEXT UNIQUE, messageID TEXT UNIQUE, PRIMARY KEY(`gID`)');
+  };
+
+  client.createUser = async () => {
+    await sql.run('CREATE TABLE IF NOT EXISTS users (jID TEXT NOT NULL UNIQUE, gID TEXT NOT NULL, uID TEXT NOT NULL, name TEXT NOT NULL, currentPoints INTEGER NOT NULL, totalPoints INTEGER NOT NULL, tokens INTEGER NOT NULL, level INTEGER NOT NULL, lastRequest DATETIME, PRIMARY KEY(`jID`))');
   };
 
   client.insertGuild = async (client, guild) => {
@@ -28,8 +36,18 @@ module.exports = (client) => {
       ]);
   };
 
-  client.createMessage = async () => {
-    await sql.run('CREATE TABLE IF NOT EXISTS guild_message (gID TEXT NOT NULL UNIQUE, channelID TEXT UNIQUE, messageID TEXT UNIQUE, PRIMARY KEY(`gID`)');
+  client.insertUser = async (member) => {
+    await sql.run('INSERT INTO users (jID, gID, uID, name, currentPoints, totalPoints, tokens, level, lastRequest) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [ member.joined,
+        member.guild.id,
+        member.id,
+        member.user.tag,
+        0,
+        0,
+        0,
+        0,
+        null
+      ]);
   };
   
 };

@@ -98,7 +98,6 @@ require('./functions/query.js')(client);
 if (sql.open('./database/feedbot.sqlite')) {client.log('Database', 'SQLite DB loaded.');}
 
 const init = async () => {
-
   klaw('./commands').on('data', (item) => {
     const file = path.parse(item.path);
     if (!file.ext || file.ext !== '.js') return;

@@ -8,7 +8,6 @@ module.exports = async (client, guild) => {
     }
   }).catch(() => {
     console.error;
-    client.log('Row does not exist.');
   });
   client.log('Event', `Left guild: ${guild.name} (${guild.id}) with ${guild.memberCount - 1} members.`, 'LEFT');
 };

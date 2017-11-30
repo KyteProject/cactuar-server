@@ -1,18 +1,22 @@
 const sql = require('sqlite');
-// const helpMessage = require('../resources/helpMessage.js');
 
 module.exports = async (client, member) => {
-  client.log('Event', `${member.user.tag} (${member.id}) has joined ${member.guild.name} (${member.guild.id})`);
+  if (!member || !member.id || !member.guild) return;
+  const guild = member.guild;
+  member.joined = `${guild.id}-${member.id}`;
 
-  await sql.get(`SELECT * FROM guild_config WHERE gID = "${member.guild.id}"`).then(settings => {
-    if (settings.welcomeMessage) {
-      // send help/welcome message
+  if (!member.user.bot) {
+    sql.get(`SELECT * FROM users WHERE jID = "${member.joined}"`).then(row => {
+      if (!row) {
+        client.insertUser(member);
+      }
+    }).catch(() => {
       console.error;
-    }})
-    .catch(() => {
-      console.error;
-      client.log('Row does not exist.');
+      client.createUser().then(() => {
+        client.insertUser(member);
+      });
     });
+  }
 
-  // TODO: Set up user in DB
+  client.log('Event', `${member.user.tag} (${member.id}) has joined ${guild.name} (${guild.id})`);
 };
