@@ -6,6 +6,7 @@ TODO: do not allow multi-links
 TODO: acheivements
 TODO: feedback master role
 TODO: say command will not delete message if channel is specified.
+TODO: ready event, check for guilds added offline
 */
 
 if (process.version.slice(1).split('.')[0] < 8) throw new Error('Node 8.0.0 or higher is required. Update Node on your system.');
@@ -94,11 +95,9 @@ const client = new FeedBot({
 
 require('./functions/util.js')(client);
 require('./functions/query.js')(client);
-if (sql.open('./database/feedbot.sqlite')) {client.log('Database', 'SQL DB loaded.');}
+if (sql.open('./database/feedbot.sqlite')) {client.log('Database', 'SQLite DB loaded.');}
 
 const init = async () => {
-  
-  client.keywords = require('./resources/keywords.json');
 
   klaw('./commands').on('data', (item) => {
     const file = path.parse(item.path);

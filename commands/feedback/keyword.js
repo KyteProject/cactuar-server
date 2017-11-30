@@ -1,6 +1,6 @@
 const fs = require('fs-nextra');
 
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 
   if (!args[0]) {
     const keywords = client.keywords.sort();
@@ -8,10 +8,9 @@ exports.run = (client, message, args, level) => {
     keywords.forEach( k => {
       output += `${k}, `;
     });
-    message.channel.send(output, {code:'asciicode'});
+    message.channel.send(output.toProperCase(), {code: 'asciidoc'});
   }
-
-  if (args[0] === 'add') {
+  else if (args[0] === 'add') {
     const word = args[1].toLowerCase().replace(/[^a-z]/gi, '');
     if (!client.keywords.includes(word)) {
       client.keywords.push(word);
@@ -23,7 +22,7 @@ exports.run = (client, message, args, level) => {
       message.channel.send('Word already exists!');
     }
   }
-  if (args[0] === 'remove') {
+  else if (args[0] === 'remove') {
     const word = args[1].toLowerCase().replace(/[^a-z]/gi, '');
     if (client.keywords.includes(word)) {
       client.keywords = client.keywords.filter(a => a !== word);
@@ -35,19 +34,22 @@ exports.run = (client, message, args, level) => {
       message.channel.send('Word does not exists!');
     }
   }
+  else {
+    message.channel.send('Invalid command argument.');
+  }
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: ['kw'],
-  permLevel: 'Moderator',
+  permLevel: 'Bot Support',
   botPerms: []
 };
 
 exports.help = {
   name: 'keyword',
   category: 'Feedback',
-  description: '',
-  usage: 'keyword [cmd] [...input]'
+  description: 'By itself it will show the list of current keywords.  To add or remove a keyword use the operator "add/remove" then the word.',
+  usage: 'keyword [operator] [...keyword]'
 };

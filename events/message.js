@@ -1,5 +1,12 @@
-module.exports = (client, message) => {
+const sql = require('sqlite');
+
+module.exports = async (client, message) => {
   if (message.author.bot) return;
+
+  await sql.get(`SELECT * FROM guild_config WHERE gID = "${message.guild.id}"`).then(row => {
+    if (row) { message.settings = row; }
+    else { message.settings = client.config.defaultSettings; }
+  }).catch(() => { console.error; });
 
   if (message.content.indexOf(client.config.prefix) !== 0) return;
 
@@ -8,7 +15,7 @@ module.exports = (client, message) => {
 
   const level = client.permlevel(message);
 
-  const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
+  const cmd =  client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
   if (!cmd) return;
 
@@ -16,7 +23,7 @@ module.exports = (client, message) => {
     return message.channel.send('This command is denied via direct message.  Please execute it within a guild channel.');
 
   if (level < client.levelCache[cmd.conf.permLevel]) {
-    if (settings.systemNotice === '1') {
+    if (message.settings.systemNotice === '1') {
       return message.channel.send(`You do not have permission to use this command.
     Your permission level is ${level} (${client.config.permLevels.find(l => l.level === level).name})
     This command requires level ${client.levelCache[cmd.conf.permLevel]} (${cmd.conf.permLevel})`);

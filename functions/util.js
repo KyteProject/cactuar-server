@@ -1,5 +1,7 @@
 module.exports = (client) => {
 
+  client.keywords = require('./../resources/keywords.json');
+
   client.verifyUser = async (user) => {
     try {
       const match = /(?:<@!?)?([0-9]{17,20})>?/gi.exec(user);

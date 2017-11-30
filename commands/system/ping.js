@@ -1,4 +1,4 @@
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
   message.channel.send('Pong...').then((msg) => {
     msg.edit(`Pong! Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
   });
