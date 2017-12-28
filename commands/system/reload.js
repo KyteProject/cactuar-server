@@ -1,13 +1,16 @@
 exports.run = async (client, message, args, level) => {
-  if (!args || args.size < 1) return message.reply('Must provide a command to reload.');
+  if (!args || args.length < 1) return message.reply('Must provide a command to reload.');
 
-  let response = await client.unloadCommand(args[0]);
+  const commands = client.commands.get(args[0]) || client.commands.get(client.aliases.get(args[0]));
+  if (!commands) return message.reply(`The command \`${args[0]}\` doesn't seem to exist, nor is it an alias. Try again!`);
+
+  let response = await client.unloadCommand(`${commands.conf.location}`, commands.help.name);
   if (response) return message.reply(`Error Unloading: ${response}`);
-
-  response = client.loadCommand(args[0]);
-  if (response) return message.reply(`Error Loading: ${response}`);
-
-  message.reply(`The command \`${args[0]}\` has been reloaded`);
+  
+  response = client.loadCommand(`${commands.conf.location}`, commands.help.name);
+  if (response) return message.reply(`Error loading: ${response}`);
+  
+  message.reply(`The command \`${commands.help.name}\` has been reloaded`);
 };
 
 exports.conf = {
@@ -21,6 +24,7 @@ exports.conf = {
 exports.help = {
   name: 'reload',
   category: 'System',
-  description: 'Reloads a command that"s been modified.',
+  description: 'Reloads a command.',
+  extended: 'This command is designed to unload, then reload the command from the command & aliases collections for changes to take effect.',
   usage: 'reload [command]'
 };

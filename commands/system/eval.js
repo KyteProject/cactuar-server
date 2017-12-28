@@ -13,7 +13,7 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: ['ev'],
-  permLevel: 'Bot Master',
+  permLevel: 'Bot Owner',
   botPerms: []
 };
 
@@ -21,5 +21,6 @@ exports.help = {
   name: 'eval',
   category: 'System',
   description: 'Evaluates arbitrary javascript.',
+  extended: 'This is an extremely dangerous command, use with caution and never eval stuff strangers tell you.',
   usage: 'eval [...code]'
 };

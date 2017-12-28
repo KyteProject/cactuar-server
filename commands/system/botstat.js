@@ -19,7 +19,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
   enabled: true,
   guildOnly: false,
-  aliases: [],
+  aliases: ['bs'],
   permLevel: 'User',
   botPerms: []
 };
@@ -28,5 +28,6 @@ exports.help = {
   name: 'botstat',
   category: 'System',
   description: 'Provides statistics on the bot',
+  extended: '',
   usage: 'botstat'
 };

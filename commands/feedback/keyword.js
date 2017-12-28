@@ -50,6 +50,7 @@ exports.conf = {
 exports.help = {
   name: 'keyword',
   category: 'Feedback',
-  description: 'By itself it will show the list of current keywords.  To add or remove a keyword use the operator "add/remove" then the word.',
+  description: 'Command for managing keywords.',
+  extended: 'By itself it will show the list of current keywords.  To add or remove a keyword use the operator "add/remove" then the word.',
   usage: 'keyword [operator] [...keyword]'
 };

@@ -16,5 +16,6 @@ exports.help = {
   name: 'rick',
   category: 'Miscelaneous',
   description: 'Random Rick Sanchez quote!',
+  extended: '',
   usage: 'rick'
 };

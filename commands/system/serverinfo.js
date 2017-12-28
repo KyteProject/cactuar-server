@@ -19,8 +19,8 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
   enabled: true,
-  guildOnly: false,
-  aliases: [],
+  guildOnly: true,
+  aliases: ['si','guildinfo', 'gi','serverstats','guildstats'],
   permLevel: 'User',
   botPerms: ['EMBED_LINKS','BAN_MEMBERS']
 };
@@ -28,6 +28,7 @@ exports.conf = {
 exports.help = {
   name: 'serverinfo',
   category: 'System',
-  description: 'Displays information about the current server.',
+  description: 'Displays server information.',
+  extended: 'This command will output an organised list of statistics related to the server the bot is running on.',
   usage: 'serverinfo'
 };

@@ -1,5 +1,5 @@
 exports.run = async (client, message, args, level) => {
-  if (args.length < 1) throw 'Please provide a message for the bot to say.';
+  if (args.length < 1) return message.reply('Please provide a message.');
   try {
     const channelid = await client.verifyChannel(message, args[0]);
     if (channelid !== message.channel.id) {
@@ -31,6 +31,7 @@ exports.conf = {
 exports.help = {
   name: 'say',
   category: 'Miscelaneous',
-  description: 'Have the bot say something.  Deletes the command message.',
-  usage: 'say [...input]'
+  description: 'Have the bot say something.',
+  extended: 'Have the bot say something either to the current channel, or a specified one.  Is dependant on user permissions and will remove the command message.',
+  usage: 'say [#channel] [...message]'
 };

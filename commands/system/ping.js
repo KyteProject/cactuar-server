@@ -15,6 +15,7 @@ exports.conf = {
 exports.help = {
   name: 'ping',
   category: 'System',
-  description: 'Display network roundtrip time.',
+  description: 'Latency and API response times.',
+  extended: 'This command is a response test, it helps gauge if there is any latency (lag) in either the bots connection, or the API.',
   usage: 'ping'
 };

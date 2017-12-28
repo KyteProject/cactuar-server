@@ -6,7 +6,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
   enabled: true,
   guildOnly: true,
-  aliases: [],
+  aliases: ['pl', 'perms'],
   permLevel: 'User',
   botPerms: []
 };
@@ -14,6 +14,7 @@ exports.conf = {
 exports.help = {
   name: 'permlevel',
   category: 'System',
-  description: 'Tells you your permission level for the guild.',
+  description: 'Tells you your permission level.',
+  extended: 'This will display your permission level, in both numerical and plain English styles.',
   usage: 'permlevel'
 };

@@ -1,44 +1,28 @@
-/*
-The HELP command is used to display every command's name and description
-to the user, so that he may see what commands are available. The help
-command is also filtered by level, so if a user does not have access to
-a command, it is not shown to them. If a command name is given with the
-help command, its extended help is shown.
-*/
-
-exports.run = async (client, message, args, level) => {
-  // If no specific command is called, show all filtered commands.
+exports.run = (client, message, args, level) => {
   if (!args[0]) {
-    // Load guild settings (for prefixes and eventually per-guild tweaks)
-    const settings = message.guild ? client.settings.get(message.guild.id) : client.config.defaultSettings;
-
-    // Filter all commands by which are available for the user's level, using the <Collection>.filter() method.
     const myCommands = message.guild ? client.commands.filter(cmd => client.levelCache[cmd.conf.permLevel] <= level) : client.commands.filter(cmd => client.levelCache[cmd.conf.permLevel] <= level &&  cmd.conf.guildOnly !== true);
 
-    // Here we have to get the command names only, and we use that array to get the longest name.
-    // This make the help commands "aligned" in the output.
     const commandNames = myCommands.keyArray();
     const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
     let currentCategory = '';
-    let output = `= Command List =\n\n[Use ${settings.prefix}help <commandname> for details]\n`;
+    let output = `= Command List =\n\n[Use ${message.settings.prefix}commands <commandname> for details]\n`;
     const sorted = myCommands.array().sort((p, c) => p.help.category > c.help.category ? 1 :  p.help.name > c.help.name && p.help.category === c.help.category ? 1 : -1 );
     sorted.forEach( c => {
       const cat = c.help.category.toProperCase();
       if (currentCategory !== cat) {
-        output += `\n== ${cat} ==\n`;
+        output += `\u200b\n== ${cat} ==\n`;
         currentCategory = cat;
       }
-      output += `${settings.prefix}${c.help.name}${' '.repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
+      output += `${message.settings.prefix}${c.help.name}${' '.repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
     });
-    message.channel.send(output, {code:'asciidoc'});
+    message.channel.send(output, {code: 'asciidoc', split: { char: '\u200b' }});
   } else {
-    // Show individual command's help.
     let command = args[0];
     if (client.commands.has(command)) {
       command = client.commands.get(command);
       if (level < client.levelCache[command.conf.permLevel]) return;
-      message.channel.send(`= ${command.help.name} = \n${command.help.description}\nusage::${command.help.usage}`, {code:'asciidoc'});
+      message.channel.send(`= ${command.help.name} = \n${command.help.description}\nDescription:: ${command.help.extended}\nusage:: ${command.help.usage}\naliases:: ${command.conf.aliases.join(', ')}`, {code:'asciidoc'});
     }
   }
 };
@@ -46,13 +30,15 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
   enabled: true,
   guildOnly: false,
-  aliases: ['c', 'command'],
-  permLevel: 'User'
+  aliases: ['h', 'halp'],
+  permLevel: 'User',
+  botPerms: []
 };
 
 exports.help = {
   name: 'commands',
   category: 'System',
-  description: 'Displays all the available commands for your permission level.  If used with a command name as an argument it will display exteneded info about that command.',
+  description: 'Displays commands for your level.',
+  extended: 'This command will display all available commands for your permission level, with the additonal option of getting per command information when you run \'help [command name]\'.',
   usage: 'commands [command]'
 };

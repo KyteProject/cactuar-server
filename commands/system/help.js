@@ -16,5 +16,6 @@ exports.help = {
   name: 'help',
   category: 'System',
   description: 'Display help information about the bot',
+  extended: 'heeeeeeeelp',
   usage: 'help'
 };

@@ -14,7 +14,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
   enabled: true,
   guildOnly: false,
-  aliases: [],
+  aliases: ['restart'],
   permLevel: 'Bot Admin',
   botPerms: []
 };
@@ -22,6 +22,7 @@ exports.conf = {
 exports.help = {
   name: 'reboot',
   category: 'System',
-  description: 'Shuts down the bot. If running under PM2, bot will restart automatically.',
+  description: 'Restarts the bot',
+  extended: 'This command will will cause the bot to exit cleanly and restart the process if using PM2 or Forever.  Otherwise it will just shut down.',
   usage: 'reboot'
 };
