@@ -2,8 +2,7 @@ const sql = require('sqlite');
 
 module.exports = async (client, member) => {
   if (!member || !member.id || !member.guild) return;
-  const guild = member.guild;
-  member.joined = `${guild.id}-${member.id}`;
+  member.joined = `${member.guild.id}-${member.id}`;
 
   if (!member.user.bot) {
     sql.get(`SELECT * FROM users WHERE jID = "${member.joined}"`).then(row => {
@@ -18,5 +17,5 @@ module.exports = async (client, member) => {
     });
   }
 
-  client.log('Event', `${member.user.tag} (${member.id}) has joined ${guild.name} (${guild.id})`);
+  client.log('Event', `${member.user.tag} (${member.id}) has joined ${member.guild.name} (${member.guild.id})`);
 };

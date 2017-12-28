@@ -1,6 +1,6 @@
 const sql = require('sqlite');
 
-module.exports = (client, member) => {
+module.exports = (client) => {
 
   client.createGuild = async () => {
     await sql.run('CREATE TABLE IF NOT EXISTS guild_config (gID TEXT NOT NULL UNIQUE, prefix TEXT NOT NULL, feedbackChannel TEXT NOT NULL, botLogEnable INTEGER NOT NULL, modRole TEXT NOT NULL, adminRole TEXT NOT NULL, enableBadges INTEGER NOT NULL, badgeNotice INTEGER NOT NULL, scoreTime INTEGER NOT NULL, pointsReward INTEGER NOT NULL, minPoints INTEGER NOT NULL, maxPoints INTEGER NOT NULL, pointCost INTEGER NOT NULL, deleteSwitch INTEGER NOT NULL, response TEXT NOT NULL, pinMessage INTEGER NOT NULL, welcomeMessage INTEGER NOT NULL, PRIMARY KEY(`gID`))');
@@ -50,4 +50,17 @@ module.exports = (client, member) => {
       ]);
   };
   
+  client.guildCheck = async (guild) => {
+    await sql.get(`SELECT * FROM guild_config WHERE gID = "${guild.id}"`).then(row => {
+      if (!row) {
+        client.insertGuild(client, guild);
+      }
+    }).catch(() => {
+      console.error;
+      client.createGuild().then(() => {
+        client.insertGuild(client, guild);
+      });
+    });
+  };
+
 };

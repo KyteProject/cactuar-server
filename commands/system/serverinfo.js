@@ -29,5 +29,5 @@ exports.help = {
   name: 'serverinfo',
   category: 'System',
   description: 'Displays information about the current server.',
-  usage: 'serverinfo]'
+  usage: 'serverinfo'
 };
