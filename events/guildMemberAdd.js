@@ -17,5 +17,5 @@ module.exports = async (client, member) => {
     });
   }
 
-  client.log('Event', `${member.user.tag} (${member.id}) has joined ${member.guild.name} (${member.guild.id})`);
+  client.logger.log(`[Event] ${member.user.tag} (${member.id}) has joined ${member.guild.name} (${member.guild.id})`);
 };

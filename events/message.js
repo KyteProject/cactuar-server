@@ -40,7 +40,7 @@ module.exports = async (client, message) => {
   }
 
   // If the command exists, **AND** the user has permission, run it.
-  client.log('log', `${client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) ran command ${cmd.help.name}`, 'CMD');
+  client.logger.log(`${client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) ran command ${cmd.help.name}`, 'cmd');
 
   if (message.channel.type === 'text') {
     const mPerms = client.permCheck(message, cmd.conf.botPerms);
@@ -48,7 +48,7 @@ module.exports = async (client, message) => {
   }
   
   cmd.run(client, message, args, level).catch(error => {
-    console.log(error);
+    client.logger.log(error, 'error');
     message.channel.send(error);
   });
 

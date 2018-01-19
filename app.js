@@ -13,7 +13,7 @@ if (process.version.slice(1).split('.')[0] < 8) throw new Error('Node 8.0.0 or h
 
 const { Client } = require('discord.js');
 const { Collection } = require('discord.js');
-const timestamp = require('log-timestamp');
+//const timestamp = require('log-timestamp');
 const {readdir} = require('fs-nextra');
 const klaw = require('klaw');
 const path = require('path');
@@ -24,6 +24,7 @@ class FeedBot extends Client {
   constructor(options) {
     super(options);
     this.config = require('./config.js');
+    this.logger = require('./functions/logger');
     this.commands = new Collection();
     this.aliases = new Collection();
   }
@@ -42,11 +43,11 @@ class FeedBot extends Client {
     return permlvl;
   }
 
-  // Console log mofified
-  log(type, message, title) {
-    if (!title) title = 'Log';
-    console.log(`[${type}] [${title}] ${message}`);
-  }
+  // // Console log mofified
+  // log(type, message, title) {
+  //   if (!title) title = 'Log';
+  //   console.log(`[${type}] [${title}] ${message}`);
+  // }
 
   permCheck(message, perms) {
     if (message.channel.type !== 'text') return;
@@ -57,7 +58,7 @@ class FeedBot extends Client {
     try {
       const props = new require(`${commandPath}${path.sep}${commandName}`);
       props.conf.location = commandPath;
-      client.log('log', `Loading Command: ${props.help.name}. 👌`);
+      client.logger.log(`Loading Command: ${props.help.name}. ✔`);
       if (props.init) {
         props.init(client);
       }
@@ -95,23 +96,23 @@ const client = new FeedBot({
 
 require('./functions/util.js')(client);
 require('./functions/query.js')(client);
-if (sql.open('./database/feedbot.sqlite')) {client.log('Database', 'SQLite DB loaded.');}
+if (sql.open('./database/feedbot.sqlite')) {client.logger.log('SQLite DB loaded.');}
 
 const init = async () => {
   klaw('./commands').on('data', (item) => {
     const file = path.parse(item.path);
     if (!file.ext || file.ext !== '.js') return;
     const response = client.loadCommand(file.dir, `${file.name}${file.ext}`);
-    if (response) console.log(response);
+    if (response) client.logger.log(response);
   });
 
   const eventFiles = await readdir('./events/');
-  client.log('System', `Loading a total of ${eventFiles.length} events.`);
+  client.logger.log(`Loading a total of ${eventFiles.length} events.`);
   eventFiles.forEach(file => {
     const eventName = file.split('.')[0];
     const event = new require(`./events/${file}`);
     client.on(eventName, event.bind(null, client));  
-    client.log('System', `Loading Event: ${eventName}. ✔`);
+    client.logger.log(`Loading Event: ${eventName}. ✔`);
     delete require.cache[require.resolve(`./events/${file}`)];  
   });
   

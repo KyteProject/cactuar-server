@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 
 exports.run = async (client, message, args, level) => {
-  client.log('help');
+  client.logger.log('help');
 };
 
 exports.conf = {
