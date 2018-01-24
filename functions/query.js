@@ -63,4 +63,10 @@ module.exports = (client) => {
     });
   };
 
+  client.loadConfig = async (client, message) => {
+    await sql.get(`SELECT * FROM guild_config WHERE gID = "${message.guild.id}"`).then(row => {
+      if (row) { message.settings = row; }
+      else { message.settings = client.config.defaultSettings; }
+    }).catch(() => { console.error; });
+  };
 };

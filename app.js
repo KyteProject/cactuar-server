@@ -1,12 +1,10 @@
 /*
 TODO: link submission to system
-TODO: If link is youtube check to see if the word 'feedback' appears in teh same message, if so perform a check that requires y/n input from user.
+TODO: If link is youtube check to see if the word 'feedback' appears in teh same message, if so perform a check that requires y/n input from user?
 TODO: React to sccessfull link
 TODO: do not allow multi-links
 TODO: acheivements
 TODO: feedback master role
-TODO: say command will not delete message if channel is specified.
-TODO: ready event, check for guilds added offline
 */
 
 if (process.version.slice(1).split('.')[0] < 8) throw new Error('Node 8.0.0 or higher is required. Update Node on your system.');
@@ -21,11 +19,11 @@ const sql = require('sqlite');
 class FeedBot extends Client {
   constructor(options) {
     super(options);
+    this.ccxt = require ('ccxt');
     this.config = require('./config.js');
     this.logger = require('./functions/logger');
     this.commands = new Collection();
     this.aliases = new Collection();
-    this.ccxt = require ('ccxt');
   }
 
   permlevel(message) {

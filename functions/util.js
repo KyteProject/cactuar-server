@@ -15,9 +15,13 @@ module.exports = (client) => {
   };
 
   client.verifyMember = async (guild, member) => {
-    const user = await this.verifyUser(member);
-    const target = await guild.fetchMember(user);
-    return target;
+    try {
+      const user = await this.verifyUser(member);
+      const target = await guild.fetchMember(user);
+      return target;
+    } catch (error) {
+      throw error;
+    }
   };
 
   client.verifyMessage = async (message, msgid) => {
