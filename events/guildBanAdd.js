@@ -12,5 +12,5 @@ module.exports = (client, member) =>  {
     }).catch(() => {console.error;});
   }
 
-  client.loggerr.log(`[Event] User: ${member.user.tag} has been banned from server: ${member.guild.name}, Owned by: ${member.guild.owner.user.tag}.`); 
+  client.logger.log(`[Event] User: ${member.user.tag} has been banned from server: ${member.guild.name}, Owned by: ${member.guild.owner.user.tag}.`); 
 };

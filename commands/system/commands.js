@@ -22,7 +22,7 @@ exports.run = (client, message, args, level) => {
     if (client.commands.has(command)) {
       command = client.commands.get(command);
       if (level < client.levelCache[command.conf.permLevel]) return;
-      message.channel.send(`= ${command.help.name} = \n${command.help.description}\nDescription:: ${command.help.extended}\nusage:: ${command.help.usage}\naliases:: ${command.conf.aliases.join(', ')}`, {code:'asciidoc'});
+      message.channel.send(`= ${command.help.name} = \n\nDescription:: ${command.help.extended}\nUsage:: ${command.help.usage}\nAliases:: ${command.conf.aliases.join(', ')}`, {code:'asciidoc'});
     }
   }
 };
@@ -39,6 +39,6 @@ exports.help = {
   name: 'commands',
   category: 'System',
   description: 'Displays commands for your level.',
-  extended: 'This command will display all available commands for your permission level, with the additonal option of getting per command information when you run \'help [command name]\'.',
+  extended: 'This command will display all available commands for your permission level, with the additonal option of getting per command information when you run \'commands [command name]\'.',
   usage: 'commands [command]'
 };

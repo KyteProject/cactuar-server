@@ -8,5 +8,5 @@ module.exports = async (client, guild) => {
     }
   }).catch(() => {console.error;});
 
-  client.logger.log(`[Event] Left guild: ${guild.name} (${guild.id}) with ${guild.memberCount - 1} members.`, 'LEFT');
+  client.logger.log(`[Event] Left guild: ${guild.name} (${guild.id}) with ${guild.memberCount - 1} members.`);
 };

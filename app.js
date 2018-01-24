@@ -13,12 +13,10 @@ if (process.version.slice(1).split('.')[0] < 8) throw new Error('Node 8.0.0 or h
 
 const { Client } = require('discord.js');
 const { Collection } = require('discord.js');
-//const timestamp = require('log-timestamp');
 const {readdir} = require('fs-nextra');
 const klaw = require('klaw');
 const path = require('path');
 const sql = require('sqlite');
-
 
 class FeedBot extends Client {
   constructor(options) {
@@ -27,6 +25,7 @@ class FeedBot extends Client {
     this.logger = require('./functions/logger');
     this.commands = new Collection();
     this.aliases = new Collection();
+    this.ccxt = require ('ccxt');
   }
 
   permlevel(message) {
@@ -42,12 +41,6 @@ class FeedBot extends Client {
     }
     return permlvl;
   }
-
-  // // Console log mofified
-  // log(type, message, title) {
-  //   if (!title) title = 'Log';
-  //   console.log(`[${type}] [${title}] ${message}`);
-  // }
 
   permCheck(message, perms) {
     if (message.channel.type !== 'text') return;
