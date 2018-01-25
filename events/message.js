@@ -5,15 +5,26 @@ module.exports = async (client, message) => {
 
   await client.loadConfig(client, message);
 
-  // handle commands
   if (message.content.indexOf(message.settings.prefix) === 0) {
     commandHandler.run(client, message).catch(error => {
       client.logger.log(error, 'error');
     });
   }
-  else if (message.channel.id !== message.settings.feedbackChannel) return;
-  else {
-    // if feedback request, do feedback functions
-    // if message begins with user mention, do user functions
+  else if (message.channel.id === message.settings.feedbackChannel) {
+    const args = message.content.trim().split(/ +/g);
+    const messageMention = args.shift();
+    message.argsJoined = args.join(' ').replace(/[^0-9a-z\s]/gi, '');
+    message.userMentioned = await client.verifyUser(messageMention ? messageMention : message.author.id);
+    if (!message) {                     // if feedback request, do feedback functions
+    
+    }
+    else if (message.userMentioned) {   // message start with mention, do user functions
+      client.feedbackScoring(message);
+      
+      // bot reaction to post?
+      // message.channel.send('yeet');
+    }
+    else return;
   }
+  else return;
 };

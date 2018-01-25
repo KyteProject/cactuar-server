@@ -85,6 +85,7 @@ const client = new FeedBot({
   disabledEvents: ['TYPING_START'],
 });
 
+require('./functions/feedback.js')(client);
 require('./functions/util.js')(client);
 require('./functions/query.js')(client);
 if (sql.open('./database/feedbot.sqlite')) {client.logger.log('SQLite DB loaded.');}

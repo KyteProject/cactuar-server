@@ -11,7 +11,7 @@ module.exports = (client) => {
   };
 
   client.createUser = async () => {
-    await sql.run('CREATE TABLE IF NOT EXISTS users (jID TEXT NOT NULL UNIQUE, gID TEXT NOT NULL, uID TEXT NOT NULL, name TEXT NOT NULL, currentPoints INTEGER NOT NULL, totalPoints INTEGER NOT NULL, tokens INTEGER NOT NULL, level INTEGER NOT NULL, lastRequest DATETIME, PRIMARY KEY(`jID`))');
+    await sql.run('CREATE TABLE IF NOT EXISTS users (jID TEXT NOT NULL UNIQUE, gID TEXT NOT NULL, uID TEXT NOT NULL, name TEXT NOT NULL, currentPoints INTEGER NOT NULL, totalPoints INTEGER NOT NULL, tokens INTEGER NOT NULL, level INTEGER NOT NULL, lastRequest DATETIME, timesGiven INTEGER NOT NULL, timesRequested INTEGER NOT NULL, PRIMARY KEY(`jID`))');
   };
 
   client.insertGuild = async (client, guild) => {
@@ -37,7 +37,7 @@ module.exports = (client) => {
   };
 
   client.insertUser = async (member) => {
-    await sql.run('INSERT INTO users (jID, gID, uID, name, currentPoints, totalPoints, tokens, level, lastRequest) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    await sql.run('INSERT INTO users (jID, gID, uID, name, currentPoints, totalPoints, tokens, level, lastRequest, timesGiven, timesRequested) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [ member.joined,
         member.guild.id,
         member.id,
@@ -46,8 +46,21 @@ module.exports = (client) => {
         0,
         0,
         0,
-        null
+        null,
+        0,
+        0
       ]);
+  };
+
+  client.updateUser = async (message, row) => {
+    await sql.run('UPDATE users SET currentPoints=?, totalPoints=?, tokens=?, timesGiven=? WHERE jID=?',
+      [ row.currentPoints + message.score,
+        row.totalPoints + message.score,
+        row.tokens + message.tokenGain,
+        row.timesGiven + 1,
+        message.member.joined
+      ]);
+    client.logger.log(`[DB] User: ${message.author.tag} submitted feedback, databse updated.`);
   };
   
   client.guildCheck = async (guild) => {
@@ -68,5 +81,23 @@ module.exports = (client) => {
       if (row) { message.settings = row; }
       else { message.settings = client.config.defaultSettings; }
     }).catch(() => { console.error; });
+  };
+
+  client.feedbackSubmit = async (message) => {
+    if (!message.member.user.bot) {
+      sql.get(`SELECT * FROM users WHERE jID = "${message.member.joined}"`).then(row => {
+        if (!row) {
+          client.insertUser(message.member);
+        }
+        else {
+          client.updateUser(message, row);
+        }
+      }).catch(() => {
+        console.error;
+        client.createUser().then(() => {
+          client.insertUser(message.member);
+        });
+      });
+    }
   };
 };

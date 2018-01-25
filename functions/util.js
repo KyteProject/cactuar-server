@@ -7,10 +7,10 @@ module.exports = (client) => {
       const match = /(?:<@!?)?([0-9]{17,20})>?/gi.exec(user);
       if (!match) throw 'Invalid user';
       const id = match[1];
-      const check = await this.client.fetchUser(id);
+      const check = await client.users.fetch(id);
       if (check.username !== undefined) return check;
     } catch (error) {
-      throw error;
+      client.logger.log(error, 'error');
     }
   };
 
