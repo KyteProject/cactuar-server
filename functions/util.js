@@ -10,7 +10,7 @@ module.exports = (client) => {
       const check = await client.users.fetch(id);
       if (check.username !== undefined) return check;
     } catch (error) {
-      client.logger.log(error, 'error');
+      // client.logger.log(error, 'error');
     }
   };
 

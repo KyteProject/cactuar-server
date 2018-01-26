@@ -18,11 +18,10 @@ module.exports = async (client, message) => {
     if (!message) {                     // if feedback request, do feedback functions
     
     }
-    else if (message.userMentioned) {   // message start with mention, do user functions
+    else if ((message.userMentioned) && (message.userMentioned !== message.author && !message.userMentioned.bot)) { 
       client.feedbackScoring(message);
-      
-      // bot reaction to post?
-      // message.channel.send('yeet');
+      const heartArray = ['❤', '💚', '💙', '💜', '💛',];
+      message.react(heartArray.random());
     }
     else return;
   }

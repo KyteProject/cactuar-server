@@ -11,7 +11,7 @@ module.exports = (client) => {
   };
 
   client.createUser = async () => {
-    await sql.run('CREATE TABLE IF NOT EXISTS users (jID TEXT NOT NULL UNIQUE, gID TEXT NOT NULL, uID TEXT NOT NULL, name TEXT NOT NULL, currentPoints INTEGER NOT NULL, totalPoints INTEGER NOT NULL, tokens INTEGER NOT NULL, level INTEGER NOT NULL, lastRequest DATETIME, timesGiven INTEGER NOT NULL, timesRequested INTEGER NOT NULL, PRIMARY KEY(`jID`))');
+    await sql.run('CREATE TABLE IF NOT EXISTS users (jID TEXT NOT NULL UNIQUE, name TEXT NOT NULL, level INTEGER NOT NULL, currentPoints INTEGER NOT NULL, totalPoints INTEGER NOT NULL, nextLevel INTEGER NOT NULL, tokens INTEGER NOT NULL, lastRequest DATETIME, timesGiven INTEGER NOT NULL, timesRequested INTEGER NOT NULL, keywordCount INTEGER NOT NULL, PRIMARY KEY(`jID`))');
   };
 
   client.insertGuild = async (client, guild) => {
@@ -37,27 +37,30 @@ module.exports = (client) => {
   };
 
   client.insertUser = async (member) => {
-    await sql.run('INSERT INTO users (jID, gID, uID, name, currentPoints, totalPoints, tokens, level, lastRequest, timesGiven, timesRequested) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [ member.joined,
-        member.guild.id,
-        member.id,
-        member.user.tag,
-        0,
-        0,
-        0,
-        0,
-        null,
-        0,
-        0
+    await sql.run('INSERT INTO users (jID, name, level, currentPoints, totalPoints, nextLevel, tokens, lastRequest, timesGiven, timesRequested, keywordCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [ member.joined,    // jID
+        member.user.tag,  // name
+        1,                // level
+        0,                // current points
+        0,                // total points
+        83,               // next level
+        0,                // tokens
+        null,             // last request
+        0,                // times given
+        0,                // times requested
+        0                 // keyword count
       ]);
   };
 
-  client.updateUser = async (message, row) => {
-    await sql.run('UPDATE users SET currentPoints=?, totalPoints=?, tokens=?, timesGiven=? WHERE jID=?',
-      [ row.currentPoints + message.score,
-        row.totalPoints + message.score,
-        row.tokens + message.tokenGain,
-        row.timesGiven + 1,
+  client.updateUser = async (message) => {
+    await sql.run('UPDATE users SET level=?, currentPoints=?, totalPoints=?, nextLevel=?, tokens=?, timesGiven=?, keywordCount=? WHERE jID=?',
+      [ message.level,
+        message.currentPoints,
+        message.totalPoints,
+        message.nextLevel,
+        message.tokens,
+        message.timesGiven,
+        message.keywordCount,
         message.member.joined
       ]);
     client.logger.log(`[DB] User: ${message.author.tag} submitted feedback, databse updated.`);
@@ -84,20 +87,23 @@ module.exports = (client) => {
   };
 
   client.feedbackSubmit = async (message) => {
-    if (!message.member.user.bot) {
-      sql.get(`SELECT * FROM users WHERE jID = "${message.member.joined}"`).then(row => {
-        if (!row) {
-          client.insertUser(message.member);
-        }
-        else {
-          client.updateUser(message, row);
-        }
-      }).catch(() => {
-        console.error;
-        client.createUser().then(() => {
-          client.insertUser(message.member);
+    await sql.get(`SELECT * FROM users WHERE jID = "${message.member.joined}"`).then(row => {
+      if (!row) {
+        client.insertUser(message.member).then(() => {
+          client.feedbackSubmit(message);
+        });
+      }
+      else {
+        client.levelUp(message, row);
+        client.updateUser(message, row);
+      }
+    }).catch(() => {
+      console.error;
+      client.createUser().then(() => {
+        client.insertUser(message.member).then(() => {
+          client.feedbackSubmit(message);
         });
       });
-    }
+    });
   };
 };
