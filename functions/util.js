@@ -29,10 +29,10 @@ module.exports = (client) => {
       const match = /([0-9]{17,20})/.exec(msgid);
       if (!match) throw 'Invalid message id.';
       const id = match[1];
-      const check = await message.channel.fetchMessage(id);
+      const check = await message.channel.messages.fetch(id);
       if (check.cleanContent !== undefined) return id;
     } catch (error) {
-      throw error;
+      client.logger.log(error, 'error');
     }
   };
 

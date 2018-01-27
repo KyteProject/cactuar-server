@@ -1,18 +1,18 @@
+const { MessageEmbed } = require('discord.js');
+const keywordArray = require('./../resources/keywords.json');
+const linkArray = require('./../resources/links.json');
 
-module.exports = async (client, message) => {
+module.exports = async (client) => {
   
   client.feedbackScoring = async (message) => {
     const regex = /\s+/gi;
-    const multipier = 1;  // replace with user level check/asignment
-    message.member.joined = `${message.member.guild.id}-${message.member.id}`;
+    const multipier = (client.permlevel(message) >= 5) ? 1.2 : 1;
     message.wordCount = message.argsJoined.trim().replace(regex, ' ').split(' ').length;
     message.charCountNoSpace = message.argsJoined.replace(regex, '').length;
-    message.keywordCount = 5;  // replace with count function
+    client.countKeywords(message);
     message.score = Math.round(((message.wordCount * 0.2) + (message.charCountNoSpace / 100) + (message.keywordCount * 9)) * multipier);
     message.tokenGain = (message.score >= 100) ? 1 : 0;
-      
-    message.channel.send(message.score);
-
+    message.channel.send(message.score);  // to be removed before launch
     client.feedbackSubmit(message);
   };
 
@@ -34,14 +34,65 @@ module.exports = async (client, message) => {
       message.level = row.level + 1;
       client.nextLevel(message, message.level);
       message.nextLevel += row.nextLevel;
+      message.channel.send(`${message.author.username} just reached level ${message.level}! 🎵`);
     }
     else {
       message.level = row.level;
       message.nextLevel = row.nextLevel;
     }
   };
-};
 
-// rewarding large feedback posts with a token (score greater than 100)
-// keyword count to 4 or 5 for feedback, or use a stored token
-// tokens can be gived my mods, or won in games/comps
+  client.countKeywords = async (message) => {
+    message.keywordCount = 0;
+    for (let i = 0; i < keywordArray.length; i++) {
+      if (message.argsJoined.includes(keywordArray[i])) {
+        message.keywordCount++;
+      }
+    }
+  };
+
+  client.checkFeedback = async (message) => {
+    for (let i = 0; i < linkArray.length; i++) {
+      if (message.cleanContent.includes(linkArray[i])) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  client.feedbackPermission = async (message, row) => {
+    if  (row.keywordCount < 5) {
+      if (message.settings.deleteSwitch) message.delete();
+      if (message.settings.botLogEnable) {
+        client.feedbackMsg(message, 'command');
+      }
+      client.logger.log('[Sys] Feedback denied for: ' + message.author.username);
+    }
+    else {
+      if (message.settings.pinMessage) {
+        message.channel.messages.fetch(message.settings.messageID).then((oldMsg) => {
+          oldMsg.unpin();
+          message.pin();
+        });
+      }
+      client.resetUser(message, row);
+    }
+  };
+
+  client.feedbackMsg = async (message, type) => {
+    message.channel.messages.fetch(message.settings.messageID).then((oldMsg) => {
+      const embed = new MessageEmbed()
+        .setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
+        .setColor(15946079)
+        .setTimestamp(oldMsg.createdAt)
+        .setThumbnail(client.user.avatarURL())
+        .addField('Feedback Denied!!' , message.settings.response)
+        .addField('Last request', oldMsg.cleanContent,)
+        .addField('About',`Type ${message.settings.prefix}help for info`)
+        .setFooter(oldMsg.author.username, oldMsg.author.avatarURL())
+        .setURL(oldMsg.embeds.url);
+      if (type === 'command') embed.fields.splice(0, 1);
+      message.channel.send({embed});
+    });
+  };
+};
