@@ -21,7 +21,7 @@ module.exports = async (client) => {
   await client.user.setPresence(presence);
 
   //check for guilds added offline
-  client.guilds.forEach(g => client.guildCheck(g));
+  client.guilds.forEach(g => client.query.guildCheck(client, g));
 
   client.logger.log(`Logged in as: ${client.user.tag}. Serving ${client.users.size} users, ${client.channels.size} channels, ${client.guilds.size} servers.`, 'ready');
 };

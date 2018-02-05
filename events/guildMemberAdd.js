@@ -7,12 +7,12 @@ module.exports = async (client, member) => {
   if (!member.user.bot) {
     sql.get(`SELECT * FROM users WHERE jID = "${member.joined}"`).then(row => {
       if (!row) {
-        client.insertUser(member);
+        client.query.insertUser(member);
       }
     }).catch(() => {
       console.error;
-      client.createUser().then(() => {
-        client.insertUser(member);
+      client.query.createUser().then(() => {
+        client.query.insertUser(member);
       });
     });
   }

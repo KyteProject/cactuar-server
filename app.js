@@ -1,10 +1,9 @@
 /*
-TODO: link submission to system
 TODO: If link is youtube check to see if the word 'feedback' appears in teh same message, if so perform a check that requires y/n input from user?
-TODO: React to sccessfull link
 TODO: do not allow multi-links
 TODO: acheivements
 TODO: feedback master role
+TODO: Handling of if user deletes feedback link/post
 */
 
 if (process.version.slice(1).split('.')[0] < 8) throw new Error('Node 8.0.0 or higher is required. Update Node on your system.');
@@ -22,6 +21,7 @@ class FeedBot extends Client {
     this.ccxt = require ('ccxt');
     this.config = require('./config.js');
     this.logger = require('./functions/logger');
+    this.query = require('./functions/query.js');
     this.commands = new Collection();
     this.aliases = new Collection();
   }
@@ -82,12 +82,13 @@ class FeedBot extends Client {
 
 const client = new FeedBot({
   fetchAllMembers: true,
+  disableEveryone: true,
   disabledEvents: ['TYPING_START'],
 });
 
 require('./functions/feedback.js')(client);
 require('./functions/util.js')(client);
-require('./functions/query.js')(client);
+
 if (sql.open('./database/feedbot.sqlite')) {client.logger.log('SQLite DB loaded.');}
 
 const init = async () => {

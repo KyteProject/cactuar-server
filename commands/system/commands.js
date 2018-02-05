@@ -14,7 +14,7 @@ exports.run = (client, message, args, level) => {
         output += `\u200b\n== ${cat} ==\n`;
         currentCategory = cat;
       }
-      output += `${message.settings.prefix}${c.help.name}${' '.repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
+      output += `• ${message.settings.prefix}${c.help.name}${' '.repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
     });
     message.author.send(output, {code: 'asciidoc', split: { char: '\u200b' }});
   } else {
@@ -22,7 +22,7 @@ exports.run = (client, message, args, level) => {
     if (client.commands.has(command)) {
       command = client.commands.get(command);
       if (level < client.levelCache[command.conf.permLevel]) return;
-      message.channel.send(`= ${command.help.name} = \n\nDescription:: ${command.help.extended}\nUsage:: ${command.help.usage}\nAliases:: ${command.conf.aliases.join(', ')}`, {code:'asciidoc'});
+      message.channel.send(`= ${command.help.name} = \n\nDescription :: ${command.help.extended}\nUsage :: ${command.help.usage}\nAliases :: ${command.conf.aliases.join(', ')}`, {code:'asciidoc'});
     }
   }
 };

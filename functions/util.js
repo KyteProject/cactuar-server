@@ -41,7 +41,7 @@ module.exports = (client) => {
       const match = /([0-9]{17,20})/.exec(chanid);
       if (!match) return message.channel.id;
       const id = match[1];
-      const check = await message.guild.channels.get(id);
+      const check = await client.channels.resolve(id);
       if (check.name !== undefined && check.type === 'text') return id;
     } catch (error) {
       throw error;

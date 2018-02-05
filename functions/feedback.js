@@ -11,9 +11,9 @@ module.exports = async (client) => {
     message.charCountNoSpace = message.argsJoined.replace(regex, '').length;
     client.countKeywords(message);
     message.score = Math.round(((message.wordCount * 0.2) + (message.charCountNoSpace / 100) + (message.keywordCount * 9)) * multipier);
-    message.tokenGain = (message.score >= 100) ? 1 : 0;
+    message.tokenGain = (message.score >= 120) ? 1 : 0;
     message.channel.send(message.score);  // to be removed before launch
-    client.feedbackSubmit(message);
+    client.query.feedbackSubmit(client, message);
   };
 
   client.nextLevel = async (message, level) => {
@@ -57,14 +57,13 @@ module.exports = async (client) => {
         return true;
       }
     }
-    return false;
   };
 
   client.feedbackPermission = async (message, row) => {
     if  (row.keywordCount < 5) {
       if (message.settings.deleteSwitch) message.delete();
       if (message.settings.botLogEnable) {
-        client.feedbackMsg(message, 'command');
+        client.feedbackMsg(message, row);
       }
       client.logger.log('[Sys] Feedback denied for: ' + message.author.username);
     }
@@ -75,11 +74,13 @@ module.exports = async (client) => {
           message.pin();
         });
       }
-      client.resetUser(message, row);
+      message.timesRequested = row.timesRequested + 1;
+      client.query.updateUser(client, message, 'request');
+      message.react(message.heartArray.random());
     }
   };
 
-  client.feedbackMsg = async (message, type) => {
+  client.feedbackMsg = async (message, row, type) => {
     message.channel.messages.fetch(message.settings.messageID).then((oldMsg) => {
       const embed = new MessageEmbed()
         .setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
@@ -87,8 +88,9 @@ module.exports = async (client) => {
         .setTimestamp(oldMsg.createdAt)
         .setThumbnail(client.user.avatarURL())
         .addField('Feedback Denied!!' , message.settings.response)
-        .addField('Last request', oldMsg.cleanContent,)
-        .addField('About',`Type ${message.settings.prefix}help for info`)
+        .addField('Last Request', oldMsg.cleanContent,)
+        .addField('Stats',`Token Count: ${row.tokens} Request Ratio: ${row.timesRequested}:${row.timesGiven}` , true)
+        .addField('About',`Type ${message.settings.prefix}help for info`, true)
         .setFooter(oldMsg.author.username, oldMsg.author.avatarURL())
         .setURL(oldMsg.embeds.url);
       if (type === 'command') embed.fields.splice(0, 1);
