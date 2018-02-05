@@ -1,6 +1,4 @@
 const { MessageEmbed } = require('discord.js');
-const keywordArray = require('./../resources/keywords.json');
-const linkArray = require('./../resources/links.json');
 
 module.exports = async (client) => {
   
@@ -44,16 +42,16 @@ module.exports = async (client) => {
 
   client.countKeywords = async (message) => {
     message.keywordCount = 0;
-    for (let i = 0; i < keywordArray.length; i++) {
-      if (message.argsJoined.includes(keywordArray[i])) {
+    for (let i = 0; i < client.keywords.length; i++) {
+      if (message.argsJoined.includes(client.keywords[i])) {
         message.keywordCount++;
       }
     }
   };
 
   client.checkFeedback = async (message) => {
-    for (let i = 0; i < linkArray.length; i++) {
-      if (message.cleanContent.includes(linkArray[i])) {
+    for (let i = 0; i < client.urls.length; i++) {
+      if (message.cleanContent.includes(client.urls[i])) {
         return true;
       }
     }
@@ -69,10 +67,20 @@ module.exports = async (client) => {
     }
     else {
       if (message.settings.pinMessage) {
-        message.channel.messages.fetch(message.settings.messageID).then((oldMsg) => {
-          oldMsg.unpin();
+        try {
+          const match = /([0-9]{17,20})/.exec(message.settings.messageID);
+          if (!match) throw 'Invalid message id.';
+          const id = match[1];
+          const oldMsg = await message.channel.messages.fetch(id);
+          if (oldMsg.cleanContent !== undefined) {
+            oldMsg.unpin();
+            message.pin();
+          }
+        }
+        catch (error) {
           message.pin();
-        });
+          client.logger.log(error, 'error');
+        }
       }
       message.timesRequested = row.timesRequested + 1;
       client.query.updateUser(client, message, 'request');
@@ -81,20 +89,31 @@ module.exports = async (client) => {
   };
 
   client.feedbackMsg = async (message, row, type) => {
-    message.channel.messages.fetch(message.settings.messageID).then((oldMsg) => {
-      const embed = new MessageEmbed()
-        .setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
-        .setColor(15946079)
-        .setTimestamp(oldMsg.createdAt)
-        .setThumbnail(client.user.avatarURL())
-        .addField('Feedback Denied!!' , message.settings.response)
-        .addField('Last Request', oldMsg.cleanContent,)
-        .addField('Stats',`Token Count: ${row.tokens} Request Ratio: ${row.timesRequested}:${row.timesGiven}` , true)
-        .addField('About',`Type ${message.settings.prefix}help for info`, true)
-        .setFooter(oldMsg.author.username, oldMsg.author.avatarURL())
-        .setURL(oldMsg.embeds.url);
-      if (type === 'command') embed.fields.splice(0, 1);
-      message.channel.send({embed});
-    });
+    try {
+      const match = /([0-9]{17,20})/.exec(message.settings.messageID);
+      if (!match) throw 'Invalid message id.';
+      const id = match[1];
+      const oldMsg = await message.channel.messages.fetch(id);
+      if (oldMsg.cleanContent !== undefined) {
+        // message.channel.messages.fetch(id).then((oldMsg) => {
+        const embed = new MessageEmbed()
+          .setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
+          .setColor(15946079)
+          .setTimestamp(oldMsg.createdAt)
+          .setThumbnail(client.user.avatarURL())
+          .addField('Feedback Denied!!' , message.settings.response)
+          .addField('Last Request', oldMsg.cleanContent,)
+          .addField('Stats',`Token Count: ${row.tokens} Request Ratio: ${row.timesRequested}:${row.timesGiven}` , true)
+          .addField('About',`Type ${message.settings.prefix}help for info`, true)
+          .setFooter(oldMsg.author.username, oldMsg.author.avatarURL())
+          .setURL(oldMsg.embeds.url);
+        if (type === 'command') embed.fields.splice(0, 1);
+        message.channel.send({embed});
+        // });
+      }
+    } catch (error) {
+      client.logger.log(error, 'error');
+      message.channel.send('Feedback has been denied - Error: Previous request message cannot be found.');
+    }
   };
 };

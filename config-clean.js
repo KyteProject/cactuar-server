@@ -7,22 +7,17 @@ const config = {
 
   // Default per-server settings. New guilds have these settings. 
   'defaultSettings' : {
-    'prefix': '.',                        // Command prefix
-    'feedbackChannel': 'feedback-tunes',  // Name of channel for bot to function
-    'botLogEnable': 1,                    // true - toggles bot log output
-    'modRole': 'Moderator',               // Name of Mod role in server
-    'adminRole': 'Administrator',         // Name of Admin role in server
-    'enableBadges': 1,                    // true - toggles badge system
-    'badgeNotice': 1,                     // true - toggles badge notifcations
-    'scoreTime': 5,
-    'pointsReward': 250,
-    'minPoints': 1,
-    'maxPoints': 50,
-    'pointCost': 10,
-    'deleteSwitch' : 1,                   // true - Toggles auto moderation of messages
-    'response' : '*brrp* Don\'t be such a morty... Have you thought about *burp* giving feedback to others before asking for feedback yourself?',  // Sets bots response
-    'pinMessage' : 1,                     // true  - Toggles auto message pin
-    'welcomeMessage': 1                   // true  - Toggles auto message pin
+    'prefix': '.',                            // Command prefix
+    'feedbackChannel': 'insert channel ID',   // Name of channel for bot to function
+    'botLogEnable': 1,                        // true - toggles bot log output
+    'modRole': 'Moderator',                   // Name of Mod role in server
+    'adminRole': 'Administrator',             // Name of Admin role in server
+    'enableBadges': 1,                        // true - toggles badge system
+    'pointCost': 10,                          // Cost to request feedback
+    'deleteSwitch' : 1,                       // true - Toggles auto moderation of messages
+    'response': '*brrp* Don\'t be such a morty... Have you thought about *burp* giving feedback to others before asking for feedback yourself?',    // Sets bots response
+    'pinMessage': 1,                          // true  - Toggles auto message pin
+    'messageID': 'insert msg ID'              // Sets feedback message ID
   },
 
   permLevels: [

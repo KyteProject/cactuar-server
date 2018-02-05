@@ -29,7 +29,7 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
   enabled: true,
-  guildOnly: false,
+  guildOnly: true,
   aliases: ['h', 'halp'],
   permLevel: 'User',
   botPerms: []
