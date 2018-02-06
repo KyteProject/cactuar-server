@@ -17,6 +17,7 @@ exports.run = (client, message, args, level) => {
       output += `• ${message.settings.prefix}${c.help.name}${' '.repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
     });
     message.author.send(output, {code: 'asciidoc', split: { char: '\u200b' }});
+    message.channel.send('Command list sent.  Please check your DM\'s.');
   } else {
     let command = args[0];
     if (client.commands.has(command)) {

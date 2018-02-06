@@ -11,9 +11,10 @@ exports.run = async (client, message, args, level) => {
 • Users      :: ${client.users.size.toLocaleString()}
 • Servers    :: ${client.guilds.size.toLocaleString()}
 • Channels   :: ${client.channels.size.toLocaleString()}
-• Channels   :: ${client.commands.size.toLocaleString()}
+• Commands   :: ${client.commands.size.toLocaleString()}
 • Discord.js :: v${version}
-• Node       :: ${process.version}`, {code: 'asciidoc'});
+• Node       :: ${process.version}
+• Bot        :: v${client.config.version}`, {code: 'asciidoc'});
 };
 
 exports.conf = {

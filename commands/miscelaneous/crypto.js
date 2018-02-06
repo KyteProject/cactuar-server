@@ -44,7 +44,7 @@ exports.conf = {
 exports.help = {
   name: 'crypto',
   category: 'Miscelaneous',
-  description: 'Display last price on an exchange for a currency pair.',
+  description: 'Display last price for a currency pair.',
   extended: 'This command will allow you to query a cryptocurrency exchange and pull the last trade price for the currency pair as provided by the exchanges API.  If executed without arguments it will deafult to BTC/USD on the Bitfinex exchange.  This command has an execution time of 2 seconds in order to prevent exchange API request flooding.',
   usage: 'crypto [exchange] [currency pair] - Example: .crypto gdax btc/gbp'
 };

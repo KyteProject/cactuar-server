@@ -9,7 +9,7 @@ exports.run = async (client, message, args, level) => {
       const number = Math.floor(Math.random() * (max - min + 1)) + min;
   
       xkcd(number, (data) => {
-        message.channel.send(`**${data.title}**`, 
+        message.channel.send(`**${data.title}** - xkcd.com`, 
           { files: [new MessageAttachment(data.img, `${data.title}.jpg`)] 
           });
       });

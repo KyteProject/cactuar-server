@@ -1,7 +1,0 @@
-exports.helpMsg = [
-  ''
-];
-
-exports.ownerMsg = [
-  ''
-];
