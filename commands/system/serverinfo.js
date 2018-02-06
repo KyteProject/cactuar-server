@@ -12,8 +12,7 @@ exports.run = async (client, message, args, level) => {
     .addField('Location', message.guild.region, true)
     .addField('Created', message.guild.createdAt.toLocaleString(), true)
     .addField('Channels', `${message.guild.channels.filter(chan => chan.type === 'voice').size} voice / ${message.guild.channels.filter(chan => chan.type === 'text').size} text`, true)
-    .addField('Roles', message.guild.roles.size, true)
-    .setFooter(message.guild.owner.user.tag, message.guild.owner.user.avatarURL(), true);
+    .addField('Roles', message.guild.roles.size, true);
   message.channel.send({embed});
 };
 

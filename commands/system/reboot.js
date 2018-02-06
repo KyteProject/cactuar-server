@@ -1,6 +1,6 @@
 exports.run = async (client, message, args, level) => {
   try {
-    await message.reply('Bot is shutting down.');
+    await message.channel.send('Bot is shutting down.');
     client.commands.forEach( async cmd => {
       await client.unloadCommand(cmd);
     });

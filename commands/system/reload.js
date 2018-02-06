@@ -1,14 +1,14 @@
 exports.run = async (client, message, args, level) => {
-  if (!args || args.length < 1) return message.reply('Must provide a command to reload.');
+  if (!args || args.length < 1) return message.channel.send('Must provide a command to reload.');
 
   const commands = client.commands.get(args[0]) || client.commands.get(client.aliases.get(args[0]));
-  if (!commands) return message.reply(`The command \`${args[0]}\` doesn't seem to exist, nor is it an alias. Try again!`);
+  if (!commands) return message.channel.send(`The command \`${args[0]}\` doesn't seem to exist, nor is it an alias. Try again!`);
 
   let response = await client.unloadCommand(`${commands.conf.location}`, commands.help.name);
-  if (response) return message.reply(`Error Unloading: ${response}`);
+  if (response) return message.channel.send(`Error Unloading: ${response}`);
   
   response = client.loadCommand(`${commands.conf.location}`, commands.help.name);
-  if (response) return message.reply(`Error loading: ${response}`);
+  if (response) return message.channel.send(`Error loading: ${response}`);
   
   message.reply(`The command \`${commands.help.name}\` has been reloaded`);
 };
