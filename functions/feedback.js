@@ -98,7 +98,7 @@ module.exports = async (client) => {
         // message.channel.messages.fetch(id).then((oldMsg) => {
         const embed = new MessageEmbed()
           .setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
-          .setColor(15946079)
+          .setColor('00d919')
           .setTimestamp(oldMsg.createdAt)
           .setThumbnail(client.user.avatarURL())
           .addField('Feedback Denied!!' , message.settings.response)

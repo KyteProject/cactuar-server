@@ -92,6 +92,13 @@ exports.loadConfig = async (client, message) => {
   }).catch(() => { console.error; });
 };
 
+exports.loadGuilds = async (client, message) => {
+  await sql.get(`SELECT * FROM guild_config WHERE gID = "${message.guild.id}"`).then(row => {
+    if (row) { message.settings = row; }
+    else { message.settings = client.config.defaultSettings; }
+  }).catch(() => { console.error; });
+};
+
 exports.feedbackSubmit = async (client, message) => {
   await sql.get(`SELECT * FROM users WHERE jID = "${message.member.joined}"`).then(row => {
     if (!row) {

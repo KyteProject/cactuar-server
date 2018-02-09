@@ -3,7 +3,6 @@ TODO: If link is youtube check to see if the word 'feedback' appears in teh same
 TODO: do not allow multi-links
 TODO: acheivements
 TODO: feedback master role
-TODO: Handling of if user deletes feedback link/post
 */
 
 if (process.version.slice(1).split('.')[0] < 8) throw new Error('Node 8.0.0 or higher is required. Update Node on your system.');
