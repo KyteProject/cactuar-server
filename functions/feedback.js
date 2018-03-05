@@ -9,7 +9,7 @@ module.exports = async (client) => {
     message.charCountNoSpace = message.argsJoined.replace(regex, '').length;
     client.countKeywords(message);
     message.score = Math.round(((message.wordCount * 0.2) + (message.charCountNoSpace / 100) + (message.keywordCount * 9)) * multipier);
-    message.tokenGain = (message.score >= 120) ? 1 : 0;
+    message.tokenGain = (message.score >= 150) ? 1 : 0;
     message.channel.send(message.score);  // to be removed before launch
     client.query.feedbackSubmit(client, message);
   };
@@ -58,7 +58,7 @@ module.exports = async (client) => {
   };
 
   client.feedbackPermission = async (message, row) => {
-    if  (row.keywordCount < 5) {
+    if  ((row.keywordCount < 5) && (row.tokens === 0)) {
       if (message.settings.deleteSwitch) message.delete();
       if (message.settings.botLogEnable) {
         client.feedbackMsg(message, row);
@@ -66,6 +66,10 @@ module.exports = async (client) => {
       client.logger.log('[Sys] Feedback denied for: ' + message.author.username);
     }
     else {
+      if ((row.keywordCount < 5) && (row.tokens > 0)) {
+        message.tokens = row.tokens - 1;
+        message.reply(`You used a token. You have ${message.tokens} remaining.`);
+      }
       if (message.settings.pinMessage) {
         try {
           const match = /([0-9]{17,20})/.exec(message.settings.messageID);

@@ -7,6 +7,7 @@
 # File Extensions
 *.log
 *.txt
+*.sqlite
 
 # Specific Files
 package-lock.json

@@ -9,17 +9,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ccxt": "^1.10.833",
-    "chalk": "^2.3.0",
+    "ccxt": "^1.11.11",
+    "chalk": "^2.3.2",
     "discord.js": "github:hydrabolt/discord.js",
-    "enmap": "^0.4.2",
-    "enmap-level": "^1.0.0",
+    "enmap": "^0.4.6",
+    "enmap-level": "^1.0.1",
     "fs-nextra": "^0.3.2",
     "klaw": "^2.1.1",
     "log-prefix": "0.0.0",
     "log-timestamp": "https://github.com/KyteProject/node-log-timestamp/tarball/master",
-    "moment": "^2.20.1",
-    "moment-duration-format": "^2.2.0",
+    "moment": "^2.21.0",
+    "moment-duration-format": "^2.2.2",
     "path": "^0.12.7",
     "promisify": "0.0.3",
     "sqlite": "^2.9.1",
@@ -27,9 +27,9 @@
   },
   "devDependencies": {
     "cross-env": "^5.1.3",
-    "eslint": "^4.15.0",
+    "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-plugin-import": "^2.9.0"
   },
   "repository": {
     "type": "git",

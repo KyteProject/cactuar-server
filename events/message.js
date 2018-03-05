@@ -19,10 +19,12 @@ module.exports = async (client, message) => {
     }
     else if (message.channel.id === message.settings.feedbackChannel) {
       const args = message.content.trim().split(/ +/g);
-      const messageMention = args.shift();
+      const messageMention = message.mentions.members.first();
       const moderate = await client.checkFeedback(message);
       message.argsJoined = args.join(' ').replace(/[^0-9a-z\s]/gi, '');
+
       message.userMentioned = await client.verifyUser(messageMention ? messageMention : message.author.id);
+
       message.heartArray = ['❤', '💚', '💙', '💜', '💛',];
     
       if (moderate) {
@@ -39,7 +41,7 @@ module.exports = async (client, message) => {
 };
 
 
-// rewarding large feedback posts with a token (score greater than 120)
+// rewarding large feedback posts with a token (score greater than 150)
 // keyword count to 4 or 5 for feedback, or use a stored token
 // tokens can be gived my mods, or won in games/comps
 // feedback can only counts when user is @ mentioned at the start (may updaste later)

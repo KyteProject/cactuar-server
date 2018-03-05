@@ -1,4 +1,5 @@
 exports.run = async (client, message, args, level) => {
+  if (!args[0]) return message.channel.send('You need a message.  Remember to be careful with this!');
   client.guilds.forEach(i => {
     i.systemChannel.startTyping();
     setTimeout(() => {

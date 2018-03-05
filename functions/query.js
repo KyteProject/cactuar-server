@@ -55,8 +55,9 @@ exports.updateUser = async (client, message, type) => {
       ]);
   }
   else if (type === 'request') {
-    await sql.run('UPDATE users SET timesRequested=?, lastRequest=?, keywordCount=? WHERE jID=?',
+    await sql.run('UPDATE users SET timesRequested=?, tokens=?, lastRequest=?, keywordCount=? WHERE jID=?',
       [ message.timesRequested,
+        message.tokens,
         message.createdAt.toString(),
         0,
         message.member.joined
@@ -138,4 +139,11 @@ exports.feedbackRequest = async (client, message) => {
       });
     });
   });
+};
+
+exports.userToken = async (client, target, row) => {
+  await sql.run('UPDATE users SET tokens=? WHERE jID=?',
+    [ row.tokens,
+      target.joined
+    ]);
 };
