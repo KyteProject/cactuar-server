@@ -3,7 +3,6 @@ require(`${process.cwd()}/modules/Prototypes.js`);
 if (Number(process.version.slice(1).split('.')[0]) < 8) throw new Error('Node 8.0.0 or higher is required.');
 
 const { Client, Collection } = require('discord.js');
-const {readdir} = require('fs-nextra');
 const klaw = require('klaw');
 const path = require('path');
 const sql = require('sqlite');
