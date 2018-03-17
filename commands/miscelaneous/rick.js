@@ -1,4 +1,4 @@
-const rickArray = require('../../resources/rick.js');
+const rickArray = require(`${process.cwd()}/resources/rick.js`);
 
 exports.run = async (client, message, args, level) => {
   message.channel.send(rickArray.random());

@@ -1,7 +1,7 @@
 module.exports = (client) => {
 
-  client.keywords = require('./../resources/keywords.json');
-  client.urls = require('./../resources/links.json');
+  client.keywords = require(`${process.cwd()}/resources/keywords.json`);
+  client.urls = require(`${process.cwd()}/resources/links.json`);
 
   client.verifyUser = async (user) => {
     try {

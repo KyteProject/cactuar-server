@@ -1,4 +1,4 @@
-const commandHandler = require('../functions/command.js');
+const commandHandler = require(`${process.cwd()}/functions/command.js`);
 
 module.exports = async (client, message) => {
   if (message.author.bot) return;
