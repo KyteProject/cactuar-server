@@ -49,7 +49,7 @@ module.exports = (client) => {
     }
   };
 
-  //Clean text input
+  // Clean text input
   client.clean = async (client, text) => {
     if (text && text.constructor.name == 'Promise')
       text = await text;
@@ -63,12 +63,84 @@ module.exports = (client) => {
     return text;
   };
 
+  // Sanitise settings input
+  client.verifyKey = async (message, settings, key, input) => {
+    if (key === 'botLogEnable' || key === 'enableBadges' || 
+        key === 'deleteSwitch' || key === 'pinMessage') {
+      const match = /[0-1]/.exec(input);
+      if (!match || (input.length != 1)) return message.reply('Value must be a 1 or a 0  (1 = enabled / 0 = dissabled)');
+      settings[key] = parseInt(input, 10);
+      return settings;
+    } 
+    else if (key === 'feedbackChannel') {
+      try {
+        const match = /([0-9]{17,20})/.exec(input);
+        if (!match) return message.reply('Not a valid channel');
+        const id = match[1];
+        const check = await client.channels.resolve(id);
+        if (check.name !== undefined && check.type === 'text') {
+          settings[key] = check.id;
+          return settings;
+        }
+      } catch (error) {
+        throw message.reply('This channel does not exist.');
+      }
+    }
+    else if (key === 'messageID') {
+      try {
+        const match = /([0-9]{17,20})/.exec(input);
+        if (!match) throw message.reply('Invalid message id.');
+        settings[key] = input;
+        return settings;
+      }
+      catch (error) {
+        throw error;
+      }
+    }
+    else if (key === 'modRole' || key === 'adminRole') {
+      try {
+        const match = /([0-9]{17,20})/.exec(input);
+        if (!match) return message.reply('not a valid Role.');
+        const id = match[1];
+        const check = await message.guild.roles.resolve(id);
+        if (check.name !== undefined) {
+          settings[key] = check.name;
+          return settings;
+        }
+      }
+      catch (error) {
+        throw message.reply('This role does not exist.');
+      }
+    }
+    else if (key === 'response') {
+      try {
+        if (input.length > 250) return message.reply('Invalid response string. Input must be alphanumeric, include only `(_.,!?:;&()^`, and be under 250 characters');
+        settings[key] = input.replace(/[^a-z0-9 _.,!)?:(;&^]/gi, '');
+        return settings;
+      }
+      catch (error) {
+        throw error;
+      }
+    }
+  };
+
+  client.awaitReply = async (message, question, filter, limit = 50000, embed) => {
+    await message.channel.send(question, embed);
+    try {
+      const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
+      return collected.first().content;
+    } catch (error) {
+      client.logger.error(error);
+      return false;
+    }
+  };
+
   // Pluralise string
   String.prototype.toPlural = function() {
     return this.replace(/((?:\D|^)1 .+?)s/g, '$1');
   };
 
-  //Randomise Array
+  // Randomise Array
   Array.prototype.random = function() {
     return this[Math.floor(Math.random() * this.length)];
   };

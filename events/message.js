@@ -39,12 +39,3 @@ module.exports = async (client, message) => {
     else return;
   }
 };
-
-
-// rewarding large feedback posts with a token (score greater than 150)
-// keyword count to 4 or 5 for feedback, or use a stored token
-// tokens can be gived my mods, or won in games/comps
-// feedback can only counts when user is @ mentioned at the start (may updaste later)
-// feedback can only counts in feedback channel
-// feedback cannot be given to self, or bot
-// bot responds with heart if score is greater than 75

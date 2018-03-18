@@ -6,8 +6,8 @@ exports.run = async (client, message, args, level) => {
     });
     process.exit(1);
   } 
-  catch (e) {
-    console.log(e); 
+  catch (error) {
+    console.log(error); 
   }
 };
 

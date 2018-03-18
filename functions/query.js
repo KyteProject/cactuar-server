@@ -1,7 +1,7 @@
 const sql = require('sqlite');
 
 exports.createGuild = async () => {
-  await sql.run('CREATE TABLE IF NOT EXISTS guild_config (gID TEXT NOT NULL UNIQUE, prefix TEXT NOT NULL, feedbackChannel TEXT NOT NULL, botLogEnable INTEGER NOT NULL, modRole TEXT NOT NULL, adminRole TEXT NOT NULL, enableBadges INTEGER NOT NULL, pointCost INTEGER NOT NULL, deleteSwitch INTEGER NOT NULL, response TEXT NOT NULL, pinMessage INTEGER NOT NULL, messageID INTEGER,PRIMARY KEY(`gID`))');
+  await sql.run('CREATE TABLE IF NOT EXISTS guild_config (gID TEXT NOT NULL UNIQUE, prefix TEXT NOT NULL, feedbackChannel TEXT NOT NULL, botLogEnable INTEGER NOT NULL, modRole TEXT NOT NULL, adminRole TEXT NOT NULL, enableBadges INTEGER NOT NULL, deleteSwitch INTEGER NOT NULL, response TEXT NOT NULL, pinMessage INTEGER NOT NULL, messageID INTEGER,PRIMARY KEY(`gID`))');
 };
 
 exports.createUser = async () => {
@@ -9,7 +9,7 @@ exports.createUser = async () => {
 };
 
 exports.insertGuild = async (client, guild) => {
-  await sql.run('INSERT INTO guild_config (gID, prefix, feedbackChannel, botLogEnable, modRole, adminRole, enableBadges, pointCost, deleteSwitch, response, pinMessage, messageID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+  await sql.run('INSERT INTO guild_config (gID, prefix, feedbackChannel, botLogEnable, modRole, adminRole, enableBadges, deleteSwitch, response, pinMessage, messageID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [ guild.id,
       client.config.defaultSettings.prefix,
       client.config.defaultSettings.feedbackChannel,
@@ -17,7 +17,6 @@ exports.insertGuild = async (client, guild) => {
       client.config.defaultSettings.modRole,
       client.config.defaultSettings.adminRole,
       client.config.defaultSettings.enableBadges,
-      client.config.defaultSettings.pointCost,
       client.config.defaultSettings.deleteSwitch,
       client.config.defaultSettings.response,
       client.config.defaultSettings.pinMessage,
@@ -71,6 +70,22 @@ exports.updateUser = async (client, message, type) => {
     client.console.log('not type provided', 'error');
   }
   client.logger.log(`[DB] User: ${message.author.tag} submitted feedback, databse updated.`);
+};
+
+exports.setConf = async (client, message, settings) => {
+  await sql.run('UPDATE guild_config SET prefix=?, feedbackChannel=?, botLogEnable=?, modRole=?, adminRole=?, enableBadges=?, deleteSwitch=?, response=?, pinMessage=?, messageID=? WHERE gID=?',
+    [ settings.prefix,
+      settings.feedbackChannel,
+      settings.botLogEnable,
+      settings.modRole,
+      settings.adminRole,
+      settings.enableBadges,
+      settings.deleteSwitch,
+      settings.response,
+      settings.pinMessage,
+      settings.messageID,
+      message.guild.id
+    ]);
 };
   
 exports.guildCheck = async (client, guild) => {

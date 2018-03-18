@@ -66,6 +66,7 @@ module.exports = async (client) => {
       client.logger.log('[Sys] Feedback denied for: ' + message.author.username);
     }
     else {
+      message.tokens = row.tokens;
       if ((row.keywordCount < 5) && (row.tokens > 0)) {
         message.tokens = row.tokens - 1;
         message.reply(`You used a token. You have ${message.tokens} remaining.`);
