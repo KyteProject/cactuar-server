@@ -124,10 +124,10 @@ module.exports = (client) => {
     }
   };
 
-  client.awaitReply = async (message, question, filter, limit = 50000, embed) => {
+  client.awaitReply = async (message, question, filter, limit, embed) => {
     await message.channel.send(question, embed);
     try {
-      const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
+      const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ['time'] });
       return collected.first().content;
     } catch (error) {
       client.logger.error(error);

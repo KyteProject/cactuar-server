@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ccxt": "^1.11.117",
+    "ccxt": "^1.11.129",
     "chalk": "^2.3.2",
     "discord.js": "github:hydrabolt/discord.js",
     "enmap": "^0.4.6",

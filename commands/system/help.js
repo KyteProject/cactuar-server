@@ -1,8 +1,6 @@
-const { MessageEmbed } = require('discord.js');
-
 exports.run = async (client, message, args, level) => {
 
-  message.channel.send(`
+  message.author.send(`
 This bot works by monitoring the designated 'feedback' channel. It's operations are divided into two categories: requests and contributions. The bot will detect messages that match these conditions and take relevant actions. In order to post a request for feedback you must first give feedback to others. This does not mean one line, or minimal effort, it means giving the kind of feedback you would like to receive. Provide quality contributions to this server and the bot *will* allow you to post your links ;)
 
 **Submissions**

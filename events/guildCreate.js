@@ -8,5 +8,5 @@ module.exports = async (client, guild) =>  {
   \`.help\` - Display some help info.\n
   \`.commands\` - Send a list of commands you can use, or extended help on a specifc command.\n
   \`.config\` - Allows you to view and set your servers configuration options.\n
-  For support, feedback, suggestions, bugs .etc you can message: @Dan (Lodestone/Kyte)#2167`);
+  For support, feedback, suggestions, bugs .etc you can message: \`@Dan <113226391771717632>\``);
 };

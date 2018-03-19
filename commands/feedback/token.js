@@ -47,6 +47,23 @@ exports.run = async (client, message, args, level) => {
       });
     });
   }
+  else if (args[0] === 'check') {
+    await sql.get(`SELECT * FROM users WHERE jID = "${target.joined}"`).then(row => {
+      if (!row) {
+        client.query.insertUser(target).then(() => {
+          message.reply('User not in database for some reason, a new record has been created. Please run the command again.');
+        });
+      }
+      else {
+        message.channel.send(`User has ${row.tokens} tokens.`);
+      }
+    }).catch(() => {
+      console.error;
+      client.query.createUser().then(() => {
+        client.query.insertUser(target);
+      });
+    });
+  }
   else {
     message.channel.send('Invalid command argument.');
   }
@@ -61,9 +78,9 @@ exports.conf = {
 };
 
 exports.help = {
-  name: 'token',
+  name: 'Token',
   category: 'Feedback',
   description: 'Command for managing user tokens.',
-  extended: '...',
-  usage: ''
+  extended: 'This command allows guild staff to add, remove and check user tokens.  Tokens can be used to bypass the checks, good for resolving issues or rewarding users.',
+  usage: 'token [add/remove/check] [@user]'
 };
