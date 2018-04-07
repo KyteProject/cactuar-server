@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ccxt": "^1.11.129",
+    "ccxt": "^1.11.155",
     "chalk": "^2.3.2",
     "discord.js": "github:hydrabolt/discord.js",
     "enmap": "^0.4.6",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "cross-env": "^5.1.4",
-    "eslint": "^4.19.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0"
   },

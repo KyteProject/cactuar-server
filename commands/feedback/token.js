@@ -1,5 +1,3 @@
-// needs optimised
-
 const sql = require('sqlite');
 
 exports.run = async (client, message, args, level) => {
@@ -78,7 +76,7 @@ exports.conf = {
 };
 
 exports.help = {
-  name: 'Token',
+  name: 'token',
   category: 'Feedback',
   description: 'Command for managing user tokens.',
   extended: 'This command allows guild staff to add, remove and check user tokens.  Tokens can be used to bypass the checks, good for resolving issues or rewarding users.',

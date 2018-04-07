@@ -9,7 +9,7 @@ module.exports = async (client) => {
     message.charCountNoSpace = message.argsJoined.replace(regex, '').length;
     client.countKeywords(message);
     message.score = Math.round(((message.wordCount * 0.2) + (message.charCountNoSpace / 100) + (message.keywordCount * 9)) * multipier);
-    message.tokenGain = (message.score >= 150) ? 1 : 0;
+    message.tokenGain = (message.score >= 200) ? 1 : 0;
     // message.channel.send(`Debug: ${message.score}`);  // to be removed before launch
     client.query.feedbackSubmit(client, message);
   };
@@ -90,7 +90,6 @@ module.exports = async (client) => {
         message.tokens = row.tokens - 1;
         client.query.updateUser(client, message, 'request');
         message.react(message.heartArray.random());
-        message.reply(`You used a token. You have ${message.tokens} remaining.`);
 
       }
       else if (['n','no','cancel', false].includes(response)) {

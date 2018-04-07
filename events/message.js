@@ -18,6 +18,10 @@ module.exports = async (client, message) => {
       });
     }
     else if (message.channel.id === message.settings.feedbackChannel) {
+      if (message.attachments.size > 0) {
+        message.delete();
+        message.reply('Attachments not allowed, please use a file host like Soundcloud or Clyp.');
+      }
       const args = message.content.trim().split(/ +/g);
       const messageMention = message.mentions.members.first();
       const moderate = await client.checkFeedback(message);
