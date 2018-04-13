@@ -8,6 +8,13 @@ exports.run = async (client, message) => {
 
   if (!cmd) return;
 
+  const rateLimit = await client.ratelimit(message, level, cmd.help.name, cmd.conf.cooldown);
+
+  if (typeof rateLimit == "string") {
+    client.logger.log(`${client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) got ratelimited while running command ${cmd.help.name}`);
+    return message.channel.send(`Please wait ${rateLimit.toPlural()} to run this command.`);
+  }
+
   if (cmd && !message.guild && cmd.conf.guildOnly)
     return message.channel.send('This command is denied via direct message.  Please execute it within a guild channel.');
 

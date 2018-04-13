@@ -1,10 +1,8 @@
 exports.run = async (client, message, args, level) => {
 
   const fetchPrice = async (exchange, symbol) => {
-    const delay = 2000;
     const price = await (exchange.fetchTicker (symbol));
     message.channel.send(`Last price for ${symbol}: **${price.last}** (*${exchange.name}*)`);
-    await new Promise (resolve => setTimeout (resolve, delay));
   };
   
   if (!args[0]) {
@@ -36,6 +34,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
   enabled: true,
   guildOnly: false,
+  cooldown: 10,
   aliases: ['cc','cryptocurrency','btc'],
   permLevel: 'User',
   botPerms: []
@@ -45,6 +44,6 @@ exports.help = {
   name: 'crypto',
   category: 'Miscelaneous',
   description: 'Display last price for a currency pair.',
-  extended: 'This command will allow you to query a cryptocurrency exchange and pull the last trade price for the currency pair as provided by the exchanges API.  If executed without arguments it will deafult to BTC/USD on the Bitfinex exchange.  This command has an execution time of 2 seconds in order to prevent exchange API request flooding.',
+  extended: 'This command will allow you to query a cryptocurrency exchange and pull the last trade price for the currency pair as provided by the exchanges API.  If executed without arguments it will deafult to BTC/USD on the Bitfinex exchange.',
   usage: 'crypto [exchange] [currency pair] - Example: .crypto gdax btc/gbp'
 };

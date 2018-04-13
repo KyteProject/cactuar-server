@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = (client) => {
 
   client.keywords = require(`${process.cwd()}/resources/keywords.json`);
@@ -132,6 +134,22 @@ module.exports = (client) => {
     } catch (error) {
       client.logger.error(error);
       return false;
+    }
+  };
+
+  client.ratelimit = async (message, level, key, duration) => {
+    // if (level > 4) return false;
+    
+    duration = duration * 1000;
+    const ratelimits = client.rateLimits.get(message.author.id) || {}; //get the map first.
+    if (!ratelimits[key]) ratelimits[key] = Date.now() - duration; //see if the command has been run before if not, add the ratelimit
+    const differnce = Date.now() - ratelimits[key]; //easier to see the difference
+    if (differnce < duration) { //check the if the duration the command was run, is more than the cooldown
+      return moment.duration(duration - differnce).format("D [days], H [hours], m [minutes], s [seconds]", 1); //returns a string to send to a channel
+    } else {
+      ratelimits[key] = Date.now(); //set the key to now, to mark the start of the cooldown
+      client.rateLimits.set(message.author.id, ratelimits); //set it
+      return true;
     }
   };
 

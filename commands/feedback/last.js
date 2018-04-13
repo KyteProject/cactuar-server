@@ -24,6 +24,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
   enabled: true,
   guildOnly: true,
+  cooldown: 10,
   aliases: ['track', 'prev', 'previous', 'lasttrack'],
   permLevel: 'User',
   botPerms: []

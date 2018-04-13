@@ -12,7 +12,7 @@ module.exports = async (client, message) => {
     await client.query.loadConfig(client, message);
     message.member.joined = `${message.member.guild.id}-${message.member.id}`;
 
-    if (message.content.indexOf(message.settings.prefix) === 0) {
+    if (message.content.indexOf(message.settings.prefix) === 0) {      
       commandHandler.run(client, message).catch(error => {
         client.logger.log(error, 'error');
       });
