@@ -1,27 +1,33 @@
-module.exports = async (client) => {
+module.exports = class {
+  constructor(client) {
+    this.client = client;
+  }
 
-  const presence = {
-    status: 'online',
-    afk: 0,
-    activity: {
-      name: 'for feedback.',
-      type: 'WATCHING',
-      url: 'http://feedbot.lodestonemusic.com',
-    }
-  };
+  async run() {
 
-  await client.wait(1000);
+    const presence = {
+      status: 'online',
+      afk: 0,
+      activity: {
+        name: 'for feedback.',
+        type: 'WATCHING',
+        url: 'http://feedbot.lodestonemusic.com',
+      }
+    };
 
-  client.appInfo = await client.fetchApplication();
+    await this.client.wait(1000);
 
-  setInterval(async () => {
-    client.appInfo = await client.fetchApplication();
-  }, 60000);
+    this.client.appInfo = await this.client.fetchApplication();
 
-  await client.user.setPresence(presence);
+    setInterval(async () => {
+      this.client.appInfo = await this.client.fetchApplication();
+    }, 60000);
 
-  //check for guilds added offline
-  client.guilds.forEach(g => client.query.guildCheck(client, g));
+    await this.client.user.setPresence(presence);
 
-  client.logger.log(`Logged in as: ${client.user.tag}. Serving ${client.users.size} users, ${client.channels.size} channels, ${client.guilds.size} servers.`, 'ready');
+    //check for guilds added offline
+    this.client.guilds.forEach(g => this.client.query.guildCheck(this.client, g));
+
+    this.client.logger.log(`Logged in as: ${this.client.user.tag}. Serving ${this.client.users.size} users, ${this.client.channels.size} channels, ${this.client.guilds.size} servers.`, 'ready');
+  }
 };

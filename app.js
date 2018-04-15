@@ -102,15 +102,29 @@ const init = async () => {
     client.logger.log(`Loaded a total of ${commandList.length} commands.`);
   }).on('error', (error) => client.logger.error(error));
 
+  const extendList = [];
+  klaw("./extenders").on("data", (item) => {
+    const extFile = path.parse(item.path);
+    if (!extFile.ext || extFile.ext !== ".js") return;
+    try {
+      require(`${extFile.dir}${path.sep}${extFile.base}`);
+      extendList.push(extFile.name);
+    } catch (error) {
+      client.logger.error(`Error loading ${extFile.name} extension: ${error}`);
+    }
+  }).on("end", () => {
+    client.logger.log(`Loaded a total of ${extendList.length} extensions.`);
+  }).on("error", (error) => client.logger.error(error));
+
   const eventList = [];
-  klaw('./events').on('data', (item) => {  
+  klaw('./events').on('data', (item) => {
     const eventFile = path.parse(item.path);
     if (!eventFile.ext || eventFile.ext !== '.js') return;
     const eventName = eventFile.name.split('.')[0];
     try {
-      const event = require(`${eventFile.dir}${path.sep}${eventFile.name}${eventFile.ext}`);    
-      eventList.push(event);      
-      client.on(eventName, event.bind(null, client));
+      const event = new (require(`${eventFile.dir}${path.sep}${eventFile.name}${eventFile.ext}`))(client);
+      eventList.push(event);
+      client.on(eventName, (...args) => event.run(...args));
       client.logger.log(`Loading Event: ${eventName}. ✔`);
       delete require.cache[require.resolve(`${eventFile.dir}${path.sep}${eventFile.name}${eventFile.ext}`)];
     } catch (error) {
