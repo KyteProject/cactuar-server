@@ -1,18 +1,23 @@
 {
-  "name": "feedbot-new",
+  "name": "cactuar",
   "version": "1.0.0",
+  "description": "Cactuar (or Feedbot) is a bot designed to help music production servers enhance their feedback channels.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint .",
+    "lint": "eslint --fix .",
+    "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": ">=8"
+  },
+  "author": "Daniel Smith",
+  "license": "",
   "dependencies": {
     "ccxt": "^1.12.141",
     "chalk": "^2.3.2",
     "discord.js": "github:hydrabolt/discord.js",
-    "enmap": "^0.4.6",
+    "enmap": "^2.1.1",
     "fs-nextra": "^0.3.2",
     "klaw": "^2.1.1",
     "log-prefix": "0.0.0",
@@ -38,6 +43,5 @@
     "url": "https://gitlab.com/KyteProject/feedbot-new/issues"
   },
   "homepage": "https://gitlab.com/KyteProject/feedbot-new#README",
-  "description": "",
   "optionalDependencies": {}
 }

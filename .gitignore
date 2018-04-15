@@ -3,6 +3,8 @@
 /data/
 /docs/
 /database/
+/.vscode/
+/.idea/
 
 # File Extensions
 *.log
