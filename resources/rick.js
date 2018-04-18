@@ -15,5 +15,5 @@ module.exports = [
   'Stupid-ass, fart-saving, carpet-store motherfucker.',
   'Allah euuh... Akbar! We\'re gonna take control of this plane! We\'re gonna 9/11 it unless Morty Smith gets better grades in math! ',
   'Pickle Riiick!',
-  'Get Schwifty'
+  'Get Schwifty',
 ];
