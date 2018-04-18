@@ -8,7 +8,7 @@ exports.conf = {
   guildOnly: true,
   aliases: ['pl', 'perms'],
   permLevel: 'User',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -16,5 +16,5 @@ exports.help = {
   category: 'System',
   description: 'Tells you your permission level.',
   extended: 'This will display your permission level, in both numerical and plain English styles.',
-  usage: 'permlevel'
+  usage: 'permlevel',
 };

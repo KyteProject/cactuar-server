@@ -7,7 +7,7 @@ exports.run = async (client, message, args, level) => {
     }
     const channel = message.guild.channels.get(channelid);
     if (!message.member.permissionsIn(channel).has(['SEND_MESSAGES', 'READ_MESSAGES'])) throw 'You do not have permission to `say` in that channel.';
-    
+
     message.delete();
 
     channel.startTyping();
@@ -25,7 +25,7 @@ exports.conf = {
   guildOnly: true,
   aliases: [],
   permLevel: 'Moderator',
-  botPerms: ['MANAGE_MESSAGES']
+  botPerms: ['MANAGE_MESSAGES'],
 };
 
 exports.help = {
@@ -33,5 +33,5 @@ exports.help = {
   category: 'Miscelaneous',
   description: 'Have the bot say something.',
   extended: 'Have the bot say something either to the current channel, or a specified one.  Is dependant on user permissions and will remove the command message.',
-  usage: 'say [#channel] [...message]'
+  usage: 'say [#channel] [...message]',
 };

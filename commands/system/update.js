@@ -1,6 +1,6 @@
 exports.run = async (client, message, args, level) => {
   if (!args[0]) return message.channel.send('You need a message.  Remember to be careful with this!');
-  client.guilds.forEach(i => {
+  client.guilds.forEach((i) => {
     i.systemChannel.startTyping();
     setTimeout(() => {
       i.systemChannel.send(args.join(' '));
@@ -14,7 +14,7 @@ exports.conf = {
   guildOnly: false,
   aliases: [],
   permLevel: 'Bot Admin',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -22,5 +22,5 @@ exports.help = {
   category: 'System',
   description: 'Push system update message.',
   extended: 'Pushes a global system message to all guilds bot is part of.  Spammy so be careful!',
-  usage: 'update'
+  usage: 'update',
 };

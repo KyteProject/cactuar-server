@@ -9,7 +9,7 @@ exports.conf = {
   guildOnly: false,
   aliases: [],
   permLevel: 'User',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -17,5 +17,5 @@ exports.help = {
   category: 'System',
   description: 'Latency and API response times.',
   extended: 'This command is a response test, it helps gauge if there is any latency (lag) in either the bots connection, or the API.',
-  usage: 'ping'
+  usage: 'ping',
 };

@@ -4,7 +4,6 @@ module.exports = class {
   }
 
   async run() {
-
     const presence = {
       status: 'online',
       afk: 0,
@@ -12,7 +11,7 @@ module.exports = class {
         name: 'for feedback.',
         type: 'WATCHING',
         url: 'http://feedbot.lodestonemusic.com',
-      }
+      },
     };
 
     await this.client.wait(1000);
@@ -25,7 +24,7 @@ module.exports = class {
 
     await this.client.user.setPresence(presence);
 
-    //check for guilds added offline
+    // check for guilds added offline
     this.client.guilds.forEach(g => this.client.query.guildCheck(this.client, g));
 
     this.client.logger.log(`Logged in as: ${this.client.user.tag}. Serving ${this.client.users.size} users, ${this.client.channels.size} channels, ${this.client.guilds.size} servers.`, 'ready');

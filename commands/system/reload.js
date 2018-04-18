@@ -6,10 +6,10 @@ exports.run = async (client, message, args, level) => {
 
   let response = await client.unloadCommand(`${commands.conf.location}`, commands.help.name);
   if (response) return message.channel.send(`Error Unloading: ${response}`);
-  
+
   response = client.loadCommand(`${commands.conf.location}`, commands.help.name);
   if (response) return message.channel.send(`Error loading: ${response}`);
-  
+
   message.reply(`The command \`${commands.help.name}\` has been reloaded`);
 };
 
@@ -18,7 +18,7 @@ exports.conf = {
   guildOnly: false,
   aliases: [],
   permLevel: 'Bot Admin',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -26,5 +26,5 @@ exports.help = {
   category: 'System',
   description: 'Reloads a command.',
   extended: 'This command is designed to unload, then reload the command from the command & aliases collections for changes to take effect.',
-  usage: 'reload [command]'
+  usage: 'reload [command]',
 };

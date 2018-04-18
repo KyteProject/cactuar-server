@@ -14,7 +14,7 @@ exports.run = async (client, message, args, level) => {
 • Commands   :: ${client.commands.size.toLocaleString()}
 • Discord.js :: v${version}
 • Node       :: ${process.version}
-• Bot        :: v${client.config.version}`, {code: 'asciidoc'});
+• Bot        :: v${client.config.version}`, { code: 'asciidoc' });
 };
 
 exports.conf = {
@@ -22,7 +22,7 @@ exports.conf = {
   guildOnly: false,
   aliases: ['bs'],
   permLevel: 'User',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -30,5 +30,5 @@ exports.help = {
   category: 'System',
   description: 'Provides statistics on the bot',
   extended: '',
-  usage: 'botstat'
+  usage: 'botstat',
 };

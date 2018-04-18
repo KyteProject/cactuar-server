@@ -16,11 +16,4 @@ package-lock.json
 settings.json
 config.json
 config.js
-
-# Asset Files
-
-# Commands
-
-# Monitors
-
-# Functions
+feedbot.sqlite

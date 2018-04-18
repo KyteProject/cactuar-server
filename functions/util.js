@@ -1,7 +1,6 @@
 const moment = require('moment');
 
 module.exports = (client) => {
-
   client.keywords = require(`${process.cwd()}/resources/keywords.json`);
   client.urls = require(`${process.cwd()}/resources/links.json`);
 
@@ -53,13 +52,12 @@ module.exports = (client) => {
 
   // Clean text input
   client.clean = async (client, text) => {
-    if (text && text.constructor.name == 'Promise')
-      text = await text;
+    if (text && text.constructor.name == 'Promise') { text = await text; }
     if (typeof evaled !== 'string') text = require('util').inspect(text, { depth: 1 });
-    
+
     text = text
-      .replace(/`/g, '`' + String.fromCharCode(8203))
-      .replace(/@/g, '@' + String.fromCharCode(8203))
+      .replace(/`/g, `\`${String.fromCharCode(8203)}`)
+      .replace(/@/g, `@${String.fromCharCode(8203)}`)
       .replace(client.config.token, 'token? lol');
 
     return text;
@@ -67,14 +65,13 @@ module.exports = (client) => {
 
   // Sanitise settings input
   client.verifyKey = async (message, settings, key, input) => {
-    if (key === 'botLogEnable' || key === 'enableBadges' || 
+    if (key === 'botLogEnable' || key === 'enableBadges' ||
         key === 'deleteSwitch' || key === 'pinMessage') {
       const match = /[0-1]/.exec(input);
       if (!match || (input.length != 1)) return message.reply('Value must be a 1 or a 0  (1 = enabled / 0 = dissabled)');
       settings[key] = parseInt(input, 10);
       return settings;
-    } 
-    else if (key === 'feedbackChannel') {
+    } else if (key === 'feedbackChannel') {
       try {
         const match = /([0-9]{17,20})/.exec(input);
         if (!match) return message.reply('Not a valid channel');
@@ -87,19 +84,16 @@ module.exports = (client) => {
       } catch (error) {
         throw message.reply('This channel does not exist.');
       }
-    }
-    else if (key === 'messageID') {
+    } else if (key === 'messageID') {
       try {
         const match = /([0-9]{17,20})/.exec(input);
         if (!match) throw message.reply('Invalid message id.');
         settings[key] = input;
         return settings;
-      }
-      catch (error) {
+      } catch (error) {
         throw error;
       }
-    }
-    else if (key === 'modRole' || key === 'adminRole') {
+    } else if (key === 'modRole' || key === 'adminRole') {
       try {
         const match = /([0-9]{17,20})/.exec(input);
         if (!match) return message.reply('not a valid Role.');
@@ -109,18 +103,15 @@ module.exports = (client) => {
           settings[key] = check.name;
           return settings;
         }
-      }
-      catch (error) {
+      } catch (error) {
         throw message.reply('This role does not exist.');
       }
-    }
-    else if (key === 'response') {
+    } else if (key === 'response') {
       try {
         if (input.length > 250) return message.reply('Invalid response string. Input must be alphanumeric, include only `(_.,!?:;&()^`, and be under 250 characters');
         settings[key] = input.replace(/[^a-z0-9 _.,!)?:(;&^]/gi, '');
         return settings;
-      }
-      catch (error) {
+      } catch (error) {
         throw error;
       }
     }
@@ -139,48 +130,45 @@ module.exports = (client) => {
 
   client.ratelimit = async (message, level, key, duration) => {
     // if (level > 4) return false;
-    
-    duration = duration * 1000;
-    const ratelimits = client.rateLimits.get(message.author.id) || {}; //get the map first.
-    if (!ratelimits[key]) ratelimits[key] = Date.now() - duration; //see if the command has been run before if not, add the ratelimit
-    const differnce = Date.now() - ratelimits[key]; //easier to see the difference
-    if (differnce < duration) { //check the if the duration the command was run, is more than the cooldown
-      return moment.duration(duration - differnce).format("D [days], H [hours], m [minutes], s [seconds]", 1); //returns a string to send to a channel
-    } else {
-      ratelimits[key] = Date.now(); //set the key to now, to mark the start of the cooldown
-      client.rateLimits.set(message.author.id, ratelimits); //set it
-      return true;
+
+    duration *= 1000;
+    const ratelimits = client.rateLimits.get(message.author.id) || {}; // get the map first.
+    if (!ratelimits[key]) ratelimits[key] = Date.now() - duration; // see if the command has been run before if not, add the ratelimit
+    const differnce = Date.now() - ratelimits[key]; // easier to see the difference
+    if (differnce < duration) { // check the if the duration the command was run, is more than the cooldown
+      return moment.duration(duration - differnce).format('D [days], H [hours], m [minutes], s [seconds]', 1); // returns a string to send to a channel
     }
+    ratelimits[key] = Date.now(); // set the key to now, to mark the start of the cooldown
+    client.rateLimits.set(message.author.id, ratelimits); // set it
+    return true;
   };
 
   // Pluralise string
-  String.prototype.toPlural = function() {
+  String.prototype.toPlural = function () {
     return this.replace(/((?:\D|^)1 .+?)s/g, '$1');
   };
 
   // Randomise Array
-  Array.prototype.random = function() {
+  Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)];
   };
 
   // Capitalises Every Word Like This
-  String.prototype.toProperCase = function() {
-    return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
+  String.prototype.toProperCase = function () {
+    return this.replace(/([^\W_]+[^\s-]*) */g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
   };
 
   // `await client.wait(1000);` to "pause" for 1 second.
   client.wait = require('util').promisify(setTimeout);
-  
-  //Error handling
+
+  // Error handling
   process.on('uncaughtException', (err) => {
     const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
     console.error('Uncaught Exception: ', errorMsg);
     process.exit(1);
   });
-    
-  process.on('unhandledRejection', err => {
+
+  process.on('unhandledRejection', (err) => {
     console.error('Uncaught Promise Error: ', err);
   });
 };

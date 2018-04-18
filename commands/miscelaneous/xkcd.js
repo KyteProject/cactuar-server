@@ -7,22 +7,22 @@ exports.run = async (client, message, args, level) => {
       const min = Math.ceil(1);
       const max = Math.floor(data.num);
       const number = Math.floor(Math.random() * (max - min + 1)) + min;
-  
+
       xkcd(number, (data) => {
-        message.channel.send(`**${data.title}** - xkcd.com`, 
-          { files: [new MessageAttachment(data.img, `${data.title}.jpg`)] 
-          });
+        message.channel.send(
+          `**${data.title}** - xkcd.com`,
+          { files: [new MessageAttachment(data.img, `${data.title}.jpg`)] },
+        );
       });
     });
-  }
-  else if (args[0] === 'latest') {
+  } else if (args[0] === 'latest') {
     xkcd((data) => {
-      message.channel.send(`**${data.title}**`, 
-        { files: [new MessageAttachment(data.img, `${data.title}.jpg`)] 
-        });
+      message.channel.send(
+        `**${data.title}**`,
+        { files: [new MessageAttachment(data.img, `${data.title}.jpg`)] },
+      );
     });
-  }
-  else {
+  } else {
     message.channel.send('Invalid Argument, leave blank for random or use \'latest\' argument.');
   }
 };
@@ -33,7 +33,7 @@ exports.conf = {
   cooldown: 10,
   aliases: [],
   permLevel: 'User',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -41,5 +41,5 @@ exports.help = {
   category: 'Miscelaneous',
   description: 'Random xkcd commic!',
   extended: 'Grabs a random xkcd commic and shares it to the channel.  Use latest argument to grab the most recent.',
-  usage: 'xkcd [...latest]'
+  usage: 'xkcd [...latest]',
 };

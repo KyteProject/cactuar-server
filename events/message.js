@@ -9,20 +9,18 @@ module.exports = class {
     if (message.author.bot) return;
 
     if (message.channel.type === 'dm') {
-      commandHandler.run(this.client, message).catch(error => {
+      commandHandler.run(this.client, message).catch((error) => {
         this.client.logger.log(error, 'error');
       });
-    }
-    else {
+    } else {
       await this.client.query.loadConfig(this.client, message);
       message.member.joined = `${message.member.guild.id}-${message.member.id}`;
 
-      if (message.content.indexOf(message.settings.prefix) === 0) {      
-        commandHandler.run(this.client, message).catch(error => {
+      if (message.content.indexOf(message.settings.prefix) === 0) {
+        commandHandler.run(this.client, message).catch((error) => {
           this.client.logger.log(error, 'error');
         });
-      }
-      else if (message.channel.id === message.settings.feedbackChannel) {
+      } else if (message.channel.id === message.settings.feedbackChannel) {
         if (message.attachments.size > 0) {
           message.delete();
           message.reply('Attachments not allowed, please use a file host like Soundcloud or Clyp.');
@@ -32,20 +30,18 @@ module.exports = class {
         const moderate = await this.client.checkFeedback(message);
         message.argsJoined = args.join(' ').replace(/[^0-9a-z\s]/gi, '');
 
-        message.userMentioned = await this.client.verifyUser(messageMention ? messageMention : message.author.id);
+        message.userMentioned = await this.client.verifyUser(messageMention || message.author.id);
 
-        message.heartArray = ['❤', '💚', '💙', '💜', '💛',];
-      
+        message.heartArray = ['❤', '💚', '💙', '💜', '💛'];
+
         if (moderate) {
           this.client.query.feedbackRequest(this.client, message);
-        }
-        else if ((message.userMentioned) && (message.userMentioned !== message.author && !message.userMentioned.bot)) { 
+        } else if ((message.userMentioned) && (message.userMentioned !== message.author && !message.userMentioned.bot)) {
           this.client.feedbackScoring(message);
+          this.client.query.insertFeedback(message);
           if (message.score >= 75) message.react(message.heartArray.random());
-        }
-        else return;
-      }
-      else return;
+        } else return;
+      } else return;
     }
   }
 };

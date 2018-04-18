@@ -9,7 +9,7 @@ exports.conf = {
   guildOnly: false,
   aliases: [],
   permLevel: 'User',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -17,5 +17,5 @@ exports.help = {
   category: 'Miscelaneous',
   description: 'Random Rick Sanchez quote!',
   extended: '',
-  usage: 'rick'
+  usage: 'rick',
 };

@@ -4,13 +4,12 @@ exports.run = async (client, message, args, level) => {
   const feedbackChannel = client.channels.resolve(message.settings.feedbackChannel);
   if (message.channel.id !== message.settings.feedbackChannel) return message.channel.send(`You can only execute this command in the designated feedback channel: ${feedbackChannel}`);
 
-  await sql.get(`SELECT * FROM users WHERE jID = "${message.member.joined}"`).then(row => {
+  await sql.get(`SELECT * FROM users WHERE jID = "${message.member.joined}"`).then((row) => {
     if (!row) {
       client.query.insertUser(message.member).then(() => {
         client.feedbackMsg(message, row, 'command');
       });
-    }
-    else {
+    } else {
       client.feedbackMsg(message, row, 'command');
     }
   }).catch(() => {
@@ -27,7 +26,7 @@ exports.conf = {
   cooldown: 10,
   aliases: ['track', 'prev', 'previous', 'lasttrack'],
   permLevel: 'User',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -35,5 +34,5 @@ exports.help = {
   category: 'Feedback',
   description: 'Command for viewing the last request.',
   extended: 'This command will retrieve the last logged feedback request for the server is is executed in.  Useful if you want to give feedback.',
-  usage: 'last'
+  usage: 'last',
 };

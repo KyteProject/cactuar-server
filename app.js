@@ -13,7 +13,8 @@ class FeedBot extends Client {
     this.config = require(`${process.cwd()}/config.js`);
     this.logger = require(`${process.cwd()}/functions/logger`);
     this.query = require(`${process.cwd()}/functions/query.js`);
-    this.ccxt = require ('ccxt');
+    this.mongo = require(`${process.cwd()}/functions/mongo.js`);
+    this.ccxt = require('ccxt');
     this.commands = new Collection();
     this.aliases = new Collection();
     this.rateLimits = new Collection();
@@ -21,7 +22,7 @@ class FeedBot extends Client {
 
   permlevel(message) {
     let permlvl = 0;
-    const permOrder = client.config.permLevels.slice(0).sort((p, c) => p.level < c.level ? 1 : -1);
+    const permOrder = client.config.permLevels.slice(0).sort((p, c) => (p.level < c.level ? 1 : -1));
     while (permOrder.length) {
       const currentLevel = permOrder.shift();
       if (message.guild && currentLevel.guildOnly) continue;
@@ -47,7 +48,7 @@ class FeedBot extends Client {
         props.init(client);
       }
       client.commands.set(props.help.name, props);
-      props.conf.aliases.forEach(alias => {
+      props.conf.aliases.forEach((alias) => {
         client.aliases.set(alias, props.help.name);
       });
       return false;
@@ -64,33 +65,32 @@ class FeedBot extends Client {
       command = client.commands.get(client.aliases.get(commandName));
     }
     if (!command) return `The command \`${commandName}\` doesn"t seem to exist, nor is it an alias. Try again!`;
-    
+
     if (command.shutdown) {
       await command.shutdown(client);
     }
     delete require.cache[require.resolve(`${commandPath}/${commandName}.js`)];
     return false;
   }
-
-
 }
 
 const client = new FeedBot({
   fetchAllMembers: false,
   disableEveryone: true,
-  disabledEvents:['GUILD_BAN_REMOVE', 'TYPING_START', 'USER_NOTE_UPDATE', 'USER_SETTINGS_UPDATE', 'VOICE_SERVER_UPDATE', 'VOICE_STATE_UPDATE'],
+  disabledEvents: ['GUILD_BAN_REMOVE', 'TYPING_START', 'USER_NOTE_UPDATE', 'USER_SETTINGS_UPDATE', 'VOICE_SERVER_UPDATE', 'VOICE_STATE_UPDATE'],
   messageCacheSize: 100,
   messageCacheLifetime: 300,
-  messageSweepInterval: 150
+  messageSweepInterval: 150,
 });
 
 require(`${process.cwd()}/functions/feedback.js`)(client);
 require(`${process.cwd()}/functions/util.js`)(client);
 
-if (sql.open(`${process.cwd()}/database/feedbot.sqlite`)) {client.logger.log('SQLite DB loaded.');}
+if (sql.open(`${process.cwd()}/database/feedbot.sqlite`)) { client.logger.log('SQLite DB loaded.'); }
+
+client.mongo.dbConnect(client);
 
 const init = async () => {
-
   const commandList = [];
   klaw('./commands').on('data', (item) => {
     const file = path.parse(item.path);
@@ -100,21 +100,21 @@ const init = async () => {
     if (response) client.logger.error(response);
   }).on('end', () => {
     client.logger.log(`Loaded a total of ${commandList.length} commands.`);
-  }).on('error', (error) => client.logger.error(error));
+  }).on('error', error => client.logger.error(error));
 
   const extendList = [];
-  klaw("./extenders").on("data", (item) => {
+  klaw('./extenders').on('data', (item) => {
     const extFile = path.parse(item.path);
-    if (!extFile.ext || extFile.ext !== ".js") return;
+    if (!extFile.ext || extFile.ext !== '.js') return;
     try {
       require(`${extFile.dir}${path.sep}${extFile.base}`);
       extendList.push(extFile.name);
     } catch (error) {
       client.logger.error(`Error loading ${extFile.name} extension: ${error}`);
     }
-  }).on("end", () => {
+  }).on('end', () => {
     client.logger.log(`Loaded a total of ${extendList.length} extensions.`);
-  }).on("error", (error) => client.logger.error(error));
+  }).on('error', error => client.logger.error(error));
 
   const eventList = [];
   klaw('./events').on('data', (item) => {
@@ -132,7 +132,7 @@ const init = async () => {
     }
   }).on('end', () => {
     client.logger.log(`Loaded a total of ${eventList.length} events.`);
-  }).on('error', (error) => client.logger.error(error));
+  }).on('error', error => client.logger.error(error));
 
   client.levelCache = {};
   for (let i = 0; i < client.config.permLevels.length; i++) {

@@ -1,4 +1,5 @@
 const sql = require('sqlite');
+
 module.exports = class {
   constructor(client) {
     this.client = client;
@@ -7,9 +8,9 @@ module.exports = class {
   async run(member) {
     if (!member || !member.id || !member.guild) return;
     member.joined = `${member.guild.id}-${member.id}`;
-  
+
     if (!member.user.bot) {
-      sql.get(`SELECT * FROM users WHERE jID = "${member.joined}"`).then(row => {
+      sql.get(`SELECT * FROM users WHERE jID = "${member.joined}"`).then((row) => {
         if (!row) {
           this.client.query.insertUser(member);
         }
@@ -20,7 +21,7 @@ module.exports = class {
         });
       });
     }
-  
+
     this.client.logger.log(`[Event] ${member.user.tag} (${member.id}) has joined ${member.guild.name} (${member.guild.id})`);
   }
 };

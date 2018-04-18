@@ -7,7 +7,7 @@ exports.conf = {
   guildOnly: false,
   aliases: [],
   permLevel: 'User',
-  botPerms: []
+  botPerms: [],
 };
 
 exports.help = {
@@ -15,5 +15,5 @@ exports.help = {
   category: 'Miscelaneous',
   description: 'Some general info about the bot.',
   extended: '',
-  usage: 'about'
+  usage: 'about',
 };
