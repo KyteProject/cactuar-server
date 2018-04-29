@@ -1,7 +1,8 @@
 const sql = require('sqlite');
 
 exports.run = async (client, message, args, level) => {
-  if (!args[0]) return message.reply('Please provide an operator');
+  if (message.settings.enableTokens === 0) return message.reply('Tokens have been disabled in guild config.');
+  if (!args[0]) return message.reply('Please provide an operator.');
   const target = message.mentions.members.first();
   if (!target) return message.reply('Please provide a target user.');
   target.joined = `${message.guild.id}-${target.id}`;

@@ -22,7 +22,9 @@ class FeedBot extends Client {
 
   permlevel(message) {
     let permlvl = 0;
-    const permOrder = client.config.permLevels.slice(0).sort((p, c) => (p.level < c.level ? 1 : -1));
+    const permOrder = this.config.permLevels.slice(0).sort((p, c) => (
+      p.level < c.level ? 1 : -1
+    ));
     while (permOrder.length) {
       const currentLevel = permOrder.shift();
       if (message.guild && currentLevel.guildOnly) continue;
@@ -34,18 +36,13 @@ class FeedBot extends Client {
     return permlvl;
   }
 
-  permCheck(message, perms) {
-    if (message.channel.type !== 'text') return;
-    return message.channel.permissionsFor(message.guild.me).missing(perms);
-  }
-
   loadCommand(commandPath, commandName) {
     try {
-      const props = new require(`${commandPath}${path.sep}${commandName}`);
+      const props = require(`${commandPath}${path.sep}${commandName}`);
       props.conf.location = commandPath;
       client.logger.log(`Loading Command: ${props.help.name}. ✔`);
       if (props.init) {
-        props.init(client);
+        props.init(this.client);
       }
       client.commands.set(props.help.name, props);
       props.conf.aliases.forEach((alias) => {
@@ -57,17 +54,22 @@ class FeedBot extends Client {
     }
   }
 
+  permCheck(message, perms) {
+    if (message.channel.type !== 'text') return;
+    return message.channel.permissionsFor(message.guild.me).missing(perms);
+  }
+
   async unloadCommand(commandPath, commandName) {
     let command;
-    if (client.commands.has(commandName)) {
-      command = client.commands.get(commandName);
-    } else if (client.aliases.has(commandName)) {
-      command = client.commands.get(client.aliases.get(commandName));
+    if (this.client.commands.has(commandName)) {
+      command = this.client.commands.get(commandName);
+    } else if (this.client.aliases.has(commandName)) {
+      command = this.client.commands.get(this.client.aliases.get(commandName));
     }
     if (!command) return `The command \`${commandName}\` doesn"t seem to exist, nor is it an alias. Try again!`;
 
     if (command.shutdown) {
-      await command.shutdown(client);
+      await command.shutdown(this.client);
     }
     delete require.cache[require.resolve(`${commandPath}/${commandName}.js`)];
     return false;
@@ -135,7 +137,7 @@ const init = async () => {
   }).on('error', error => client.logger.error(error));
 
   client.levelCache = {};
-  for (let i = 0; i < client.config.permLevels.length; i++) {
+  for (let i = 0; i < client.config.permLevels.length; i += 1) {
     const thisLevel = client.config.permLevels[i];
     client.levelCache[thisLevel.name] = thisLevel.level;
   }

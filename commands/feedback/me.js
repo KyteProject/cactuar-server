@@ -37,6 +37,7 @@ exports.conf = {
 exports.help = {
   name: 'me',
   category: 'Feedback',
-  description: '...',
+  description: 'Display your feedback profile',
+  extended: 'Displays your profile and stats on the current server',
   usage: 'me',
 };

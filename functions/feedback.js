@@ -8,8 +8,8 @@ module.exports = async (client) => {
     message.charCountNoSpace = message.argsJoined.replace(regex, '').length;
     client.countKeywords(message);
     message.score = Math.round(((message.wordCount * 0.2) + (message.charCountNoSpace / 100) + (message.keywordCount * 9)) * multipier);
-    message.tokenGain = (message.score >= 200) ? 1 : 0;
-    // message.channel.send(`Debug: ${message.score}`);  // to be removed before launch
+    message.tokenGain = ((message.score >= 200) && (message.settings.enableTokens === 1)) ? 1 : 0;
+    client.logger.log(`Debug: ${message.score}`);  // to be removed before launch
     client.query.feedbackSubmit(client, message);
   };
 
@@ -63,34 +63,41 @@ module.exports = async (client) => {
       if (message.settings.botLogEnable) client.feedbackMsg(message, row);
       client.logger.log(`[Sys] Feedback denied for: ${message.author.username}`);
     } else if ((row.keywordCount < 5) && (row.tokens > 0)) {
-      const filter = m => m.author.id === message.author.id;
-      const response = await client.awaitReply(message, `Would you like to use a token?  You currently have: ${row.tokens}`, filter, 5000, null);
-
-      if (['y', 'yes'].includes(response)) {
-        if (message.settings.pinMessage) {
-          try {
-            const match = /([0-9]{17,20})/.exec(message.settings.messageID);
-            if (!match) throw 'Invalid message id.';
-            const id = match[1];
-            const oldMsg = await message.channel.messages.fetch(id);
-            if (oldMsg.cleanContent !== undefined) {
-              oldMsg.unpin();
-              message.pin();
+        if (message.settings.enableTokens === 1) {
+          const filter = m => m.author.id === message.author.id;
+          const response = await client.awaitReply(message, `Would you like to use a token?  You currently have: ${row.tokens}`, filter, 5000, null);
+    
+          if (['y', 'yes'].includes(response)) {
+            if (message.settings.pinMessage) {
+              try {
+                const match = /([0-9]{17,20})/.exec(message.settings.messageID);
+                if (!match) throw 'Invalid message id.';
+                const id = match[1];
+                const oldMsg = await message.channel.messages.fetch(id);
+                if (oldMsg.cleanContent !== undefined) {
+                  oldMsg.unpin();
+                  message.pin();
+                }
+              } catch (error) {
+                message.pin();
+                client.logger.log(error, 'error');
+              }
             }
-          } catch (error) {
-            message.pin();
-            client.logger.log(error, 'error');
+            message.timesRequested = row.timesRequested + 1;
+            message.tokens = row.tokens - 1;
+            client.query.updateUser(client, message, 'request');
+            message.react(message.heartArray.random());
+          } else if (['n', 'no', 'cancel', false].includes(response)) {
+            if (message.settings.deleteSwitch) message.delete();
+            if (message.settings.botLogEnable) client.feedbackMsg(message, row);
+            client.logger.log(`[Sys] Feedback denied for: ${message.author.username}`);
           }
         }
-        message.timesRequested = row.timesRequested + 1;
-        message.tokens = row.tokens - 1;
-        client.query.updateUser(client, message, 'request');
-        message.react(message.heartArray.random());
-      } else if (['n', 'no', 'cancel', false].includes(response)) {
-        if (message.settings.deleteSwitch) message.delete();
-        if (message.settings.botLogEnable) client.feedbackMsg(message, row);
-        client.logger.log(`[Sys] Feedback denied for: ${message.author.username}`);
-      }
+        else {
+          if (message.settings.deleteSwitch) message.delete();
+            if (message.settings.botLogEnable) client.feedbackMsg(message, row);
+            client.logger.log(`[Sys] Feedback denied for: ${message.author.username}`);
+        }
     } else {
       if (message.settings.pinMessage) {
         try {

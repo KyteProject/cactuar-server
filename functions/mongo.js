@@ -52,32 +52,3 @@ const createGuild = async (client) => {
     },
   );
 };
-
-const bot_g = [
-  {
-    _id: '',
-    name: '',
-    owner: '',
-    ownerid: '',
-    
-  }
-
-
-]
-  _id: "joe",
-  name: "Joe Bookreader",
-  addresses: [
-               {
-                 street: "123 Fake Street",
-                 city: "Faketon",
-                 state: "MA",
-                 zip: "12345"
-               },
-               {
-                 street: "1 Some Other Street",
-                 city: "Boston",
-                 state: "MA",
-                 zip: "12345"
-               }
-             ]
-}

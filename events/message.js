@@ -38,7 +38,7 @@ module.exports = class {
           this.client.query.feedbackRequest(this.client, message);
         } else if ((message.userMentioned) && (message.userMentioned !== message.author && !message.userMentioned.bot)) {
           this.client.feedbackScoring(message);
-          this.client.query.insertFeedback(message);
+          // this.client.query.insertFeedback(message);
           if (message.score >= 75) message.react(message.heartArray.random());
         } else return;
       } else return;

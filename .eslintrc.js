@@ -1,7 +1,10 @@
 module.exports = {
-    "extends": "airbnb",
+    "extends": "eslint:recommended",
     "rules": {
+        "global-require": "off",
+        "import/no-dynamic-require": "off",
         "no-console": "off",
+        "no-param-reassign": "off",
         "indent": [
           "error",
           2,
@@ -46,7 +49,7 @@ module.exports = {
             "destructuring": "all",
             "ignoreReadBeforeAssign": false
           }
-        ]
+        ],
       }  
 };
 

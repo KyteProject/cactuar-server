@@ -66,7 +66,8 @@ module.exports = (client) => {
   // Sanitise settings input
   client.verifyKey = async (message, settings, key, input) => {
     if (key === 'botLogEnable' || key === 'enableBadges' ||
-        key === 'deleteSwitch' || key === 'pinMessage') {
+        key === 'deleteSwitch' || key === 'pinMessage' ||
+        key === 'enableTokens') {
       const match = /[0-1]/.exec(input);
       if (!match || (input.length != 1)) return message.reply('Value must be a 1 or a 0  (1 = enabled / 0 = dissabled)');
       settings[key] = parseInt(input, 10);
