@@ -9,7 +9,7 @@ module.exports = async (client) => {
     client.countKeywords(message);
     message.score = Math.round(((message.wordCount * 0.2) + (message.charCountNoSpace / 100) + (message.keywordCount * 9)) * multipier);
     message.tokenGain = ((message.score >= 200) && (message.settings.enableTokens === 1)) ? 1 : 0;
-    client.logger.log(`Debug: ${message.score}`);  // to be removed before launch
+    client.logger.log(`Debug: ${message.score}`);
     client.query.feedbackSubmit(client, message);
   };
 
@@ -135,17 +135,16 @@ module.exports = async (client) => {
           .setThumbnail(client.user.avatarURL())
           .addField('Feedback Denied!!', message.settings.response)
           .addField('Last Request', oldMsg.cleanContent)
-          // .addField('Stats',`Token Count: ${row.tokens} Request Ratio: ${row.timesRequested}:${row.timesGiven}` , true)
           .addField('About', `Type ${message.settings.prefix}help for info`, true)
           .setFooter(oldMsg.author.username, oldMsg.author.avatarURL())
           .setURL(oldMsg.embeds.url);
         if (type === 'command') embed.fields.splice(0, 1);
-        message.channel.send({ embed });
+        message.reply({ embed });
         // });
       }
     } catch (error) {
       client.logger.log(error, 'error');
-      message.channel.send('Feedback has been denied - Error: Previous request message cannot be found.');
+      message.reply('Feedback has been denied - Error: Previous request message cannot be found.');
     }
   };
 };

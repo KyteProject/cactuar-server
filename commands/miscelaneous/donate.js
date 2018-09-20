@@ -1,10 +1,10 @@
 const { MessageAttachment } = require('discord.js');
 
 exports.run = async (client, message, args, level) => {
-  message.channel.send(
+  // message.channel.send(
     '**Donation info**\n\nBitcoin Address: 1MrRYsJAEgkBz2PoxvEQEtHwaTcDhThEzW',
     { files: [new MessageAttachment('http://lodestonemusic.com/1517935102586.jpg', 'QR Code.jpg')] },
-  );
+  // );
 };
 
 exports.conf = {

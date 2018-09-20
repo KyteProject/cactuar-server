@@ -13,7 +13,7 @@ class FeedBot extends Client {
     this.config = require(`${process.cwd()}/config.js`);
     this.logger = require(`${process.cwd()}/functions/logger`);
     this.query = require(`${process.cwd()}/functions/query.js`);
-    this.mongo = require(`${process.cwd()}/functions/mongo.js`);
+    // this.mongo = require(`${process.cwd()}/functions/mongo.js`);
     this.ccxt = require('ccxt');
     this.commands = new Collection();
     this.aliases = new Collection();
@@ -40,13 +40,13 @@ class FeedBot extends Client {
     try {
       const props = require(`${commandPath}${path.sep}${commandName}`);
       props.conf.location = commandPath;
-      client.logger.log(`Loading Command: ${props.help.name}. ✔`);
+      this.logger.log(`Loading Command: ${props.help.name}. ✔`);
       if (props.init) {
-        props.init(this.client);
+        props.init(this);
       }
-      client.commands.set(props.help.name, props);
+      this.commands.set(props.help.name, props);
       props.conf.aliases.forEach((alias) => {
-        client.aliases.set(alias, props.help.name);
+        this.aliases.set(alias, props.help.name);
       });
       return false;
     } catch (error) {
@@ -61,15 +61,15 @@ class FeedBot extends Client {
 
   async unloadCommand(commandPath, commandName) {
     let command;
-    if (this.client.commands.has(commandName)) {
-      command = this.client.commands.get(commandName);
-    } else if (this.client.aliases.has(commandName)) {
-      command = this.client.commands.get(this.client.aliases.get(commandName));
+    if (this.commands.has(commandName)) {
+      command = this.commands.get(commandName);
+    } else if (this.aliases.has(commandName)) {
+      command = this.commands.get(this.aliases.get(commandName));
     }
     if (!command) return `The command \`${commandName}\` doesn"t seem to exist, nor is it an alias. Try again!`;
 
     if (command.shutdown) {
-      await command.shutdown(this.client);
+      await command.shutdown(this);
     }
     delete require.cache[require.resolve(`${commandPath}/${commandName}.js`)];
     return false;
@@ -90,7 +90,7 @@ require(`${process.cwd()}/functions/util.js`)(client);
 
 if (sql.open(`${process.cwd()}/database/feedbot.sqlite`)) { client.logger.log('SQLite DB loaded.'); }
 
-client.mongo.dbConnect(client);
+// client.mongo.dbConnect(client);
 
 const init = async () => {
   const commandList = [];

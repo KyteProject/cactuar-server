@@ -6,7 +6,7 @@ exports.run = async (client, message, args, level) => {
       args.shift();
     }
     const channel = message.guild.channels.get(channelid);
-    if (!message.member.permissionsIn(channel).has(['SEND_MESSAGES', 'READ_MESSAGES'])) throw 'You do not have permission to `say` in that channel.';
+    // if (!message.member.permissionsIn(channel).has(['SEND_MESSAGES', 'READ_MESSAGES'])) throw 'You do not have permission to `say` in that channel.';
 
     message.delete();
 
