@@ -1,11 +1,13 @@
 require(`${process.cwd()}/extenders/Guild.js`);
 require(`${process.cwd()}/modules/Prototypes.js`);
-if (Number(process.version.slice(1).split('.')[0]) < 8) throw new Error('Node 8.0.0 or higher is required.');
+if (Number(process.version.slice(1).split('.')[0]) < 8)
+  throw new Error('Node 8.0.0 or higher is required.');
 
 const { Client, Collection } = require('discord.js');
 const klaw = require('klaw');
 const path = require('path');
 const sql = require('sqlite');
+const mongo = require('mongoose');
 
 class FeedBot extends Client {
   constructor(options) {
@@ -22,9 +24,9 @@ class FeedBot extends Client {
 
   permlevel(message) {
     let permlvl = 0;
-    const permOrder = this.config.permLevels.slice(0).sort((p, c) => (
-      p.level < c.level ? 1 : -1
-    ));
+    const permOrder = this.config.permLevels
+      .slice(0)
+      .sort((p, c) => (p.level < c.level ? 1 : -1));
     while (permOrder.length) {
       const currentLevel = permOrder.shift();
       if (message.guild && currentLevel.guildOnly) continue;
@@ -45,7 +47,7 @@ class FeedBot extends Client {
         props.init(this);
       }
       this.commands.set(props.help.name, props);
-      props.conf.aliases.forEach((alias) => {
+      props.conf.aliases.forEach(alias => {
         this.aliases.set(alias, props.help.name);
       });
       return false;
@@ -66,7 +68,8 @@ class FeedBot extends Client {
     } else if (this.aliases.has(commandName)) {
       command = this.commands.get(this.aliases.get(commandName));
     }
-    if (!command) return `The command \`${commandName}\` doesn"t seem to exist, nor is it an alias. Try again!`;
+    if (!command)
+      return `The command \`${commandName}\` doesn"t seem to exist, nor is it an alias. Try again!`;
 
     if (command.shutdown) {
       await command.shutdown(this);
@@ -79,7 +82,14 @@ class FeedBot extends Client {
 const client = new FeedBot({
   fetchAllMembers: false,
   disableEveryone: true,
-  disabledEvents: ['GUILD_BAN_REMOVE', 'TYPING_START', 'USER_NOTE_UPDATE', 'USER_SETTINGS_UPDATE', 'VOICE_SERVER_UPDATE', 'VOICE_STATE_UPDATE'],
+  disabledEvents: [
+    'GUILD_BAN_REMOVE',
+    'TYPING_START',
+    'USER_NOTE_UPDATE',
+    'USER_SETTINGS_UPDATE',
+    'VOICE_SERVER_UPDATE',
+    'VOICE_STATE_UPDATE',
+  ],
   messageCacheSize: 100,
   messageCacheLifetime: 300,
   messageSweepInterval: 150,
@@ -88,53 +98,80 @@ const client = new FeedBot({
 require(`${process.cwd()}/functions/feedback.js`)(client);
 require(`${process.cwd()}/functions/util.js`)(client);
 
-if (sql.open(`${process.cwd()}/database/feedbot.sqlite`)) { client.logger.log('SQLite DB loaded.'); }
+if (sql.open(`${process.cwd()}/database/feedbot.sqlite`)) {
+  client.logger.log('SQLite DB loaded.');
+}
+
+mongo
+  .connect(
+    client.config.mongoURI,
+    { useNewUrlParser: true }
+  )
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
 
 // client.mongo.dbConnect(client);
 
 const init = async () => {
   const commandList = [];
-  klaw('./commands').on('data', (item) => {
-    const file = path.parse(item.path);
-    if (!file.ext || file.ext !== '.js') return;
-    const response = client.loadCommand(file.dir, `${file.name}${file.ext}`);
-    commandList.push(file.name);
-    if (response) client.logger.error(response);
-  }).on('end', () => {
-    client.logger.log(`Loaded a total of ${commandList.length} commands.`);
-  }).on('error', error => client.logger.error(error));
+  klaw('./commands')
+    .on('data', item => {
+      const file = path.parse(item.path);
+      if (!file.ext || file.ext !== '.js') return;
+      const response = client.loadCommand(file.dir, `${file.name}${file.ext}`);
+      commandList.push(file.name);
+      if (response) client.logger.error(response);
+    })
+    .on('end', () => {
+      client.logger.log(`Loaded a total of ${commandList.length} commands.`);
+    })
+    .on('error', error => client.logger.error(error));
 
   const extendList = [];
-  klaw('./extenders').on('data', (item) => {
-    const extFile = path.parse(item.path);
-    if (!extFile.ext || extFile.ext !== '.js') return;
-    try {
-      require(`${extFile.dir}${path.sep}${extFile.base}`);
-      extendList.push(extFile.name);
-    } catch (error) {
-      client.logger.error(`Error loading ${extFile.name} extension: ${error}`);
-    }
-  }).on('end', () => {
-    client.logger.log(`Loaded a total of ${extendList.length} extensions.`);
-  }).on('error', error => client.logger.error(error));
+  klaw('./extenders')
+    .on('data', item => {
+      const extFile = path.parse(item.path);
+      if (!extFile.ext || extFile.ext !== '.js') return;
+      try {
+        require(`${extFile.dir}${path.sep}${extFile.base}`);
+        extendList.push(extFile.name);
+      } catch (error) {
+        client.logger.error(
+          `Error loading ${extFile.name} extension: ${error}`
+        );
+      }
+    })
+    .on('end', () => {
+      client.logger.log(`Loaded a total of ${extendList.length} extensions.`);
+    })
+    .on('error', error => client.logger.error(error));
 
   const eventList = [];
-  klaw('./events').on('data', (item) => {
-    const eventFile = path.parse(item.path);
-    if (!eventFile.ext || eventFile.ext !== '.js') return;
-    const eventName = eventFile.name.split('.')[0];
-    try {
-      const event = new (require(`${eventFile.dir}${path.sep}${eventFile.name}${eventFile.ext}`))(client);
-      eventList.push(event);
-      client.on(eventName, (...args) => event.run(...args));
-      client.logger.log(`Loading Event: ${eventName}. ✔`);
-      delete require.cache[require.resolve(`${eventFile.dir}${path.sep}${eventFile.name}${eventFile.ext}`)];
-    } catch (error) {
-      client.logger.error(`Error loading event ${eventFile.name}: ${error}`);
-    }
-  }).on('end', () => {
-    client.logger.log(`Loaded a total of ${eventList.length} events.`);
-  }).on('error', error => client.logger.error(error));
+  klaw('./events')
+    .on('data', item => {
+      const eventFile = path.parse(item.path);
+      if (!eventFile.ext || eventFile.ext !== '.js') return;
+      const eventName = eventFile.name.split('.')[0];
+      try {
+        const event = new (require(`${eventFile.dir}${path.sep}${
+          eventFile.name
+        }${eventFile.ext}`))(client);
+        eventList.push(event);
+        client.on(eventName, (...args) => event.run(...args));
+        client.logger.log(`Loading Event: ${eventName}. ✔`);
+        delete require.cache[
+          require.resolve(
+            `${eventFile.dir}${path.sep}${eventFile.name}${eventFile.ext}`
+          )
+        ];
+      } catch (error) {
+        client.logger.error(`Error loading event ${eventFile.name}: ${error}`);
+      }
+    })
+    .on('end', () => {
+      client.logger.log(`Loaded a total of ${eventList.length} events.`);
+    })
+    .on('error', error => client.logger.error(error));
 
   client.levelCache = {};
   for (let i = 0; i < client.config.permLevels.length; i += 1) {
@@ -147,7 +184,8 @@ const init = async () => {
 
 init();
 
-client.on('disconnect', () => client.logger.warn('Bot is disconnecting...'))
+client
+  .on('disconnect', () => client.logger.warn('Bot is disconnecting...'))
   .on('reconnect', () => client.logger.log('Bot reconnecting...', 'log'))
   .on('error', error => client.logger.error(error))
   .on('warn', info => client.logger.warn(info));

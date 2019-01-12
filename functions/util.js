@@ -1,10 +1,10 @@
 const moment = require('moment');
 
-module.exports = (client) => {
+module.exports = client => {
   client.keywords = require(`${process.cwd()}/resources/keywords.json`);
   client.urls = require(`${process.cwd()}/resources/links.json`);
 
-  client.verifyUser = async (user) => {
+  client.verifyUser = async user => {
     try {
       const match = /(?:<@!?)?([0-9]{17,20})>?/gi.exec(user);
       if (!match) throw 'Invalid user';
@@ -52,8 +52,11 @@ module.exports = (client) => {
 
   // Clean text input
   client.clean = async (client, text) => {
-    if (text && text.constructor.name == 'Promise') { text = await text; }
-    if (typeof evaled !== 'string') text = require('util').inspect(text, { depth: 1 });
+    if (text && text.constructor.name == 'Promise') {
+      text = await text;
+    }
+    if (typeof evaled !== 'string')
+      text = require('util').inspect(text, { depth: 1 });
 
     text = text
       .replace(/`/g, `\`${String.fromCharCode(8203)}`)
@@ -65,11 +68,18 @@ module.exports = (client) => {
 
   // Sanitise settings input
   client.verifyKey = async (message, settings, key, input) => {
-    if (key === 'botLogEnable' || key === 'enableBadges' ||
-        key === 'deleteSwitch' || key === 'pinMessage' ||
-        key === 'enableTokens') {
+    if (
+      key === 'botLogEnable' ||
+      key === 'enableBadges' ||
+      key === 'deleteSwitch' ||
+      key === 'pinMessage' ||
+      key === 'enableTokens'
+    ) {
       const match = /[0-1]/.exec(input);
-      if (!match || (input.length != 1)) return message.reply('Value must be a 1 or a 0  (1 = enabled / 0 = dissabled)');
+      if (!match || input.length != 1)
+        return message.reply(
+          'Value must be a 1 or a 0  (1 = enabled / 0 = dissabled)'
+        );
       settings[key] = parseInt(input, 10);
       return settings;
     } else if (key === 'feedbackChannel') {
@@ -109,7 +119,10 @@ module.exports = (client) => {
       }
     } else if (key === 'response') {
       try {
-        if (input.length > 250) return message.reply('Invalid response string. Input must be alphanumeric, include only `(_.,!?:;&()^`, and be under 250 characters');
+        if (input.length > 250)
+          return message.reply(
+            'Invalid response string. Input must be alphanumeric, include only `(_.,!?:;&()^`, and be under 250 characters'
+          );
         settings[key] = input.replace(/[^a-z0-9 _.,!)?:(;&^]/gi, '');
         return settings;
       } catch (error) {
@@ -121,7 +134,11 @@ module.exports = (client) => {
   client.awaitReply = async (message, question, filter, limit, embed) => {
     await message.channel.send(question, embed);
     try {
-      const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ['time'] });
+      const collected = await message.channel.awaitMessages(filter, {
+        max: 1,
+        time: limit,
+        errors: ['time'],
+      });
       return collected.first().content;
     } catch (error) {
       client.logger.error(error);
@@ -136,8 +153,11 @@ module.exports = (client) => {
     const ratelimits = client.rateLimits.get(message.author.id) || {}; // get the map first.
     if (!ratelimits[key]) ratelimits[key] = Date.now() - duration; // see if the command has been run before if not, add the ratelimit
     const differnce = Date.now() - ratelimits[key]; // easier to see the difference
-    if (differnce < duration) { // check the if the duration the command was run, is more than the cooldown
-      return moment.duration(duration - differnce).format('D [days], H [hours], m [minutes], s [seconds]', 1); // returns a string to send to a channel
+    if (differnce < duration) {
+      // check the if the duration the command was run, is more than the cooldown
+      return moment
+        .duration(duration - differnce)
+        .format('D [days], H [hours], m [minutes], s [seconds]', 1); // returns a string to send to a channel
     }
     ratelimits[key] = Date.now(); // set the key to now, to mark the start of the cooldown
     client.rateLimits.set(message.author.id, ratelimits); // set it
@@ -145,31 +165,34 @@ module.exports = (client) => {
   };
 
   // Pluralise string
-  String.prototype.toPlural = function () {
+  String.prototype.toPlural = function() {
     return this.replace(/((?:\D|^)1 .+?)s/g, '$1');
   };
 
   // Randomise Array
-  Array.prototype.random = function () {
+  Array.prototype.random = function() {
     return this[Math.floor(Math.random() * this.length)];
   };
 
   // Capitalises Every Word Like This
-  String.prototype.toProperCase = function () {
-    return this.replace(/([^\W_]+[^\s-]*) */g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+  String.prototype.toProperCase = function() {
+    return this.replace(
+      /([^\W_]+[^\s-]*) */g,
+      txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    );
   };
 
   // `await client.wait(1000);` to "pause" for 1 second.
   client.wait = require('util').promisify(setTimeout);
 
   // Error handling
-  process.on('uncaughtException', (err) => {
+  process.on('uncaughtException', err => {
     const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
     console.error('Uncaught Exception: ', errorMsg);
     process.exit(1);
   });
 
-  process.on('unhandledRejection', (err) => {
+  process.on('unhandledRejection', err => {
     console.error('Uncaught Promise Error: ', err);
   });
 };
