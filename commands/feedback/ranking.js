@@ -39,21 +39,3 @@ exports.help = {
 	extended: '...',
 	usage: 'ranking',
 };
-
-// .then(async row => {
-//   if (!row) {
-//     message.reply('Database error');
-//   } else {
-//     embed.addField('1', `${row.name}`);
-//   }
-// })
-// .catch(() => {
-//   console.error;
-// });
-
-// message.channel.send({ embed });
-
-// SELECT jID, totalPoints, name FROM users
-// WHERE instr(jID, '237307052911755264')
-// ORDER BY totalPoints DESC
-// LIMIT 10

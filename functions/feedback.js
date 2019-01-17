@@ -73,45 +73,26 @@ module.exports = async client => {
 			client.logger.log(`[Sys] Feedback denied for: ${message.author.username}`);
 		} else if (row.keywordCount < 5 && row.tokens > 0) {
 			if (message.settings.enableTokens === 1) {
-				const filter = m => m.author.id === message.author.id;
-				const response = await client.awaitReply(
-					message,
-					`Would you like to use a token?  You currently have: ${row.tokens}`,
-					filter,
-					5000,
-					null
-				);
-
-				if (['y', 'yes'].includes(response)) {
-					if (message.settings.pinMessage) {
-						try {
-							const match = /([0-9]{17,20})/.exec(message.settings.messageID);
-							if (!match) throw 'Invalid message id.';
-							const id = match[1];
-							const oldMsg = await message.channel.messages.fetch(id);
-							if (oldMsg.cleanContent !== undefined) {
-								oldMsg.unpin();
-								message.pin();
-							}
-						} catch (error) {
+				if (message.settings.pinMessage) {
+					try {
+						const match = /([0-9]{17,20})/.exec(message.settings.messageID);
+						if (!match) throw 'Invalid message id.';
+						const id = match[1];
+						const oldMsg = await message.channel.messages.fetch(id);
+						if (oldMsg.cleanContent !== undefined) {
+							oldMsg.unpin();
 							message.pin();
-							client.logger.log(error, 'error');
 						}
+					} catch (error) {
+						message.pin();
+						client.logger.log(error, 'error');
 					}
-					message.timesRequested = row.timesRequested + 1;
-					message.tokens = row.tokens - 1;
-					client.query.updateUser(client, message, 'request');
-					message.react(message.heartArray.random());
-				} else if (['n', 'no', 'cancel', false].includes(response)) {
-					if (message.settings.deleteSwitch) message.delete();
-					if (message.settings.botLogEnable) client.feedbackMsg(message, row);
-					client.logger.log(`[Sys] Feedback denied for: ${message.author.username}`);
 				}
-			} else {
-				if (message.settings.deleteSwitch) message.delete();
-				if (message.settings.botLogEnable) client.feedbackMsg(message, row);
-				client.logger.log(`[Sys] Feedback denied for: ${message.author.username}`);
 			}
+			message.timesRequested = row.timesRequested + 1;
+			message.tokens = row.tokens - 1;
+			client.query.updateUser(client, message, 'request');
+			message.react(message.heartArray.random());
 		} else {
 			if (message.settings.pinMessage) {
 				try {
@@ -141,20 +122,29 @@ module.exports = async client => {
 			const id = match[1];
 			const oldMsg = await message.channel.messages.fetch(id);
 			if (oldMsg.cleanContent !== undefined) {
-				// message.channel.messages.fetch(id).then((oldMsg) => {
 				const embed = new MessageEmbed()
 					.setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
 					.setColor('00d919')
 					.setTimestamp(oldMsg.createdAt)
-					.setThumbnail(client.user.avatarURL())
+					.setThumbnail(oldMsg.author.avatarURL())
 					.addField('Feedback Denied!!', message.settings.response)
-					.addField('Last Request', oldMsg.cleanContent)
+					// .addField('Last Request', oldMsg.cleanContent)
 					.addField('About', `Type ${message.settings.prefix}help for info`, true)
 					.setFooter(oldMsg.author.username, oldMsg.author.avatarURL())
-					.setURL(oldMsg.embeds.url);
+					.setURL(oldMsg.embeds[0].url);
+
+				const oldEmbed = oldMsg.embeds[0];
+				// oldEmbed
+				// .setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
+				// .setColor('00d919');
+				// .setTimestamp(oldMsg.createdAt);
+				// .setThumbnail(oldMsg.author.avatarURL())
+				// .setFooter(oldMsg.author.username, oldMsg.author.avatarURL());
+
 				if (type === 'command') embed.fields.splice(0, 1);
-				message.reply({ embed });
-				// });
+				message.reply(
+					'https://soundcloud.com/lodestonemusic/lodestone-return-of-the-dj-mix-2016-free-download'
+				);
 			}
 		} catch (error) {
 			client.logger.log(error, 'error');
