@@ -32,7 +32,7 @@ module.exports = async client => {
 		message.timesGiven = row.timesGiven + 1;
 
 		if (row.keywordCount < 5 && message.keywordCount >= 5) {
-			message.reply('you can now request feedback. Yaaay~ 😘');
+			message.reply('Cactuar approves!\nYou can now request feedback <:cactuar:537604635687518245>');
 		}
 
 		if (message.currentPoints >= row.nextLevel) {
@@ -92,7 +92,7 @@ module.exports = async client => {
 			message.timesRequested = row.timesRequested + 1;
 			message.tokens = row.tokens - 1;
 			client.query.updateUser(client, message, 'request');
-			message.react(message.heartArray.random());
+			message.react('537604635687518245');
 		} else {
 			if (message.settings.pinMessage) {
 				try {
@@ -111,7 +111,7 @@ module.exports = async client => {
 			}
 			message.timesRequested = row.timesRequested + 1;
 			client.query.updateUser(client, message, 'request');
-			message.react(message.heartArray.random());
+			message.react('537604635687518245');
 		}
 	};
 
@@ -122,29 +122,22 @@ module.exports = async client => {
 			const id = match[1];
 			const oldMsg = await message.channel.messages.fetch(id);
 			if (oldMsg.cleanContent !== undefined) {
-				const embed = new MessageEmbed()
-					.setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
+				const embed = oldMsg.embeds[0]
 					.setColor('00d919')
 					.setTimestamp(oldMsg.createdAt)
-					.setThumbnail(oldMsg.author.avatarURL())
-					.addField('Feedback Denied!!', message.settings.response)
-					// .addField('Last Request', oldMsg.cleanContent)
-					.addField('About', `Type ${message.settings.prefix}help for info`, true)
-					.setFooter(oldMsg.author.username, oldMsg.author.avatarURL())
-					.setURL(oldMsg.embeds[0].url);
-
-				const oldEmbed = oldMsg.embeds[0];
-				// oldEmbed
-				// .setAuthor('Feedback Auto Moderation', client.user.avatarURL(), 'http://lodestonemusic.com')
-				// .setColor('00d919');
-				// .setTimestamp(oldMsg.createdAt);
-				// .setThumbnail(oldMsg.author.avatarURL())
-				// .setFooter(oldMsg.author.username, oldMsg.author.avatarURL());
-
-				if (type === 'command') embed.fields.splice(0, 1);
-				message.reply(
-					'https://soundcloud.com/lodestonemusic/lodestone-return-of-the-dj-mix-2016-free-download'
-				);
+					.setFooter(oldMsg.author.username, oldMsg.author.avatarURL());
+				if (type === 'command') {
+					embed.setAuthor('Last Request', client.user.avatarURL());
+				} else {
+					embed
+						.setAuthor('Feedback Denied!', client.user.avatarURL())
+						.addField(
+							'⬆ Last Request ⬆',
+							`${message.settings.response} *Type \`${message.settings.prefix}help\` for info.*`,
+							true
+						);
+				}
+				message.reply(embed);
 			}
 		} catch (error) {
 			client.logger.log(error, 'error');

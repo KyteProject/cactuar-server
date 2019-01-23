@@ -10,6 +10,7 @@
 *.log
 *.txt
 *.sqlite
+*.env
 
 # Specific Files
 package-lock.json
