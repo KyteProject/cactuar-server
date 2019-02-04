@@ -58,7 +58,7 @@ module.exports = async client => {
 
 	client.checkFeedback = async message => {
 		for (let i = 0; i < client.urls.length; i++) {
-			if (message.cleanContent.includes(client.urls[i])) {
+			if (message.cleanContent.includes(client.urls[i]) || message.attachments.size > 0) {
 				return true;
 			}
 		}
@@ -137,7 +137,7 @@ module.exports = async client => {
 							true
 						);
 				}
-				message.reply(embed);
+				message.reply({ embed });
 			}
 		} catch (error) {
 			client.logger.log(error, 'error');
