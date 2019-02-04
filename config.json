@@ -1,0 +1,4 @@
+const TOKEN     = "MzUxNjc1MzUxMzY3NDE3ODcw.DIWCvA.qtuEwuQCYLlhvB-WTi2LMxwRN7s";
+const CLIENT_ID = "351675351367417870";
+const MSGPATH  = "/home/squarego/feedbot.lodestonemusic.com/messages/";     // Message log file path
+const EOL       = require('os').EOL;

@@ -1,0 +1,16 @@
+{
+  "name": "feedbackautomod",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.1.0",
+    "jsonfile": "^3.0.1",
+    "log-timestamp": "^0.1.2"
+  }
+}
