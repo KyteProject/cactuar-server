@@ -1,4 +1,4 @@
-import { Permissions } from 'discord.js';
+import { Permissions } from 'discords.js';
 
 class Command {
 	constructor(client, file, args = {}) {

@@ -32,7 +32,7 @@ module.exports = async client => {
 		message.timesGiven = row.timesGiven + 1;
 
 		if (row.keywordCount < 5 && message.keywordCount >= 5) {
-			message.reply('Cactuar approves!\nYou can now request feedback <:cactuar:537604635687518245>');
+			message.reply('You can now request feedback! <:cactuar:537604635687518245>');
 		}
 
 		if (message.currentPoints >= row.nextLevel) {
