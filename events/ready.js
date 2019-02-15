@@ -12,7 +12,7 @@ module.exports = class {
 
 		setInterval(async () => {
 			await ActivityUpdate.fetch(this.client);
-		}, 20000);
+		}, 30000);
 
 		// check for guilds added offline
 		this.client.guilds.forEach(g => this.client.query.guildCheck(this.client, g));
