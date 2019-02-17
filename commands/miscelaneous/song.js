@@ -2,9 +2,13 @@ const Youtube = require('../../system/Youtube');
 const ActivityUpdate = require('../../system/ActivityUpdate');
 
 exports.run = async (client, message, args, level) => {
+	if (ActivityUpdate.presence.activity.name === 'feedback') {
+		return message.channel.send('Not currently listening to anything!');
+	}
+
 	const song = await Youtube.search(ActivityUpdate.presence.activity.name, message);
 
-	message.channel.send(
+	return message.channel.send(
 		`Currently listening to: **${ActivityUpdate.presence.activity
 			.name}**\n\nhttps://www.youtube.com/watch?v=${song}`
 	);
@@ -16,6 +20,7 @@ exports.conf = {
 	aliases: ['track'],
 	permLevel: 'User',
 	botPerms: [],
+	cooldown: 10,
 };
 
 exports.help = {
