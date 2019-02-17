@@ -5,6 +5,9 @@
 /database/
 /.vscode/
 /.idea/
+database
+./database
+/database
 
 # File Extensions
 *.log
