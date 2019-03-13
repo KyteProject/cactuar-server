@@ -13,7 +13,7 @@ module.exports = async client => {
 		message.score = Math.round(
 			(message.wordCount * 0.2 + message.charCountNoSpace / 100 + message.keywordCount * 9) * multipier
 		);
-		message.tokenGain = message.score >= 200 && message.settings.enableTokens === 1 ? 1 : 0;
+		message.tokenGain = message.score >= 300 && message.settings.enableTokens === 1 ? 1 : 0;
 		client.logger.log(`Debug: ${message.score}`);
 		client.query.feedbackSubmit(client, message);
 	};
@@ -121,27 +121,46 @@ module.exports = async client => {
 			if (!match) throw 'Invalid message id.';
 			const id = match[1];
 			const oldMsg = await message.channel.messages.fetch(id);
+			let embed = new MessageEmbed();
+
 			if (oldMsg.cleanContent !== undefined) {
-				const embed = oldMsg.embeds[0]
+				if (oldMsg.attachments.size > 0) {
+					let files = [];
+
+					oldMsg.attachments.each(file => {
+						files.push(file);
+					});
+
+					embed.setDescription(oldMsg.cleanContent);
+
+					embed.attachFiles(files);
+				}
+
+				if (oldMsg.embeds.length > 0) {
+					embed = oldMsg.embeds[0];
+				}
+
+				if (oldMsg.embeds.length === 0 && oldMsg.attachments.size === 0) {
+					embed.setDescription(oldMsg.cleanContent);
+				}
+
+				embed
+					.setAuthor('Last Request:', client.user.avatarURL())
 					.setColor('00d919')
 					.setTimestamp(oldMsg.createdAt)
 					.setFooter(oldMsg.author.username, oldMsg.author.avatarURL());
-				if (type === 'command') {
-					embed.setAuthor('Last Request', client.user.avatarURL());
-				} else {
-					embed
-						.setAuthor('Feedback Denied!', client.user.avatarURL())
-						.addField(
-							'⬆ Last Request ⬆',
-							`${message.settings.response} *Type \`${message.settings.prefix}help\` for info.*`,
-							true
-						);
+
+				if (type !== 'command') {
+					return message.reply(`❌ Feedback Denied! ❌\n${message.settings.response}`, embed);
 				}
-				message.reply({ embed });
+
+				return message.reply(embed);
 			}
 		} catch (error) {
 			client.logger.log(error, 'error');
-			message.reply('Feedback has been denied - Error: Previous request message cannot be found.');
+			message.reply(
+				'Feedback has been denied! The previous request message cannot be found, try scrolling up and finding some older tracks to give feedback to 😄'
+			);
 		}
 	};
 };
