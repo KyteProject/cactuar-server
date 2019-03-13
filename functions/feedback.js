@@ -151,14 +151,14 @@ module.exports = async client => {
 					.setFooter(oldMsg.author.username, oldMsg.author.avatarURL());
 
 				if (type !== 'command') {
-					return message.reply(`❌ Feedback Denied! ❌\n${message.settings.response}`, embed);
+					return message.reply(`❌ **Feedback Denied!** ❌\n${message.settings.response}`, embed);
 				}
 
-				return message.reply(embed);
+				return message.channel.send(embed);
 			}
 		} catch (error) {
 			client.logger.log(error, 'error');
-			message.reply(
+			message.channel.send(
 				'Feedback has been denied! The previous request message cannot be found, try scrolling up and finding some older tracks to give feedback to 😄'
 			);
 		}
