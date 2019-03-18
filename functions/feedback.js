@@ -57,11 +57,24 @@ module.exports = async client => {
 	};
 
 	client.checkFeedback = async message => {
+		const fileRegex = /\.(mp3|wav|wma|flac|ogg|m4a|mp4|m4b|aac)/gim;
+		let ret = false;
+
 		for (let i = 0; i < client.urls.length; i++) {
-			if (message.cleanContent.includes(client.urls[i]) || message.attachments.size > 0) {
-				return true;
+			if (message.cleanContent.includes(client.urls[i])) {
+				ret = true;
 			}
 		}
+
+		if (message.attachments.size) {
+			message.attachments.each(file => {
+				if (fileRegex.exec(file.name) !== null) {
+					ret = true;
+				}
+			});
+		}
+
+		return ret;
 	};
 
 	client.feedbackPermission = async (message, row) => {
