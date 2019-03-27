@@ -21,7 +21,19 @@ export default class Cactuar extends Client {
 
     // Enmap
     this.settings = new Enmap( {
-      provider: new EnmapMongo( { name: 'settings', dbName: process.env.DB_NAME, url: process.env.MONGO_URI } )
+      provider: new EnmapMongo( {
+        name: 'settings',
+        dbName: process.env.DB_NAME,
+        url: process.env.MONGO_URI
+      } )
+    } );
+
+    this.users = new Enmap( {
+      provider: new EnmapMongo( {
+        name: 'users',
+        dbName: process.env.DB_NAME,
+        url: process.env.MONGO_URI
+      } )
     } );
 
     this.ready = false;
