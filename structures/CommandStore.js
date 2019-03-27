@@ -9,21 +9,15 @@ class CommandStore extends Store {
   }
 
   get( name ) {
-    return super.get( name ) || this.aliases.get( name );
+    return super.get( name );
   }
 
   has( name ) {
-    return super.has( name ) || this.aliases.has( name );
+    return super.has( name );
   }
 
   set( command ) {
     super.set( command );
-
-    if ( command.aliases.length ) {
-      for ( let i = 0; i < command.aliases.length; i++ ) {
-        this.aliases.set( command.aliases[ i ], command );
-      }
-    }
 
     return command;
   }
@@ -31,19 +25,11 @@ class CommandStore extends Store {
   delete( command ) {
     const exists = this.get( command );
 
-    if ( exists.aliases.length ) {
-      for ( let i = 0; i < exists.aliases.length; i++ ) {
-        this.aliases.delete( exists.aliases[ i ] );
-      }
-    }
-
     return !exists ? flase : super.delete( command );
   }
 
   clear() {
     super.clear();
-
-    this.aliases.clear();
   }
 }
 
