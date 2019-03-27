@@ -6,127 +6,127 @@ import EnmapMongo from 'enmap-mongo';
 import Config from './Config';
 
 export default class Cactuar extends Client {
-    constructor( options ) {
-        super( options );
+  constructor( options ) {
+    super( options );
 
-        this.config = new Config();
+    this.config = new Config();
 
-        this.commands = new CommandStore( this );
-        this.events = new EventStore( this );
+    this.commands = new CommandStore( this );
+    this.events = new EventStore( this );
 
-        this.mongoCache = {};
-        this.methods = {
-            util: require( '../util/util.js' )
-        };
+    this.levelCache = {};
+    this.methods = {
+      util: require( '../util/util.js' )
+    };
 
-        // Enmap
-        this.settings = new Enmap( {
-            provider: new EnmapMongo( { name: 'settings', dbName: process.env.DB_NAME, url: process.env.MONGO_URI } )
-        } );
+    // Enmap
+    this.settings = new Enmap( {
+      provider: new EnmapMongo( { name: 'settings', dbName: process.env.DB_NAME, url: process.env.MONGO_URI } )
+    } );
 
-        this.ready = false;
-        this.on( 'ready', this._ready.bind( this ) );
+    this.ready = false;
+    this.on( 'ready', this._ready.bind( this ) );
+  }
+
+  async login( token ) {
+    await this.init();
+    return super.login( token );
+  }
+
+  _ready() {
+    this.ready = true;
+    this.emit( 'botReady' );
+  }
+
+  get ping() {
+    return this.pings.reduce( ( prev, p ) => prev + p, 0 ) / this.pings.length;
+  }
+
+  get status() {
+    return this.ws.connection ? this.ws.connection.status : null;
+  }
+
+  permlevel( message ) {
+    let permlvl = 0;
+
+    const permOrder = this.config.permLevels.slice( 0 ).sort( ( prev, val ) => ( prev.level < val.level ? 1 : -1 ) );
+
+    while ( permOrder.length ) {
+      const currentLevel = permOrder.shift();
+
+      if ( currentLevel.check( message ) ) {
+        permlvl = currentLevel.level;
+        break;
+      }
+    }
+    return permlvl;
+  }
+
+  getGuildSettings( guild ) {
+    const def = this.config.defaultSettings;
+
+    if ( !guild ) {
+      return def;
     }
 
-    async login( token ) {
-        await this.init();
-        return super.login( token );
+    const returns = {},
+      overrides = this.settings.get( guild.id ) || {};
+
+    for ( const key in def ) {
+      returns[ key ] = overrides[ key ] || def[ key ];
     }
 
-    _ready() {
-        this.ready = true;
-        this.emit( 'botReady' );
+    return returns;
+  }
+
+  getSettings( id ) {
+    const defaults = this.settings.get( 'default' ) || this.config.defaultSettings;
+    let guild = this.settings.get( id );
+
+    if ( typeof guild !== 'object' ) {
+      guild = {};
+    }
+    const returnObject = {};
+
+    Object.keys( defaults ).forEach( ( key ) => {
+      returnObject[ key ] = guild[ key ] ? guild[ key ] : defaults[ key ];
+    } );
+
+    return returnObject;
+  }
+
+  writeSettings( id, newSettings ) {
+    const defaults = this.settings.get( 'default' ) || this.config.defaultSettings;
+    let settings = this.settings.get( id );
+
+    if ( typeof settings !== 'object' ) {
+      settings = {};
     }
 
-    get ping() {
-        return this.pings.reduce( ( prev, p ) => prev + p, 0 ) / this.pings.length;
+    for ( const key in newSettings ) {
+      if ( defaults[ key ] !== newSettings[ key ] ) {
+        settings[ key ] = newSettings[ key ];
+      } else {
+        delete settings[ key ];
+      }
     }
 
-    get status() {
-        return this.ws.connection ? this.ws.connection.status : null;
+    this.settings.set( id, settings );
+  }
+
+  async init() {
+    const [ commands, events ] = await Promise.all( [ this.commands.loadFiles(), this.events.loadFiles() ] );
+
+    console.log( `Loaded a total of ${commands} commands` );
+    console.log( `Loaded a total of ${events} events` );
+
+    await settings.defer;
+    console.log( `${settings.size} keys loaded` );
+
+    for ( let i = 0; i < this.config.permLevels.length; i++ ) {
+      const thisLevel = this.config.permLevels[ i ];
+
+      this.levelCache[ thisLevel.name ] = thisLevel.level;
     }
-
-    permlevel( message ) {
-        let permlvl = 0;
-
-        const permOrder = this.config.permLevels.slice( 0 ).sort( ( prev, val ) => ( prev.level < val.level ? 1 : -1 ) );
-
-        while ( permOrder.length ) {
-            const currentLevel = permOrder.shift();
-
-            if ( currentLevel.check( message ) ) {
-                permlvl = currentLevel.level;
-                break;
-            }
-        }
-        return permlvl;
-    }
-
-    getGuildSettings( guild ) {
-        const def = this.config.defaultSettings;
-
-        if ( !guild ) {
-            return def;
-        }
-
-        const returns = {},
-            overrides = this.settings.get( guild.id ) || {};
-
-        for ( const key in def ) {
-            returns[ key ] = overrides[ key ] || def[ key ];
-        }
-
-        return returns;
-    }
-
-    getSettings( id ) {
-        const defaults = this.settings.get( 'default' ) || this.config.defaultSettings;
-        let guild = this.settings.get( id );
-
-        if ( typeof guild !== 'object' ) {
-            guild = {};
-        }
-        const returnObject = {};
-
-        Object.keys( defaults ).forEach( ( key ) => {
-            returnObject[ key ] = guild[ key ] ? guild[ key ] : defaults[ key ];
-        } );
-
-        return returnObject;
-    }
-
-    writeSettings( id, newSettings ) {
-        const defaults = this.settings.get( 'default' ) || this.config.defaultSettings;
-        let settings = this.settings.get( id );
-
-        if ( typeof settings !== 'object' ) {
-            settings = {};
-        }
-
-        for ( const key in newSettings ) {
-            if ( defaults[ key ] !== newSettings[ key ] ) {
-                settings[ key ] = newSettings[ key ];
-            } else {
-                delete settings[ key ];
-            }
-        }
-
-        this.settings.set( id, settings );
-    }
-
-    async init() {
-        const [ commands, events ] = await Promise.all( [ this.commands.loadFiles(), this.events.loadFiles() ] );
-
-        console.log( `Loaded a total of ${commands} commands` );
-        console.log( `Loaded a total of ${events} events` );
-
-        await settings.defer;
-        console.log( `${settings.size} keys loaded` );
-
-        for ( let i = 0; i < this.config.permLevels.length; i++ ) {
-            const thisLevel = this.config.permLevels[ i ];
-
-            this.levelCache[ thisLevel.name ] = thisLevel.level;
-        }
-    }
+  }
 }
