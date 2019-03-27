@@ -31,7 +31,9 @@
 		"enmap": "^4.8.1",
 		"enmap-mongo": "^2.0.2",
 		"fs-nextra": "^0.4.5",
+		"googleapis": "^38.0.0",
 		"moment": "^2.24.0",
-		"path": "^0.12.7"
+		"path": "^0.12.7",
+		"request-promise": "^4.2.4"
 	}
 }
