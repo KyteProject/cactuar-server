@@ -1,0 +1,37 @@
+{
+	"name": "cactuar-bot",
+	"version": "1.0.0",
+	"description": "Custom music feedback bot for Discord servers",
+	"main": "app.js",
+	"repository": "https://github.com/KyteProject/Cactuar",
+	"author": "Daniel Smith",
+	"license": "private",
+	"private": true,
+	"scripts": {
+		"test": "eslint .",
+		"lint": "eslint --fix .",
+		"start": "babel-node index.js",
+		"debug": "babel-node debug index.js"
+	},
+	"engines": {
+		"node": ">=8"
+	},
+	"devDependencies": {
+		"babel-cli": "^6.26.0",
+		"babel-core": "^6.26.3",
+		"babel-eslint": "^10.0.1",
+		"babel-preset-env": "^1.7.0",
+		"eslint": "^5.15.3",
+		"eslint-plugin-import": "^2.16.0",
+		"nodemon": "^1.18.10"
+	},
+	"dependencies": {
+		"discord.js": "discordjs/discord.js",
+		"dotenv": "^7.0.0",
+		"enmap": "^4.8.1",
+		"enmap-mongo": "^2.0.2",
+		"fs-nextra": "^0.4.5",
+		"moment": "^2.24.0",
+		"path": "^0.12.7"
+	}
+}
