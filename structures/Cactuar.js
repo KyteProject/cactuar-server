@@ -2,7 +2,6 @@ import { Client } from 'discord.js';
 import CommandStore from './CommandStore';
 import EventStore from './EventStore';
 import Enmap from 'enmap';
-import EnmapMongo from 'enmap-mongo';
 import Config from './Config';
 
 export default class Cactuar extends Client {
@@ -19,22 +18,7 @@ export default class Cactuar extends Client {
       util: require( '../util/util.js' )
     };
 
-    // Enmap
-    this.settings = new Enmap( {
-      provider: new EnmapMongo( {
-        name: 'settings',
-        dbName: process.env.DB_NAME,
-        url: process.env.MONGO_URI
-      } )
-    } );
-
-    this.users = new Enmap( {
-      provider: new EnmapMongo( {
-        name: 'users',
-        dbName: process.env.DB_NAME,
-        url: process.env.MONGO_URI
-      } )
-    } );
+    this.settings = new Enmap( { name: 'settings', poling: true } );
 
     this.ready = false;
     this.on( 'ready', this._ready.bind( this ) );
@@ -132,8 +116,9 @@ export default class Cactuar extends Client {
     console.log( `Loaded a total of ${commands} commands` );
     console.log( `Loaded a total of ${events} events` );
 
-    await settings.defer;
-    console.log( `${settings.size} keys loaded` );
+    if ( this.settings.isReady ) {
+      console.log( `${this.settings.size} keys loaded` );
+    }
 
     for ( let i = 0; i < this.config.permLevels.length; i++ ) {
       const thisLevel = this.config.permLevels[ i ];

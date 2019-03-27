@@ -1,11 +1,8 @@
 import Store from './Store';
-import { Collection } from 'discord.js';
 
 class CommandStore extends Store {
   constructor( client ) {
     super( client, 'commands' );
-
-    this.aliases = new Collection();
   }
 
   get( name ) {

@@ -6,15 +6,15 @@
       "request": "launch",
       "name": "Launch Program",
 	  	"smartStep": false,
-      "program": "${workspaceFolder}\\index.js"
+      "program": "${workspaceFolder}\\app.js"
     },
 		{
 			"type": "node",
-			"request": "launch",
+			"request": "attach",
 			"name": "ES6 Debugger",
-			"smartStep": false,
-			"program": "${workspaceFolder}/index.js",
-			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node"
+			"protocol": "inspector",
+			"restart": true,
+			"processId": "${command:PickProcess}",
 		}
 	]
 }

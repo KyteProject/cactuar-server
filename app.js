@@ -11,16 +11,13 @@ const errorDirnameRegex = new RegExp( `${__dirname}/`, 'g' ),
       'RELATIONSHIP_ADD',
       'RELATIONSHIP_REMOVE',
       'TYPING_START',
-      'USER_NOTE_UPDATE',
-      'USER_SETTINGS_UPDATE',
       'VOICE_SERVER_UPDATE',
       'VOICE_STATE_UPDATE'
     ],
     disableEveryone: true,
     messageCacheMaxSize: 100,
     messageCacheLifetime: 240,
-    messageSweepInterval: 300,
-    shardCount: 'auto'
+    messageSweepInterval: 300
   } );
 
 client.login( process.env.TOKEN );

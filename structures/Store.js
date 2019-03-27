@@ -1,8 +1,8 @@
 import { Collection } from 'discord.js';
 import path from 'path';
-import fs from 'fs-nextra';
+import * as fs from 'fs-nextra';
 
-export default class Store extends Collection {
+class Store extends Collection {
   constructor( client, name ) {
     super();
 
@@ -59,3 +59,5 @@ export default class Store extends Collection {
       .catch( ( err ) => console.error( err ) );
   }
 }
+
+export default Store;

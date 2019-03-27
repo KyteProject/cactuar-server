@@ -10,30 +10,32 @@
 	"scripts": {
 		"test": "eslint .",
 		"lint": "eslint --fix .",
-		"start": "babel-node index.js",
-		"debug": "babel-node debug index.js"
+		"start": "nodemon --exec yarn babel-node app.js",
+		"debug": "nodemon --exec yarn babel-node --inspect app.js"
 	},
 	"engines": {
 		"node": ">=8"
 	},
 	"devDependencies": {
-		"babel-cli": "^6.26.0",
-		"babel-core": "^6.26.3",
-		"babel-eslint": "^10.0.1",
-		"babel-preset-env": "^1.7.0",
+		"@babel/cli": "^7.2.3",
+		"@babel/core": "^7.4.0",
+		"@babel/node": "^7.2.2",
+		"@babel/preset-env": "^7.4.2",
 		"eslint": "^5.15.3",
 		"eslint-plugin-import": "^2.16.0",
 		"nodemon": "^1.18.10"
 	},
 	"dependencies": {
+		"@babel/polyfill": "^7.4.0",
+		"better-sqlite-pool": "^0.2.2",
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^7.0.0",
 		"enmap": "^4.8.1",
-		"enmap-mongo": "^2.0.2",
 		"fs-nextra": "^0.4.5",
 		"googleapis": "^38.0.0",
 		"moment": "^2.24.0",
 		"path": "^0.12.7",
+		"request": "^2.88.0",
 		"request-promise": "^4.2.4"
 	}
 }
