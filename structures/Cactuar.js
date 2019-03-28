@@ -1,5 +1,4 @@
 import { Client } from 'discord.js';
-import Enmap from 'enmap';
 import Config from './Config';
 import CommandStore from './CommandStore';
 import EventStore from './EventStore';
@@ -57,46 +56,8 @@ export default class Cactuar extends Client {
     return permlvl;
   }
 
-  getSettings( id ) {
-    const defaults = this.settings.get( 'default' ) || this.config.defaultSettings;
-    let guild = this.settings.get( id );
-
-    if ( typeof guild !== 'object' ) {
-      guild = {};
-    }
-    const returnObject = {};
-
-    Object.keys( defaults ).forEach( ( key ) => {
-      returnObject[ key ] = guild[ key ] ? guild[ key ] : defaults[ key ];
-    } );
-
-    return returnObject;
-  }
-
-  writeSettings( id, newSettings ) {
-    const defaults = this.settings.get( 'default' ) || this.config.defaultSettings;
-    let settings = this.settings.get( id );
-
-    if ( typeof settings !== 'object' ) {
-      settings = {};
-    }
-
-    for ( const key in newSettings ) {
-      if ( defaults[ key ] !== newSettings[ key ] ) {
-        settings[ key ] = newSettings[ key ];
-      } else {
-        delete settings[ key ];
-      }
-    }
-
-    this.settings.set( id, settings );
-  }
-
   async init() {
     const [ commands, events ] = await Promise.all( [ this.commands.loadFiles(), this.events.loadFiles() ] );
-
-    // REMOVE
-    await this.db.getSettings( '237307052911755264X' );
 
     console.log( `Loaded a total of ${commands} commands` );
     console.log( `Loaded a total of ${events} events` );
