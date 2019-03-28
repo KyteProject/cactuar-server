@@ -34,7 +34,9 @@
 		"fs-nextra": "^0.4.5",
 		"googleapis": "^38.0.0",
 		"moment": "^2.24.0",
+		"mongoose": "^5.4.20",
 		"path": "^0.12.7",
+		"pg": "^7.9.0",
 		"request": "^2.88.0",
 		"request-promise": "^4.2.4"
 	}

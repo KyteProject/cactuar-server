@@ -1,8 +1,8 @@
 import { Client } from 'discord.js';
-import CommandStore from './CommandStore';
-import EventStore from './EventStore';
 import Enmap from 'enmap';
 import Config from './Config';
+import CommandStore from './CommandStore';
+import EventStore from './EventStore';
 
 export default class Cactuar extends Client {
   constructor( options ) {
@@ -115,10 +115,6 @@ export default class Cactuar extends Client {
 
     console.log( `Loaded a total of ${commands} commands` );
     console.log( `Loaded a total of ${events} events` );
-
-    if ( this.settings.isReady ) {
-      console.log( `${this.settings.size} keys loaded` );
-    }
 
     for ( let i = 0; i < this.config.permLevels.length; i++ ) {
       const thisLevel = this.config.permLevels[ i ];
