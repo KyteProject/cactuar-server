@@ -3,13 +3,14 @@ import Enmap from 'enmap';
 import Config from './Config';
 import CommandStore from './CommandStore';
 import EventStore from './EventStore';
+import Database from '../queries';
 
 export default class Cactuar extends Client {
   constructor( options ) {
     super( options );
 
     this.config = new Config();
-
+    this.db = new Database( this );
     this.commands = new CommandStore( this );
     this.events = new EventStore( this );
 
@@ -17,8 +18,6 @@ export default class Cactuar extends Client {
     this.methods = {
       util: require( '../util/util.js' )
     };
-
-    this.settings = new Enmap( { name: 'settings', poling: true } );
 
     this.ready = false;
     this.on( 'ready', this._ready.bind( this ) );
@@ -58,23 +57,6 @@ export default class Cactuar extends Client {
     return permlvl;
   }
 
-  getGuildSettings( guild ) {
-    const def = this.config.defaultSettings;
-
-    if ( !guild ) {
-      return def;
-    }
-
-    const returns = {},
-      overrides = this.settings.get( guild.id ) || {};
-
-    for ( const key in def ) {
-      returns[ key ] = overrides[ key ] || def[ key ];
-    }
-
-    return returns;
-  }
-
   getSettings( id ) {
     const defaults = this.settings.get( 'default' ) || this.config.defaultSettings;
     let guild = this.settings.get( id );
@@ -112,6 +94,9 @@ export default class Cactuar extends Client {
 
   async init() {
     const [ commands, events ] = await Promise.all( [ this.commands.loadFiles(), this.events.loadFiles() ] );
+
+    // REMOVE
+    await this.db.getSettings( '237307052911755264X' );
 
     console.log( `Loaded a total of ${commands} commands` );
     console.log( `Loaded a total of ${events} events` );
