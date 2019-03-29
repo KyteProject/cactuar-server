@@ -26,7 +26,7 @@ client.login( token );
 
 client
   .on( 'disconnect', () => client.log.info( 'Bot is disconnecting...' ) )
-  .on( 'reconnecting', () => client.info( 'Bot reconnecting...' ) )
+  .on( 'reconnecting', () => client.log.info( 'Bot reconnecting...' ) )
   .on( 'error', ( err ) => client.log.error( err ) )
   .on( 'warn', ( info ) => client.log.warn( info ) );
 
