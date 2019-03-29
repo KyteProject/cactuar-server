@@ -11,7 +11,7 @@ module.exports = class extends Event {
       await ActivityUpdate.fetch( this.client );
     }, 20000 );
 
-    console.log(
+    this.client.log.data(
       `${this.client.user.tag}, ready to roll! ${this.client.users.size} users in ${this.client.guilds
         .size} servers.`
     );

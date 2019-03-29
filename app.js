@@ -2,7 +2,8 @@ require( 'dotenv' ).config();
 
 import Cactuar from './structures/Cactuar';
 
-const errorDirnameRegex = new RegExp( `${__dirname}/`, 'g' ),
+const token = process.env.NODE_ENV === 'production' ? process.env.TOKEN : process.env.DEV_TOKEN,
+  errorDirnameRegex = new RegExp( `${__dirname}/`, 'g' ),
   client = new Cactuar( {
     disabledEvents: [
       'CHANNEL_PINS_UPDATE',
@@ -20,17 +21,17 @@ const errorDirnameRegex = new RegExp( `${__dirname}/`, 'g' ),
     messageSweepInterval: 300
   } );
 
-client.login( process.env.TOKEN );
+client.login( token );
 
 client
-  .on( 'disconnect', () => console.log( 'Bot is disconnecting...' ) )
-  .on( 'reconnecting', () => console.log( 'Bot reconnecting...' ) )
-  .on( 'error', ( err ) => console.error( err ) )
-  .on( 'warn', ( info ) => console.warn( info ) );
+  .on( 'disconnect', () => client.log.info( 'Bot is disconnecting...' ) )
+  .on( 'reconnecting', () => client.info( 'Bot reconnecting...' ) )
+  .on( 'error', ( err ) => client.log.error( err ) )
+  .on( 'warn', ( info ) => client.log.warn( info ) );
 
 process.on( 'uncaughtException', ( err ) => {
   const errorMsg = err.stack.replace( errorDirnameRegex, './' );
 
-  console.error( `Uncaught Exception: ${errorMsg}` );
+  client.log.error( `Uncaught Exception: ${errorMsg}` );
   process.exit( 1 );
 } );

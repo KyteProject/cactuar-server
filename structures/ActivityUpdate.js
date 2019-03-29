@@ -44,7 +44,7 @@ class ActivityUpdate {
     this.presence.activity.name = track;
 
     client.user.setPresence( this.presence );
-    return console.log( `Activity changed to: ${this.presence.activity.name}` );
+    return client.log.info( `Activity changed to: ${this.presence.activity.name}` );
   }
 }
 

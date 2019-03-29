@@ -28,7 +28,7 @@ export default class Database {
 
       settings = res.rowCount > 0 ? res.rows[ 0 ] : def;
     } catch ( err ) {
-      console.log( err );
+      this.client.log.error( `getSettings() query failed: ${err}` );
       return def;
     }
 
@@ -37,23 +37,23 @@ export default class Database {
 
   async writeSettings( key, value, guild ) {
     if ( !key || !value || !guild ) {
-      return 'Missing arguments: requires a key and value.';
+      return this.client.log.debug( 'Missing arguments: requires a key and value.' );
     }
 
     try {
       const text = 'UPDATE bot.settings SET $1 = $2 WHERE GID = $3',
         values = [ key, value, guild ],
         res = await this.pool.query( text, values );
-
-      return console.log( res );
     } catch ( err ) {
-      return console.log( err );
+      return this.client.log.error( `writeSettings() query failed: ${err}` );
     }
+
+    return this.client.log.data( `Wrote setting: ${key}: ${value} for guild: ${guild}` );
   }
 
   async insertSettings( guild, name ) {
     if ( !guild || !name ) {
-      return console.log( 'Missing arguments: requires a guild and name.' );
+      return this.client.log.debug( 'Missing arguments: requires a guild and name.' );
     }
 
     try {
@@ -62,10 +62,10 @@ export default class Database {
         res = await this.pool.query( text, values );
 
       if ( res.rowCount ) {
-        console.log( `${name} (guild) has been added to database` );
+        this.client.log.data( `${name} (guild) has been added to database` );
       }
     } catch ( err ) {
-      return console.log( err );
+      return this.client.log.error( `insertSettings() failed: ${err}` );
     }
   }
 }

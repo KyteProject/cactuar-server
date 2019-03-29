@@ -3,6 +3,7 @@ import Config from './Config';
 import CommandStore from './CommandStore';
 import EventStore from './EventStore';
 import Database from '../queries';
+import Logger from './Logger';
 
 export default class Cactuar extends Client {
   constructor( options ) {
@@ -10,15 +11,15 @@ export default class Cactuar extends Client {
 
     this.config = new Config();
     this.db = new Database( this );
+    this.log = Logger;
     this.commands = new CommandStore( this );
     this.events = new EventStore( this );
-
     this.levelCache = {};
     this.methods = {
       util: require( '../util/util.js' )
     };
-
     this.ready = false;
+
     this.on( 'ready', this._ready.bind( this ) );
   }
 
@@ -59,8 +60,8 @@ export default class Cactuar extends Client {
   async init() {
     const [ commands, events ] = await Promise.all( [ this.commands.loadFiles(), this.events.loadFiles() ] );
 
-    console.log( `Loaded a total of ${commands} commands` );
-    console.log( `Loaded a total of ${events} events` );
+    this.log.data( `Loaded a total of ${commands} commands` );
+    this.log.data( `Loaded a total of ${events} events` );
 
     for ( let i = 0; i < this.config.permLevels.length; i++ ) {
       const thisLevel = this.config.permLevels[ i ];

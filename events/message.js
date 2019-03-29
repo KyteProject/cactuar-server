@@ -56,7 +56,7 @@ module.exports = class extends Event {
     try {
       await cmd.run( message, args );
     } catch ( err ) {
-      console.log( err );
+      this.client.log.error( err );
     }
   }
 };
