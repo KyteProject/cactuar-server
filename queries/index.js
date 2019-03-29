@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import { Collection } from 'discord.js';
 
 export default class Database {
   constructor( client ) {
@@ -13,9 +14,29 @@ export default class Database {
     } );
   }
 
-  async getSettings( guild ) {
+  async getSettings() {
+    try {
+      const col = new Collection(),
+        text = 'SELECT * FROM bot.settings',
+        res = await this.pool.query( text );
+
+      if ( !res.rowCount ) {
+        return this.client.log.warn( 'No settings found for any servers to cache' );
+      }
+
+      res.rows.forEach( ( item ) => {
+        col.set( item.gid, item );
+      } );
+
+      return col;
+    } catch ( err ) {
+      return this.client.log.error( `getSettings() query failed: ${err}` );
+    }
+  }
+
+  async getGuildSettings( guild ) {
     const def = this.client.config.defaultSettings;
-    let settings;
+    let settings = {};
 
     if ( !guild ) {
       return def;

@@ -12,4 +12,4 @@ Util.wait = require( 'util' ).promisify( setTimeout );
 
 Util.REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
 
-export default Util;
+module.exports = Util;

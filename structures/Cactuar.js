@@ -14,6 +14,7 @@ export default class Cactuar extends Client {
     this.log = Logger;
     this.commands = new CommandStore( this );
     this.events = new EventStore( this );
+    this.settingsCache = {};
     this.levelCache = {};
     this.methods = {
       util: require( '../util/util.js' )
@@ -57,11 +58,30 @@ export default class Cactuar extends Client {
     return permlvl;
   }
 
+  async updateCache() {
+    this.settingsCache = await this.db.getSettings();
+  }
+
+  getGuildSettings( guild ) {
+    if ( !guild ) {
+      return this.config.defaultSettings;
+    }
+
+    if ( this.settingsCache.has( guild ) ) {
+      return this.settingsCache.get( guild );
+    }
+
+    return this.config.defaultSettings;
+  }
+
   async init() {
     const [ commands, events ] = await Promise.all( [ this.commands.loadFiles(), this.events.loadFiles() ] );
 
+    await this.updateCache();
+
     this.log.data( `Loaded a total of ${commands} commands` );
     this.log.data( `Loaded a total of ${events} events` );
+    this.log.data( `Cached ${this.settingsCache.size} servers settings.` );
 
     for ( let i = 0; i < this.config.permLevels.length; i++ ) {
       const thisLevel = this.config.permLevels[ i ];

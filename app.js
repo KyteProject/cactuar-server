@@ -1,4 +1,5 @@
 require( 'dotenv' ).config();
+require( './extenders/Message' );
 
 import Cactuar from './structures/Cactuar';
 
