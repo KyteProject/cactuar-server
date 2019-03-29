@@ -53,7 +53,7 @@ export default class Database {
 
   async insertSettings( guild, name ) {
     if ( !guild || !name ) {
-      return 'Missing arguments: requires a guild and name.';
+      return console.log( 'Missing arguments: requires a guild and name.' );
     }
 
     try {
@@ -61,7 +61,9 @@ export default class Database {
         values = [ guild, name ],
         res = await this.pool.query( text, values );
 
-      return console.log( res );
+      if ( res.rowCount ) {
+        console.log( `${name} (guild) has been added to database` );
+      }
     } catch ( err ) {
       return console.log( err );
     }
