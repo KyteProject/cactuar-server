@@ -1,18 +1,18 @@
 CREATE TABLE "settings"
 (
-  "gID" varchar(255) NOT NULL,
+  "gid" varchar(255) NOT NULL,
   "name" varchar(255) NOT NULL DEFAULT '',
   "prefix" varchar(3) NOT NULL DEFAULT '.',
-  "modRole" varchar(255) NOT NULL DEFAULT 'Moderator',
-  "adminRole" varchar(255) NOT NULL DEFAULT 'Administrator',
-  "feedbackChannel" varchar(255) DEFAULT 'Insert channel ID',
+  "modrole" varchar(255) NOT NULL DEFAULT 'Moderator',
+  "adminrole" varchar(255) NOT NULL DEFAULT 'Administrator',
+  "feedbackchannel" varchar(255) DEFAULT 'Insert channel ID',
   "delete" bool NOT NULL DEFAULT TRUE,
   "pin" bool NOT NULL DEFAULT TRUE,
   "badges" bool NOT NULL DEFAULT TRUE,
   "tokens" bool NOT NULL DEFAULT TRUE,
-  "response" varchar(255) NOT NULL DEFAULT 'Have you considered giving feedback before makign a request?',
   "threshold" int2 NOT NULL DEFAULT 8,
-  PRIMARY KEY ("gID")
+  "response" varchar(255) NOT NULL DEFAULT 'Have you considered giving feedback before makign a request?',
+  PRIMARY KEY ("gid")
 )
 WITHOUT OIDS;
 

@@ -2,7 +2,7 @@ import Command from '../../structures/Command';
 import Youtube from '../../structures/Youtube';
 import ActivityUpdate from '../../structures/ActivityUpdate';
 
-module.exports = class Google extends Command {
+module.exports = class Song extends Command {
   constructor( ...args ) {
     super( ...args, {
       name: 'song',

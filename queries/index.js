@@ -16,19 +16,14 @@ export default class Database {
 
   async getSettings() {
     try {
-      const col = new Collection(),
-        text = 'SELECT * FROM bot.settings',
+      const text = 'SELECT * FROM bot.settings',
         res = await this.pool.query( text );
 
       if ( !res.rowCount ) {
         return this.client.log.warn( 'No settings found for any servers to cache' );
       }
 
-      res.rows.forEach( ( item ) => {
-        col.set( item.gid, item );
-      } );
-
-      return col;
+      return res.rows;
     } catch ( err ) {
       return this.client.log.error( `getSettings() query failed: ${err}` );
     }

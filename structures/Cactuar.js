@@ -1,4 +1,4 @@
-import { Client } from 'discord.js';
+import { Client, Collection } from 'discord.js';
 import Config from './Config';
 import CommandStore from './CommandStore';
 import EventStore from './EventStore';
@@ -14,7 +14,7 @@ export default class Cactuar extends Client {
     this.log = Logger;
     this.commands = new CommandStore( this );
     this.events = new EventStore( this );
-    this.settingsCache = {};
+    this.settingsCache = new Collection();
     this.levelCache = {};
     this.methods = {
       util: require( '../util/util.js' )
@@ -34,14 +34,6 @@ export default class Cactuar extends Client {
     this.emit( 'botReady' );
   }
 
-  get ping() {
-    return this.pings.reduce( ( prev, p ) => prev + p, 0 ) / this.pings.length;
-  }
-
-  get status() {
-    return this.ws.connection ? this.ws.connection.status : null;
-  }
-
   permlevel( message ) {
     let permlvl = 0;
 
@@ -59,11 +51,17 @@ export default class Cactuar extends Client {
   }
 
   async updateCache() {
-    this.settingsCache = await this.db.getSettings();
+    const res = await this.db.getSettings();
+
+    res.forEach( ( item ) => {
+      this.settingsCache.set( item.gid, item );
+    } );
+
+    this.log.data( `Cached ${this.settingsCache.size} server' settings.` );
   }
 
   getGuildSettings( guild ) {
-    if ( !guild ) {
+    if ( !guild || !this.settingsCache.size ) {
       return this.config.defaultSettings;
     }
 
@@ -81,7 +79,6 @@ export default class Cactuar extends Client {
 
     this.log.data( `Loaded ${commands} commands` );
     this.log.data( `Loaded ${events} events` );
-    this.log.data( `Cached ${this.settingsCache.size} server' settings.` );
 
     for ( let i = 0; i < this.config.permLevels.length; i++ ) {
       const thisLevel = this.config.permLevels[ i ];
