@@ -79,9 +79,9 @@ export default class Cactuar extends Client {
 
     await this.updateCache();
 
-    this.log.data( `Loaded a total of ${commands} commands` );
-    this.log.data( `Loaded a total of ${events} events` );
-    this.log.data( `Cached ${this.settingsCache.size} servers settings.` );
+    this.log.data( `Loaded ${commands} commands` );
+    this.log.data( `Loaded ${events} events` );
+    this.log.data( `Cached ${this.settingsCache.size} server' settings.` );
 
     for ( let i = 0; i < this.config.permLevels.length; i++ ) {
       const thisLevel = this.config.permLevels[ i ];

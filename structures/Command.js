@@ -9,7 +9,7 @@ export default class Command {
     this.usage = options.usage || 'No usage provided.';
     this.extended = options.extended || 'No information provided.';
     this.hidden = options.hidden || false;
-    this.guildOnly = options.guildOnly || true;
+    this.guildOnly = options.guildOnly || false;
     this.botPerms = new Permissions( options.botPerms || [] ).freeze();
     this.permLevel = options.permLevel || 'User';
     this.file = file;

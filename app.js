@@ -25,8 +25,8 @@ const token = process.env.NODE_ENV === 'production' ? process.env.TOKEN : proces
 client.login( token );
 
 client
-  .on( 'disconnect', () => client.log.info( 'Bot is disconnecting...' ) )
-  .on( 'reconnecting', () => client.log.info( 'Bot reconnecting...' ) )
+  .on( 'disconnect', () => client.log.warn( 'Bot is disconnecting...' ) )
+  .on( 'reconnecting', () => client.log.warn( 'Bot reconnecting...' ) )
   .on( 'error', ( err ) => client.log.error( err ) )
   .on( 'warn', ( info ) => client.log.warn( info ) );
 
