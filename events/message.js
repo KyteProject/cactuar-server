@@ -49,20 +49,27 @@ module.exports = class extends Event {
         }
         await this.runCommand( message, cmd, args );
       }
+
+      return;
     }
 
+    // Handle feedback
     if ( message.channel.id === message.settings.feedbackchannel ) {
-      const args = message.content.trim().split( / +/g ),
-        mentioned = message.mentions.members.first();
+      const args = message.content.trim().split( / +/g );
 
       // handle feedback requests
-      if ( this.isRequest( message ) ) {
-        //
+      if ( this.client.feedback.isRequest( message ) ) {
+        message.reply( 'true' );
       }
 
       // handle submission requests
-      if ( this.isSubmission( message, args ) ) {
-        //
+      if ( message.mentions.memebers ) {
+        const mentioned = message.mentions.members.first();
+
+        // verify users exist and are in DB
+        // check if mentioned user has submitted feedback
+        // score feedback
+        // update users
       }
     }
   }
@@ -73,31 +80,5 @@ module.exports = class extends Event {
     } catch ( err ) {
       this.client.log.error( err );
     }
-  }
-
-  isRequest( message ) {
-    const fileRegex = /\.(mp3|wav|wma|flac|ogg|m4a|mp4|m4b|aac)/gim;
-
-    urls.forEach( ( url ) => {
-      if ( message.cleanContent.includes( url ) ) {
-        return true;
-      }
-    } );
-
-    if ( message.attachments.size ) {
-      message.attachments.each( ( file ) => {
-        if ( fileRegex.exec( file.name ) !== null ) {
-          return true;
-        }
-      } );
-    }
-  }
-
-  isSubmission( message ) {
-    if ( !message.mentions.memebers ) {
-      return false;
-    }
-
-    return message.mentions.members.first();
   }
 };

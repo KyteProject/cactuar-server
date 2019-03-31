@@ -3,15 +3,17 @@ import Config from './Config';
 import CommandStore from './CommandStore';
 import EventStore from './EventStore';
 import Database from '../queries';
+import Feedback from './Feedback';
 import Logger from './Logger';
 
 export default class Cactuar extends Client {
   constructor( options ) {
     super( options );
 
+    this.log = Logger;
     this.config = new Config();
     this.db = new Database( this );
-    this.log = Logger;
+    this.feedback = new Feedback();
     this.commands = new CommandStore( this );
     this.events = new EventStore( this );
     this.settingsCache = new Collection();
