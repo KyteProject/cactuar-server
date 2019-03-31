@@ -49,30 +49,21 @@ module.exports = class Conf extends Command {
         return message.channel.send( 'This key already has that value.' );
       }
 
+      // Prefix validity checking
       if ( key === 'prefix' && value.join( '' ).length !== 1 ) {
         return message.channel.send( 'Prefix should be a single character.' );
       }
 
+      // Channel validity checking
       if ( key === 'feedbackchannel' ) {
-        const match = /([0-9]{17,20})/.exec( value );
-
-        if ( !match ) {
-          return message.channel.send( 'Not a valid channel.' );
-        }
-
         try {
-          const check = await this.client.channels.resolve( match[ 1 ] );
-
-          if ( !check.type === 'text' ) {
-            return message.channel.send( ' Not a text channel.' );
-          }
-
-          value[ 0 ] = match[ 1 ];
+          value[ 0 ] = await message.verifyChannel( value );
         } catch ( err ) {
-          return message.channel.send( 'This channel does not exist.' );
+          return message.channel.send( err );
         }
       }
 
+      // Role validity checking
       if ( key === 'adminrole' || key === 'modrole' ) {
         const match = /([0-9]{17,20})/.exec( value );
 
@@ -93,6 +84,7 @@ module.exports = class Conf extends Command {
         }
       }
 
+      // Write to DB and update cache
       try {
         const res = await this.client.db.writeSettings( key, value.join( ' ' ), message.guild.id );
 
