@@ -10,7 +10,7 @@ module.exports = class Conf extends Command {
     } );
   }
 
-  run( message, [ action, key, ...value ], level ) {
+  async run( message, [ action, key, ...value ], level ) {
     const settings = message.settings;
 
     delete settings.gid;
@@ -33,7 +33,75 @@ module.exports = class Conf extends Command {
     }
 
     if ( action === 'edit' ) {
-      //
+      if ( !key ) {
+        return message.channel.send( 'Please specify a setting to edit.' );
+      }
+
+      if ( settings[ key ] == undefined ) {
+        return message.channel.send( `The key "${key}" does not exist.` );
+      }
+
+      if ( !value.length ) {
+        return message.channel.send( 'Please specify a new value.' );
+      }
+
+      if ( value.join( ' ' ) == String( settings[ key ] ) ) {
+        return message.channel.send( 'This key already has that value.' );
+      }
+
+      if ( key === 'prefix' && value.join( '' ).length !== 1 ) {
+        return message.channel.send( 'Prefix should be a single character.' );
+      }
+
+      if ( key === 'feedbackchannel' ) {
+        const match = /([0-9]{17,20})/.exec( value );
+
+        if ( !match ) {
+          return message.channel.send( 'Not a valid channel.' );
+        }
+
+        try {
+          const check = await this.client.channels.resolve( match[ 1 ] );
+
+          if ( !check.type === 'text' ) {
+            return message.channel.send( ' Not a text channel.' );
+          }
+
+          value[ 0 ] = match[ 1 ];
+        } catch ( err ) {
+          return message.channel.send( 'This channel does not exist.' );
+        }
+      }
+
+      if ( key === 'adminrole' || key === 'modrole' ) {
+        const match = /([0-9]{17,20})/.exec( value );
+
+        if ( !match ) {
+          return message.channel.send( 'Not a valid role.' );
+        }
+
+        try {
+          const check = await message.guild.roles.resolve( match[ 1 ] );
+
+          if ( !check.name ) {
+            throw err;
+          }
+
+          value[ 0 ] = check.name;
+        } catch ( err ) {
+          return message.channel.send( 'This role does not exist.' );
+        }
+      }
+
+      try {
+        const res = await this.client.db.writeSettings( key, value.join( ' ' ), message.guild.id );
+
+        this.client.updateCache();
+
+        message.channel.send( `${res}` );
+      } catch ( err ) {
+        this.client.log.error( err );
+      }
     }
   }
 };

@@ -1,5 +1,4 @@
 import { Pool } from 'pg';
-import { Collection } from 'discord.js';
 
 export default class Database {
   constructor( client ) {
@@ -57,14 +56,19 @@ export default class Database {
     }
 
     try {
-      const text = 'UPDATE bot.settings SET $1 = $2 WHERE GID = $3',
-        values = [ key, value, guild ],
-        res = await this.pool.query( text, values );
-    } catch ( err ) {
-      return this.client.log.error( `writeSettings() query failed: ${err}` );
-    }
+      const response = `Wrote setting: ${key} = ${value} for guild: ${guild}`,
+        text = `UPDATE bot.settings SET ${key} = $1 WHERE GID = $2`,
+        values = [ value, guild ];
 
-    return this.client.log.data( `Wrote setting: ${key}: ${value} for guild: ${guild}` );
+      await this.pool.query( text, values );
+
+      this.client.log.data( response );
+
+      return response;
+    } catch ( err ) {
+      this.client.log.error( `writeSettings() query failed: ${err}` );
+      return err;
+    }
   }
 
   async insertSettings( guild, name ) {
