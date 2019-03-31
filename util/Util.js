@@ -8,6 +8,11 @@ class Util {
   }
 }
 
+// Naughty stuff~ ;<
+Array.prototype.random = function() {
+  return this[ Math.floor( Math.random() * this.length ) ];
+};
+
 Util.wait = require( 'util' ).promisify( setTimeout );
 
 Util.REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
