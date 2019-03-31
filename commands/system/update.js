@@ -1,6 +1,6 @@
 import Command from '../../structures/Command';
 
-module.exports = class Reboot extends Command {
+module.exports = class Update extends Command {
   constructor( ...args ) {
     super( ...args, {
       name: 'update',

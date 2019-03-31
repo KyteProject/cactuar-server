@@ -6,7 +6,8 @@ module.exports = class Conf extends Command {
       name: 'conf',
       description: 'View or change server configuration.',
       category: 'System',
-      permLevel: 'Administrator'
+      permLevel: 'Administrator',
+      guildOnly: true
     } );
   }
 
