@@ -4,7 +4,7 @@ export default class Config {
 
     this.defaultSettings = {
       prefix: '.',
-      feedbackChannel: 'insert channel ID',
+      feedbackchannel: 'insert channel ID',
       modRole: 'Moderator',
       adminRole: 'Administrator',
       badges: true, // Enables badges/acheivements

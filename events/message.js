@@ -7,7 +7,7 @@ module.exports = class extends Event {
     this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
   }
 
-  async run( message ) {
+  async run( message, args ) {
     if ( message.author.bot ) {
       return;
     }
@@ -50,6 +50,21 @@ module.exports = class extends Event {
         await this.runCommand( message, cmd, args );
       }
     }
+
+    if ( message.channel.id === message.settings.feedbackchannel ) {
+      const args = message.content.trim().split( / +/g ),
+        mentioned = message.mentions.members.first();
+
+      // handle feedback requests
+      if ( this.isRequest( message ) ) {
+        //
+      }
+
+      // handle submission requests
+      if ( this.isSubmission( message, args ) ) {
+        //
+      }
+    }
   }
 
   async runCommand( message, cmd, args ) {
@@ -58,5 +73,31 @@ module.exports = class extends Event {
     } catch ( err ) {
       this.client.log.error( err );
     }
+  }
+
+  isRequest( message ) {
+    const fileRegex = /\.(mp3|wav|wma|flac|ogg|m4a|mp4|m4b|aac)/gim;
+
+    urls.forEach( ( url ) => {
+      if ( message.cleanContent.includes( url ) ) {
+        return true;
+      }
+    } );
+
+    if ( message.attachments.size ) {
+      message.attachments.each( ( file ) => {
+        if ( fileRegex.exec( file.name ) !== null ) {
+          return true;
+        }
+      } );
+    }
+  }
+
+  isSubmission( message ) {
+    if ( !message.mentions.memebers ) {
+      return false;
+    }
+
+    return message.mentions.members.first();
   }
 };
