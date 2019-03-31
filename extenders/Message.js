@@ -23,13 +23,12 @@ module.exports = Structures.extend(
       async verifyChannel( value ) {
         try {
           const match = /([0-9]{17,20})/.exec( value );
-          let check;
 
           if ( !match ) {
             throw new Error( 'Not a valid channel.' );
           }
 
-          check = await this.client.channels.resolve( match[ 1 ] );
+          const check = await this.client.channels.resolve( match[ 1 ] );
 
           if ( !check.type === 'text' ) {
             throw new Error( 'Not a text channel.' );
@@ -37,7 +36,7 @@ module.exports = Structures.extend(
 
           return match[ 1 ];
         } catch ( err ) {
-          if ( err.message.includes( 'null' ) ) {
+          if ( err instanceof TypeError ) {
             err.message = 'Channel does not exist.';
           }
 
