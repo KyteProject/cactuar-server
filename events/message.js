@@ -3,8 +3,6 @@ import Event from '../structures/Event.js';
 module.exports = class extends Event {
   constructor( ...args ) {
     super( ...args );
-
-    this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
   }
 
   async run( message, args ) {
@@ -55,7 +53,6 @@ module.exports = class extends Event {
     }
 
     // Handle Feedback
-    // TODO: Probably some refacrtoring here
     if ( message.channel.id === message.settings.feedbackchannel ) {
       const args = message.content.trim().split( / +/g ),
         [ jID, mID, gID, aID ] = [
@@ -69,6 +66,7 @@ module.exports = class extends Event {
       if ( this.client.feedback.isRequest( message ) ) {
         const user = await this.client.feedback.verifyUser( jID, message.author.tag );
 
+        // Process rejection
         if ( user.keywords < message.settings.threshold && user.tokens <= 0 ) {
           if ( message.settings.delete ) {
             message.delete();
@@ -84,10 +82,12 @@ module.exports = class extends Event {
           return this.client.log.info( `Feedback denied for: ${message.author.tag}` );
         }
 
+        // Check for token use
         if ( user.keywords < message.settings.threshold && user.tokens > 0 ) {
           this.client.db.removeToken( jID );
         }
 
+        // Pin/Unpin messages
         if ( message.settings.pin ) {
           try {
             const oldMessages = await this.client.db.fetchMessages( gID, 1 ),
@@ -101,8 +101,13 @@ module.exports = class extends Event {
         }
 
         // Update user info and msg DB
-        this.client.db.insertMessage( mID, gID, aID );
-        this.client.db.updateUserRequest( jID, message.createdAt.toString() );
+        try {
+          this.client.db.insertMessage( mID, gID, aID );
+          this.client.db.updateUserRequest( jID, message.createdAt.toString() );
+        } catch ( err ) {
+          this.client.log.error( err );
+        }
+
         return;
       }
 
