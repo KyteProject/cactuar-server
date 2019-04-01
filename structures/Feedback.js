@@ -39,6 +39,38 @@ export default class Feedback {
     }
   }
 
+  async verifyMessage( message, input ) {
+    for ( let i = 0; i < input.length; i++ ) {
+      try {
+        const oldMsg = await message.channel.messages.fetch( input[ i ].msg );
+
+        if ( oldMsg ) {
+          return oldMsg;
+        }
+      } catch ( err ) {
+        this.client.db.removeMessage( input[ i ].msg );
+      }
+    }
+  }
+
+  async verifyAllMessage( message, input ) {
+    let msgArray = [];
+
+    for ( let i = 0; i < input.length; i++ ) {
+      try {
+        const oldMsg = await message.channel.messages.fetch( input[ i ].msg );
+
+        if ( oldMsg ) {
+          msgArray.push( oldMsg );
+        }
+      } catch ( err ) {
+        this.client.db.removeMessage( input[ i ].msg );
+      }
+    }
+
+    return msgArray;
+  }
+
   rejectMessage( message, oldMsg ) {
     try {
       let embed = new MessageEmbed();
