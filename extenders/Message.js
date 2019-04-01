@@ -45,6 +45,38 @@ module.exports = Structures.extend(
         }
       }
 
+      async verifyMessage( message, input ) {
+        for ( let i = 0; i < input.length; i++ ) {
+          try {
+            const oldMsg = await message.channel.messages.fetch( input[ i ].msg );
+
+            if ( oldMsg ) {
+              return oldMsg;
+            }
+          } catch ( err ) {
+            this.client.db.removeMessage( input[ i ].msg );
+          }
+        }
+      }
+
+      async verifyAllMessage( message, input ) {
+        let msgArray = [];
+
+        for ( let i = 0; i < input.length; i++ ) {
+          try {
+            const oldMsg = await message.channel.messages.fetch( input[ i ].msg );
+
+            if ( oldMsg ) {
+              msgArray.push( oldMsg );
+            }
+          } catch ( err ) {
+            this.client.db.removeMessage( input[ i ].msg );
+          }
+        }
+
+        return msgArray;
+      }
+
       async awaitReply( question, filter, limit = 60000, embed ) {
         await this.channel.send( question, embed );
 

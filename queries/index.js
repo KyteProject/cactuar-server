@@ -114,4 +114,28 @@ export default class Database {
       return this.client.log.error( `addUser() query failed: ${err}` );
     }
   }
+
+  async fetchMessages( guild, limit ) {
+    try {
+      const text = 'SELECT * FROM bot.messages WHERE guild = $1 ORDER BY msg DESC LIMIT $2',
+        values = [ guild, limit ],
+        res = await this.pool.query( text, values );
+
+      return res.rows;
+    } catch ( err ) {
+      return this.client.log.error( `fetchMessages() query failed: ${err}` );
+    }
+  }
+
+  async removeMessage( message ) {
+    try {
+      const text = 'DELETE FROM bot.messages WHERE msg = $1',
+        values = [ message ],
+        res = await this.pool.query( text, values );
+
+      return this.client.log.data( `Removed message: ${message}` );
+    } catch ( err ) {
+      this.client.log.error( `removeMessahe() query failed: ${err}` );
+    }
+  }
 }

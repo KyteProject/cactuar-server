@@ -55,6 +55,7 @@ module.exports = class extends Event {
     }
 
     // Handle Feedback
+    // TODO: Probably some refacrtoring here
     if ( message.channel.id === message.settings.feedbackchannel ) {
       const args = message.content.trim().split( / +/g ),
         jID = `${message.guild.id}-${message.author.id}`;
@@ -69,7 +70,10 @@ module.exports = class extends Event {
           }
 
           if ( message.settings.response ) {
-            this.client.feedback.rejectMessage(); // TODO: params
+            const oldID = await this.client.db.fetchMessages( message.guild.id, 5 ),
+              oldMsg = await message.verifyMessage( message, oldID );
+
+            this.client.feedback.rejectMessage( message, oldMsg );
           }
 
           return;

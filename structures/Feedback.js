@@ -67,7 +67,7 @@ export default class Feedback {
         .setTimestamp( oldMsg.createdAt )
         .setFooter( oldMsg.author.username, oldMsg.author.avatarURL() );
 
-      return message.channel.send( embed );
+      return message.reply( `❌ **Feedback Denied!** ❌\n${message.settings.response}`, embed );
     } catch ( err ) {
       //
     }
