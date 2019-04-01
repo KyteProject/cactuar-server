@@ -83,10 +83,6 @@ module.exports = class extends Event {
           this.client.db.removeToken( jID );
         }
 
-        // Accept Request
-
-        // update user
-
         if ( message.settings.pin ) {
           return message.pin();
         }

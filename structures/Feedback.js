@@ -69,7 +69,11 @@ export default class Feedback {
 
       return message.reply( `❌ **Feedback Denied!** ❌\n${message.settings.response}`, embed );
     } catch ( err ) {
-      //
+      this.client.log.error( err );
+
+      return message.channel.send(
+        'Feedback has been denied! The previous request message cannot be found, try scrolling up and finding some older tracks to give feedback to 😄'
+      );
     }
   }
 }
