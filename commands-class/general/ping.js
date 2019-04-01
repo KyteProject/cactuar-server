@@ -1,6 +1,6 @@
 import Command from '../../system/Command';
 
-class PermLevel extends Command {
+class Ping extends Command {
 	constructor(...args) {
 		super(...args, {
 			name: 'ping',
@@ -21,4 +21,4 @@ class PermLevel extends Command {
 	}
 }
 
-export default PermLevel();
+export default Ping();

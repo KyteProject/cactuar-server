@@ -9,8 +9,11 @@ exports.run = async (client, message, [action, key, ...value], level) => {
 		if (value.length < 1) return message.reply('Please specify a new value.');
 
 		value = value.join(' ');
+
 		await client.verifyKey(message, settings, key, value);
+
 		client.query.setConf(client, message, settings);
+
 		message.reply(`${key} value is: ${settings[key]}`);
 	} else if (action === 'del' || action === 'reset') {
 		if (!key) return message.reply('Please specify a setting to rese.');
