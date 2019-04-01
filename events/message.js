@@ -54,7 +54,7 @@ module.exports = class extends Event {
       return;
     }
 
-    // Handle feedback
+    // Handle Feedback
     if ( message.channel.id === message.settings.feedbackchannel ) {
       const args = message.content.trim().split( / +/g ),
         jID = `${message.guild.id}-${message.author.id}`;
@@ -63,19 +63,26 @@ module.exports = class extends Event {
       if ( this.client.feedback.isRequest( message ) ) {
         const user = await this.client.feedback.verifyUser( jID, message.author.tag );
 
-        // check if have met threshold
+        if ( user.keywords < message.settings.threshold && user.tokens <= 0 ) {
+          if ( message.settings.delete ) {
+            message.delete();
+          }
 
-        // delete/allow
+          if ( message.settings.response ) {
+            this.client.feedback.rejectMessage(); // TODO: params
+          }
+
+          return;
+        }
 
         // update user
 
-        // pin message
         if ( message.settings.pin ) {
           return message.pin();
         }
       }
 
-      // handle submission requests
+      // Feedback Submissions
       if ( message.mentions.memebers ) {
         const mentioned = message.mentions.members.first();
 

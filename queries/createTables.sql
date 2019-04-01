@@ -10,7 +10,8 @@ CREATE TABLE "settings"
   "pin" bool NOT NULL DEFAULT TRUE,
   "badges" bool NOT NULL DEFAULT TRUE,
   "tokens" bool NOT NULL DEFAULT TRUE,
-  "threshold" int2 NOT NULL DEFAULT 8,
+  "threshold" int2 NOT NULL DEFAULT 5,
+  "respond" bool NOT NULL DEFAULT TRUE,
   "response" varchar(255) NOT NULL DEFAULT 'Have you considered giving feedback before makign a request?',
   PRIMARY KEY ("gid")
 )
