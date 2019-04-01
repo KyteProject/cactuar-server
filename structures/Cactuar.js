@@ -13,7 +13,7 @@ export default class Cactuar extends Client {
     this.log = Logger;
     this.config = new Config();
     this.db = new Database( this );
-    this.feedback = new Feedback();
+    this.feedback = new Feedback( this );
     this.commands = new CommandStore( this );
     this.events = new EventStore( this );
     this.settingsCache = new Collection();

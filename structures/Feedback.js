@@ -1,5 +1,6 @@
 export default class Feedback {
-  constructor() {
+  constructor( client ) {
+    this.client = client;
     this.urls = require( '../assets/urls.json' );
     this.keywords = require( '../assets/keywords.json' );
   }
@@ -19,6 +20,20 @@ export default class Feedback {
           return true;
         }
       } );
+    }
+  }
+
+  async verifyUser( jID, name ) {
+    try {
+      let user = await this.client.db.getUser( jID );
+
+      if ( !user ) {
+        user = await this.client.db.addUser( jID, name );
+      }
+
+      return user;
+    } catch ( err ) {
+      return this.client.log.error( err );
     }
   }
 }

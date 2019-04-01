@@ -56,19 +56,14 @@ module.exports = class extends Event {
 
     // Handle feedback
     if ( message.channel.id === message.settings.feedbackchannel ) {
-      const args = message.content.trim().split( / +/g );
+      const args = message.content.trim().split( / +/g ),
+        jID = `${message.guild.id}-${message.author.id}`;
 
-      // handle feedback requests
+      // Feedback Requests
       if ( this.client.feedback.isRequest( message ) ) {
-        const jID = `${message.guild.id}-${message.author.id}`;
+        const user = await this.client.feedback.verifyUser( jID, message.author.tag );
 
-        try {
-          const user = this.client.db.getUser( jID );
-        } catch ( err ) {
-          this.client.db.addUser( jID, message.author.username );
-        }
-
-        // check if hve met threshold
+        // check if have met threshold
 
         // delete/allow
 

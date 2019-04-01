@@ -107,7 +107,9 @@ export default class Database {
         values = [ jID, name ],
         res = await this.pool.query( text, values );
 
-      return res;
+      this.client.log.data( `Added user: ${jID} - ${name} to database.` );
+
+      return res.rows[ 0 ];
     } catch ( err ) {
       return this.client.log.error( `addUser() query failed: ${err}` );
     }
