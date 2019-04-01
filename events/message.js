@@ -24,6 +24,7 @@ module.exports = class extends Event {
       `^<@!?${this.client.user.id}> |^${this.client.methods.util.regExpEsc( message.settings.prefix )}`
     ).exec( message.content );
 
+    // Handle commands
     if ( prefix ) {
       const args = message.content
           .slice( prefix[ 0 ].length )
@@ -59,7 +60,24 @@ module.exports = class extends Event {
 
       // handle feedback requests
       if ( this.client.feedback.isRequest( message ) ) {
-        message.reply( 'true' );
+        const jID = `${message.guild.id}-${message.author.id}`;
+
+        try {
+          const user = this.client.db.getUser( jID );
+        } catch ( err ) {
+          this.client.db.addUser( jID, message.author.username );
+        }
+
+        // check if hve met threshold
+
+        // delete/allow
+
+        // update user
+
+        // pin message
+        if ( message.settings.pin ) {
+          return message.pin();
+        }
       }
 
       // handle submission requests

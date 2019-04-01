@@ -29,25 +29,25 @@ export default class Database {
   }
 
   async getGuildSettings( guild ) {
-    const def = this.client.config.defaultSettings;
-    let settings = {};
-
-    if ( !guild ) {
-      return def;
-    }
-
     try {
+      const def = this.client.config.defaultSettings;
+      let settings = {};
+
+      if ( !guild ) {
+        return def;
+      }
+
       const text = 'SELECT * FROM bot.settings where GID = $1',
         values = [ guild ],
         res = await this.pool.query( text, values );
 
       settings = res.rowCount > 0 ? res.rows[ 0 ] : def;
+
+      return settings;
     } catch ( err ) {
       this.client.log.error( `getSettings() query failed: ${err}` );
       return def;
     }
-
-    return settings;
   }
 
   async writeSettings( key, value, guild ) {
@@ -86,6 +86,30 @@ export default class Database {
       }
     } catch ( err ) {
       return this.client.log.error( `insertSettings() failed: ${err}` );
+    }
+  }
+
+  async getUser( user ) {
+    try {
+      const text = 'SELECT * FROM bot.users where JID = $1',
+        values = [ user ],
+        res = await this.pool.query( text, values );
+
+      return res.rows[ 0 ];
+    } catch ( err ) {
+      return this.client.log.error( `getUser() query failed: ${err}` );
+    }
+  }
+
+  async addUser( jID, name ) {
+    try {
+      const text = 'INSERT INTO bot.users (jid, name) VALUES ($1, $2) RETURNING *',
+        values = [ jID, name ],
+        res = await this.pool.query( text, values );
+
+      return res;
+    } catch ( err ) {
+      return this.client.log.error( `addUser() query failed: ${err}` );
     }
   }
 }
