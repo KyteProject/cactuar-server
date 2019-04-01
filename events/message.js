@@ -71,12 +71,12 @@ module.exports = class extends Event {
 
           if ( message.settings.response ) {
             const oldMessages = await this.client.db.fetchMessages( message.guild.id, 5 ),
-              oldMsg = await message.verifyMessage( message, oldMessages );
+              oldMsg = await this.client.feedback.verifyMessage( message, oldMessages );
 
             this.client.feedback.rejectMessage( message, oldMsg );
           }
 
-          return;
+          return this.client.log.info( `Feedback denied for: ${message.author.tag}` );
         }
 
         if ( user.keywords < message.settings.threshold && user.tokens > 0 ) {
@@ -84,8 +84,18 @@ module.exports = class extends Event {
         }
 
         if ( message.settings.pin ) {
-          return message.pin();
+          try {
+            const oldMessages = await this.client.db.fetchMessages( message.guild.id, 1 ),
+              oldMsg = await this.client.feedback.verifyMessage( message, oldMessages );
+
+            message.pin();
+            oldMsg.unpin();
+          } catch ( err ) {
+            this.client.log.error( err );
+          }
         }
+
+        // Update user info and msg DB
       }
 
       // Feedback Submissions
