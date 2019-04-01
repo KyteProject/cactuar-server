@@ -58,7 +58,12 @@ module.exports = class extends Event {
     // TODO: Probably some refacrtoring here
     if ( message.channel.id === message.settings.feedbackchannel ) {
       const args = message.content.trim().split( / +/g ),
-        jID = `${message.guild.id}-${message.author.id}`;
+        [ jID, mID, gID, aID ] = [
+          `${message.guild.id}-${message.author.id}`,
+          message.id,
+          message.guild.id,
+          message.author.id
+        ];
 
       // Feedback Requests
       if ( this.client.feedback.isRequest( message ) ) {
@@ -70,7 +75,7 @@ module.exports = class extends Event {
           }
 
           if ( message.settings.response ) {
-            const oldMessages = await this.client.db.fetchMessages( message.guild.id, 5 ),
+            const oldMessages = await this.client.db.fetchMessages( gID, 5 ),
               oldMsg = await this.client.feedback.verifyMessage( message, oldMessages );
 
             this.client.feedback.rejectMessage( message, oldMsg );
@@ -85,7 +90,7 @@ module.exports = class extends Event {
 
         if ( message.settings.pin ) {
           try {
-            const oldMessages = await this.client.db.fetchMessages( message.guild.id, 1 ),
+            const oldMessages = await this.client.db.fetchMessages( gID, 1 ),
               oldMsg = await this.client.feedback.verifyMessage( message, oldMessages );
 
             message.pin();
@@ -96,6 +101,9 @@ module.exports = class extends Event {
         }
 
         // Update user info and msg DB
+        this.client.db.insertMessage( mID, gID, aID );
+        this.client.db.updateUserRequest( jID, message.createdAt.toString() );
+        return;
       }
 
       // Feedback Submissions

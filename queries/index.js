@@ -115,12 +115,27 @@ export default class Database {
     }
   }
 
-  async removeToken( jID ) {
+  updateUserRequest( jID, date ) {
+    try {
+      // eslint-disable-next-line
+			const text =
+					'UPDATE bot.users SET submissions = submissions + 1, last_request = $2, keywords = 0 WHERE jid = $1',
+        values = [ jID, date ];
+
+      this.pool.query( text, values );
+
+      return this.client.log.data( `Updated user via request: ${jID}` );
+    } catch ( err ) {
+      return this.client.log.error( `updateUserRFequest() query failed: ${err}` );
+    }
+  }
+
+  removeToken( jID ) {
     try {
       const text = 'UPDATE bot.users SET tokens = 0 WHERE jid = $1',
         values = [ jID ];
 
-      await this.pool.query( text, values );
+      this.pool.query( text, values );
 
       return this.client.log.data( `Removed token for: ${jID}` );
     } catch ( err ) {
@@ -140,15 +155,29 @@ export default class Database {
     }
   }
 
-  async removeMessage( message ) {
+  removeMessage( message ) {
     try {
       const text = 'DELETE FROM bot.messages WHERE msg = $1',
-        values = [ message ],
-        res = await this.pool.query( text, values );
+        values = [ message ];
+
+      this.pool.query( text, values );
 
       return this.client.log.data( `Removed message: ${message}` );
     } catch ( err ) {
       this.client.log.error( `removeMessahe() query failed: ${err}` );
+    }
+  }
+
+  insertMessage( message, guild, author ) {
+    try {
+      const text = 'INSERT INTO bot.messages (msg, guild, author) VALUES ($1, $2, $3)',
+        values = [ message, guild, author ];
+
+      this.pool.query( text, values );
+
+      this.client.log.data( `Added message: ${message}` );
+    } catch ( err ) {
+      return this.client.log.error( `addUser() query failed: ${err}` );
     }
   }
 }
