@@ -70,14 +70,20 @@ module.exports = class extends Event {
           }
 
           if ( message.settings.response ) {
-            const oldID = await this.client.db.fetchMessages( message.guild.id, 5 ),
-              oldMsg = await message.verifyMessage( message, oldID );
+            const oldMessages = await this.client.db.fetchMessages( message.guild.id, 5 ),
+              oldMsg = await message.verifyMessage( message, oldMessages );
 
             this.client.feedback.rejectMessage( message, oldMsg );
           }
 
           return;
         }
+
+        if ( user.keywords < message.settings.threshold && user.tokens > 0 ) {
+          this.client.db.removeToken( jID );
+        }
+
+        // Accept Request
 
         // update user
 

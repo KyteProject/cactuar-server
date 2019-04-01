@@ -57,7 +57,7 @@ export default class Database {
 
     try {
       const response = `Wrote setting: ${key} = ${value} for guild: ${guild}`,
-        text = `UPDATE bot.settings SET ${key} = $1 WHERE GID = $2`,
+        text = `UPDATE bot.settings SET ${key} = $1 WHERE gid = $2`,
         values = [ value, guild ];
 
       await this.pool.query( text, values );
@@ -112,6 +112,19 @@ export default class Database {
       return res.rows[ 0 ];
     } catch ( err ) {
       return this.client.log.error( `addUser() query failed: ${err}` );
+    }
+  }
+
+  async removeToken( jID ) {
+    try {
+      const text = 'UPDATE bot.users SET tokens = 0 WHERE jid = $1',
+        values = [ jID ];
+
+      await this.pool.query( text, values );
+
+      return this.client.log.data( `Removed token for: ${jID}` );
+    } catch ( err ) {
+      return this.client.log.error( `removeToken() query failed: ${err}` );
     }
   }
 
