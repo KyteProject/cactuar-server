@@ -54,13 +54,12 @@ module.exports = class extends Event {
 
     // Handle Feedback
     if ( message.channel.id === message.settings.feedbackchannel ) {
-      const args = message.content.trim().split( / +/g ),
-        [ jID, mID, gID, aID ] = [
-          `${message.guild.id}-${message.author.id}`,
-          message.id,
-          message.guild.id,
-          message.author.id
-        ];
+      const [ jID, mID, gID, aID ] = [
+        `${message.guild.id}-${message.author.id}`,
+        message.id,
+        message.guild.id,
+        message.author.id
+      ];
 
       // Feedback Requests
       if ( this.client.feedback.isRequest( message ) ) {
@@ -126,13 +125,29 @@ module.exports = class extends Event {
         const user = await this.client.feedback.verifyUser( jID, message.author.tag ),
           oldMessages = await this.client.db.fetchMessages( gID, 5 );
 
-        // Check mentioned user has registered feedback
         if ( !oldMessages.find( ( msg ) => msg.author === mentioned.id ) ) {
           return;
         }
 
-        // score feedback
-        this.client.feedback.score( message );
+        const score = this.client.feedback.score( message ),
+          data = {
+            current: user.current + score.points,
+            total: user.total + score.points,
+            tokens: user.tokens + score.tokens,
+            submissions: user.submissions + 1,
+            keywords: user.keywords + score.keywords
+          };
+
+        if ( data.current >= user.next ) {
+          data.current = 0;
+          data.level = user.level + 1;
+          data.next = user.next + this.client.feedback.nextLevel( data.level );
+
+          message.channel.send( `${message.author.username} just reached level ${data.level}! 🎵` );
+        } else {
+          data.level = user.level;
+          data.next = user.next;
+        }
 
         // update users
       } catch ( err ) {

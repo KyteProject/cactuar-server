@@ -25,6 +25,13 @@ export default class Feedback {
     }
   }
 
+  nextLevel( level ) {
+    const nextLevel = level + 1,
+      nextPoints = 1 / 4 * Math.floor( nextLevel - 1 + 300 * Math.pow( 2, ( nextLevel - 1 ) / 7 ) );
+
+    return Math.floor( nextPoints );
+  }
+
   score( message ) {
     const regex = /\s+/gi,
       score = {
@@ -37,7 +44,7 @@ export default class Feedback {
     score.points = Math.round(
       ( score.wordCount * 0.2 + score.charCount / 100 + score.keywords * 9 ) * score.multiplier
     );
-    score.token = score.points >= 300 && message.settings.tokens ? 1 : 0;
+    score.tokens = score.points >= 300 && message.settings.tokens ? 1 : 0;
 
     this.client.log.info( `${message.author.tag} Feedback score: ${score.points}` );
     return score;
