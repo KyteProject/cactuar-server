@@ -1,6 +1,7 @@
 export default class Config {
   constructor() {
     this.owner = '113226391771717632';
+    this.version = '3.0.0';
 
     this.defaultSettings = {
       prefix: '.',
@@ -55,6 +56,12 @@ export default class Config {
       },
       {
         level: 3,
+        name: 'Server Owner',
+        check: ( message ) =>
+          ( message.channel.type === 'text' ? message.guild.owner.user.id === message.author.id : false )
+      },
+      {
+        level: 4,
         name: 'Bot Owner',
         check: ( message ) => this.owner === message.author.id
       }

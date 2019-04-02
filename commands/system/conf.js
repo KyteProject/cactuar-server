@@ -11,7 +11,7 @@ module.exports = class Conf extends Command {
     } );
   }
 
-  async run( message, [ action, key, ...value ], level ) {
+  async run( message, [ action, key, ...value ] ) {
     const settings = message.settings;
 
     delete settings.gid;
@@ -38,7 +38,7 @@ module.exports = class Conf extends Command {
         return message.channel.send( 'Please specify a setting to edit.' );
       }
 
-      if ( settings[ key ] == undefined ) {
+      if ( settings[ key ] === undefined ) {
         return message.channel.send( `The key "${key}" does not exist.` );
       }
 
@@ -46,6 +46,7 @@ module.exports = class Conf extends Command {
         return message.channel.send( 'Please specify a new value.' );
       }
 
+      // eslint-disable-next-line eqeqeq
       if ( value.join( ' ' ) == String( settings[ key ] ) ) {
         return message.channel.send( 'This key already has that value.' );
       }

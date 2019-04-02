@@ -5,7 +5,7 @@ module.exports = class extends Event {
     super( ...args );
   }
 
-  async run( message, args ) {
+  async run( message ) {
     if ( message.author.bot ) {
       return;
     }

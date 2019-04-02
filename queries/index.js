@@ -215,4 +215,17 @@ export default class Database {
       return this.client.log.error( `addUser() query failed: ${err}` );
     }
   }
+
+  async schemaSize() {
+    try {
+      const text = `SELECT pg_size_pretty(sum(pg_relation_size(quote_ident(schemaname) || '.' || quote_ident(tablename)))::bigint) FROM pg_tables 
+    WHERE schemaname = 'bot'`,
+        values = [],
+        res = await this.pool.query( text, values );
+
+      return res.rows[ 0 ];
+    } catch ( err ) {
+      this.client.log.error( `schemaSize() query failed: ${err}` );
+    }
+  }
 }

@@ -10,7 +10,7 @@ module.exports = class Rick extends Command {
     } );
   }
 
-  async run( message, args ) {
+  async run( message ) {
     const quotes = [
       'Wubba-lubba-dub-dub!',
       'Rikki-Tikki-Tavi, biatch!',
