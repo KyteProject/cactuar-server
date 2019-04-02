@@ -12,8 +12,10 @@ module.exports = class Urls extends Command {
   }
 
   async run( message, [ action, ...value ], level ) {
+    let urls = this.client.feedback.urls;
+
     if ( !action ) {
-      const links = this.client.feedback.urls.sort();
+      const links = urls.sort();
       let output = 'URL List\n========\n\n';
 
       links.forEach( ( k ) => {
@@ -35,13 +37,13 @@ module.exports = class Urls extends Command {
       try {
         const word = value[ 0 ].toLowerCase().replace( /[^a-z.]/gi, '' );
 
-        if ( this.client.feedback.urls.includes( word ) ) {
+        if ( urls.includes( word ) ) {
           return message.channel.send( 'URL already exists!' );
         }
 
-        this.client.feedback.urls.push( word );
+        urls.push( word );
 
-        fs.writeJson( `${process.cwd()}/assets/urls.json`, this.client.feedback.urls );
+        fs.writeJson( `${process.cwd()}/assets/urls.json`, urls );
       } catch ( err ) {
         this.client.log.error( err );
 
@@ -52,7 +54,27 @@ module.exports = class Urls extends Command {
     }
 
     if ( action === 'remove' ) {
-      //
+      if ( !value.length ) {
+        return message.channel.send( 'Please provide a value to remove.' );
+      }
+
+      try {
+        const word = value[ 0 ].toLowerCase().replace( /[^a-z.]/gi, '' );
+
+        if ( !urls.includes( word ) ) {
+          return message.channel.send( 'URL doesn\'t exist!' );
+        }
+
+        urls = urls.filter( ( a ) => a !== word );
+
+        fs.writeJson( `${process.cwd()}/assets/urls.json`, urls );
+      } catch ( err ) {
+        this.client.log.error( err );
+
+        return message.channel.send( 'Failed to write.' );
+      }
+
+      return message.channel.send( 'URL\'s updated.' );
     }
   }
 };
