@@ -22,13 +22,16 @@ module.exports = class Bstat extends Command {
         Servers: this.client.guilds.size.toLocaleString(),
         Channels: this.client.channels.size.toLocaleString(),
         Commands: this.client.commands.size.toLocaleString(),
-        Memory: `${( process.memoryUsage().heapUsed / 1024 / 1024 ).toFixed( 2 )} MB`,
-        Database: dbSize.pg_size_pretty,
+        Bot: `v${this.client.config.version}`,
         Discord: `v${version}`,
         Node: process.version,
-        Bot: `v${this.client.config.version}`
+        Memory: `${( process.memoryUsage().heapUsed / 1024 / 1024 ).toFixed( 2 )} MB`
       },
       array = [];
+
+    dbSize.forEach( ( table ) => {
+      stats[ table.relation.replace( 'bot.', 'DB.' ) ] = table.total_size;
+    } );
 
     Object.entries( stats ).forEach( ( [ k, v ] ) => {
       array.push(

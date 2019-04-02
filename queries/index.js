@@ -218,12 +218,18 @@ export default class Database {
 
   async schemaSize() {
     try {
-      const text = `SELECT pg_size_pretty(sum(pg_relation_size(quote_ident(schemaname) || '.' || quote_ident(tablename)))::bigint) FROM pg_tables 
-    WHERE schemaname = 'bot'`,
+      const text = `SELECT nspname || '.' || relname AS "relation",
+      pg_size_pretty(pg_total_relation_size(C.oid)) AS "total_size"
+    FROM pg_class C
+    LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+    WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+      AND C.relkind <> 'i'
+      AND nspname !~ '^pg_toast'
+    ORDER BY pg_total_relation_size(C.oid) DESC`,
         values = [],
         res = await this.pool.query( text, values );
 
-      return res.rows[ 0 ];
+      return res.rows;
     } catch ( err ) {
       this.client.log.error( `schemaSize() query failed: ${err}` );
     }
