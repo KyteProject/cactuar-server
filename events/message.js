@@ -63,9 +63,7 @@ module.exports = class extends Event {
 
       // Feedback Requests
       try {
-        const blep = this.client.feedback.isRequest( message );
-
-        if ( blep ) {
+        if ( this.client.feedback.isRequest( message ) ) {
           this.client.feedback.processRequest( jID, mID, gID, aID, message );
         }
       } catch ( err ) {
