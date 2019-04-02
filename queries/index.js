@@ -152,9 +152,9 @@ export default class Database {
     }
   }
 
-  removeToken( jID ) {
+  addToken( jID ) {
     try {
-      const text = 'UPDATE bot.users SET tokens = 0 WHERE jid = $1',
+      const text = 'UPDATE bot.users SET tokens = tokens + 1 WHERE jid = $1',
         values = [ jID ];
 
       this.pool.query( text, values );
@@ -162,6 +162,19 @@ export default class Database {
       return this.client.log.data( `Removed token for: ${jID}` );
     } catch ( err ) {
       return this.client.log.error( `removeToken() query failed: ${err}` );
+    }
+  }
+
+  removeToken( jID ) {
+    try {
+      const text = 'UPDATE bot.users SET tokens = 0 WHERE jid = $1',
+        values = [ jID ];
+
+      this.pool.query( text, values );
+
+      return this.client.log.data( `Added token for: ${jID}` );
+    } catch ( err ) {
+      return this.client.log.error( `addToken() query failed: ${err}` );
     }
   }
 
