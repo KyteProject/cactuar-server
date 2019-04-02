@@ -152,6 +152,18 @@ export default class Database {
     }
   }
 
+  async fetchRanking( gID, limit ) {
+    try {
+      const text =					'SELECT jid, name, level, current, next, total FROM bot.users WHERE jid LIKE $1 ORDER BY total DESC LIMIT $2',
+        values = [ `${gID}%`, limit ],
+        res = await this.pool.query( text, values );
+
+      return res.rows;
+    } catch ( err ) {
+      this.client.log.error( err );
+    }
+  }
+
   async addToken( jID ) {
     try {
       const text = 'UPDATE bot.users SET tokens = tokens + 1 WHERE jid = $1',
