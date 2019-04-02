@@ -6,7 +6,7 @@ module.exports = class Urls extends Command {
     super( ...args, {
       name: 'urls',
       description: 'Fetch list of URL\'s to check for',
-      category: 'System'
+      category: 'Feedback'
     } );
   }
 
@@ -43,13 +43,12 @@ module.exports = class Urls extends Command {
         urls.push( word );
 
         fs.writeJson( `${process.cwd()}/assets/urls.json`, urls );
+
+        return message.react( '✅' );
       } catch ( err ) {
         this.client.log.error( err );
-
-        return message.channel.send( 'Failed to write.' );
+        return message.message.react( '❌' );
       }
-
-      return message.channel.send( 'URL\'s updated.' );
     }
 
     if ( action === 'remove' ) {
@@ -67,13 +66,12 @@ module.exports = class Urls extends Command {
         urls = urls.filter( ( a ) => a !== word );
 
         fs.writeJson( `${process.cwd()}/assets/urls.json`, urls );
+
+        return message.react( '✅' );
       } catch ( err ) {
         this.client.log.error( err );
-
-        return message.channel.send( 'Failed to write.' );
+        return message.react( '❌' );
       }
-
-      return message.channel.send( 'URL\'s updated.' );
     }
   }
 };
