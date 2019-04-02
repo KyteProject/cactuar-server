@@ -150,8 +150,13 @@ module.exports = class extends Event {
         }
 
         // update users
+        await this.client.db.updateUserSubmission( jID, data );
+
+        if ( data.keywords > message.settings.threshold ) {
+          message.reply( 'You can now request feedback! <:cactuar:537604635687518245>' );
+        }
       } catch ( err ) {
-        this.client.log.error( err );
+        return this.client.log.error( err );
       }
     }
   }

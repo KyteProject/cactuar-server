@@ -130,6 +130,28 @@ export default class Database {
     }
   }
 
+  async updateUserSubmission( jID, data ) {
+    try {
+      const text =					'UPDATE bot.users SET level = $1, current = $2, next = $3, total = $4, tokens = $5, submissions = $6, keywords = $7 WHERE jid = $8',
+        values = [
+          data.level,
+          data.current,
+          data.next,
+          data.total,
+          data.tokens,
+          data.submissions,
+          data.keywords,
+          jID
+        ];
+
+      await this.pool.query( text, values );
+
+      return this.client.log.data( `Updated user via submission: ${jID}` );
+    } catch ( err ) {
+      return this.client.log.error( `updateUserSubmission() query failed: ${err}` );
+    }
+  }
+
   removeToken( jID ) {
     try {
       const text = 'UPDATE bot.users SET tokens = 0 WHERE jid = $1',

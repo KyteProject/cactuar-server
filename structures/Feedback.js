@@ -26,8 +26,7 @@ export default class Feedback {
   }
 
   nextLevel( level ) {
-    const nextLevel = level + 1,
-      nextPoints = 1 / 4 * Math.floor( nextLevel - 1 + 300 * Math.pow( 2, ( nextLevel - 1 ) / 7 ) );
+    const nextPoints = 1 / 4 * Math.floor( level + 300 * Math.pow( 1.5, level / 7 ) );
 
     return Math.floor( nextPoints );
   }
