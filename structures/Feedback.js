@@ -9,6 +9,7 @@ export default class Feedback {
 
   isRequest( message ) {
     const fileRegex = /\.(mp3|wav|wma|flac|ogg|m4a|mp4|m4b|aac)/gim;
+    let ret;
 
     for ( let i = 0; i < this.urls.length; i++ ) {
       if ( message.cleanContent.includes( this.urls[ i ] ) ) {
@@ -19,10 +20,12 @@ export default class Feedback {
     if ( message.attachments.size ) {
       message.attachments.each( ( file ) => {
         if ( fileRegex.exec( file.name ) !== null ) {
-          return true;
+          ret = true;
         }
       } );
     }
+
+    return ret;
   }
 
   nextLevel( level ) {
@@ -34,7 +37,7 @@ export default class Feedback {
   score( message ) {
     const regex = /\s+/gi,
       score = {
-        multiplier: 1,
+        multiplier: 1, // TODO
         wordCount: message.cleanContent.replace( regex, ' ' ).split( ' ' ).length,
         charCount: message.cleanContent.replace( regex, '' ).length,
         keywords: this.countKeywords( message.cleanContent )
