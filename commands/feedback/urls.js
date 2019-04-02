@@ -5,9 +5,8 @@ module.exports = class Urls extends Command {
   constructor( ...args ) {
     super( ...args, {
       name: 'urls',
-      description: 'Fetch logs',
-      category: 'System',
-      permLevel: 'Bot Owner'
+      description: 'Fetch list of URL\'s to check for',
+      category: 'System'
     } );
   }
 
