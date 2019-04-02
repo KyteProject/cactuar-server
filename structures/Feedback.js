@@ -3,8 +3,8 @@ import { MessageEmbed } from 'discord.js';
 export default class Feedback {
   constructor( client ) {
     this.client = client;
-    this.urls = require( '../assets/urls.json' );
-    this.keywords = require( '../assets/keywords.json' );
+    this.urls = require( `${process.cwd()}/assets/urls.json` );
+    this.keywords = require( `${process.cwd()}/assets/keywords.json` );
   }
 
   isRequest( message ) {

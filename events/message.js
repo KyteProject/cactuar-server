@@ -46,7 +46,7 @@ module.exports = class extends Event {
         while ( args[ 0 ] && args[ 0 ][ 0 ] === '-' ) {
           message.flags.push( args.shift().slice( 1 ) );
         }
-        await this.runCommand( message, cmd, args );
+        await this.runCommand( message, cmd, args, level );
       }
 
       return;
@@ -89,9 +89,9 @@ module.exports = class extends Event {
     }
   }
 
-  async runCommand( message, cmd, args ) {
+  async runCommand( message, cmd, args, level ) {
     try {
-      await cmd.run( message, args );
+      await cmd.run( message, args, level );
     } catch ( err ) {
       this.client.log.error( err );
     }
