@@ -104,21 +104,39 @@ module.exports = class extends Event {
         try {
           this.client.db.insertMessage( mID, gID, aID );
           this.client.db.updateUserRequest( jID, message.createdAt.toString() );
-        } catch ( err ) {
-          this.client.log.error( err );
-        }
 
-        return;
+          return message.react( '537604635687518245' );
+        } catch ( err ) {
+          return this.client.log.error( err );
+        }
       }
 
       // Feedback Submissions
-      if ( message.mentions.memebers ) {
-        const mentioned = message.mentions.members.first();
+      if ( !message.mentions.members.size ) {
+        return;
+      }
 
-        // verify users exist and are in DB
-        // check if mentioned user has submitted feedback
+      const mentioned = message.mentions.members.first();
+
+      if ( mentioned.id === message.author.id || mentioned.user.bot ) {
+        return;
+      }
+
+      try {
+        const user = await this.client.feedback.verifyUser( jID, message.author.tag ),
+          oldMessages = await this.client.db.fetchMessages( gID, 5 );
+
+        // Check mentioned user has registered feedback
+        if ( !oldMessages.find( ( msg ) => msg.author === mentioned.id ) ) {
+          return;
+        }
+
         // score feedback
+        this.client.feedback.score( message );
+
         // update users
+      } catch ( err ) {
+        this.client.log.error( err );
       }
     }
   }

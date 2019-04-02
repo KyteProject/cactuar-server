@@ -25,6 +25,36 @@ export default class Feedback {
     }
   }
 
+  score( message ) {
+    const regex = /\s+/gi,
+      score = {
+        multiplier: 1,
+        wordCount: message.cleanContent.replace( regex, ' ' ).split( ' ' ).length,
+        charCount: message.cleanContent.replace( regex, '' ).length,
+        keywords: this.countKeywords( message.cleanContent )
+      };
+
+    score.points = Math.round(
+      ( score.wordCount * 0.2 + score.charCount / 100 + score.keywords * 9 ) * score.multiplier
+    );
+    score.token = score.points >= 300 && message.settings.tokens ? 1 : 0;
+
+    this.client.log.info( `${message.author.tag} Feedback score: ${score.points}` );
+    return score;
+  }
+
+  countKeywords( input ) {
+    let count = 0;
+
+    this.keywords.forEach( ( word ) => {
+      if ( input.includes( word ) ) {
+        count++;
+      }
+    } );
+
+    return count;
+  }
+
   async verifyUser( jID, name ) {
     try {
       let user = await this.client.db.getUser( jID );
