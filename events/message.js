@@ -62,101 +62,29 @@ module.exports = class extends Event {
       ];
 
       // Feedback Requests
-      if ( this.client.feedback.isRequest( message ) ) {
-        const user = await this.client.feedback.verifyUser( jID, message.author.tag );
-
-        // Process rejection
-        if ( user.keywords < message.settings.threshold && user.tokens <= 0 ) {
-          if ( message.settings.delete ) {
-            message.delete();
-          }
-
-          if ( message.settings.response ) {
-            const oldMessages = await this.client.db.fetchMessages( gID, 5 ),
-              oldMsg = await this.client.feedback.verifyMessage( message, oldMessages );
-
-            this.client.feedback.rejectMessage( message, oldMsg );
-          }
-
-          return this.client.log.info( `Feedback denied for: ${message.author.tag}` );
+      try {
+        if ( this.client.feedback.isRequest( message ) ) {
+          this.client.feedback.processRequest( jID, mID, gID, aID, message );
         }
-
-        // Check for token use
-        if ( user.keywords < message.settings.threshold && user.tokens > 0 ) {
-          this.client.db.removeToken( jID );
-        }
-
-        // Pin/Unpin messages
-        if ( message.settings.pin ) {
-          try {
-            const oldMessages = await this.client.db.fetchMessages( gID, 1 ),
-              oldMsg = await this.client.feedback.verifyMessage( message, oldMessages );
-
-            message.pin();
-            oldMsg.unpin();
-          } catch ( err ) {
-            this.client.log.error( err );
-          }
-        }
-
-        // Update user info and msg DB
-        try {
-          this.client.db.insertMessage( mID, gID, aID );
-          this.client.db.updateUserRequest( jID, message.createdAt.toString() );
-
-          return message.react( '537604635687518245' );
-        } catch ( err ) {
-          return this.client.log.error( err );
-        }
+      } catch ( err ) {
+        this.client.log.error( `Feedback Request fault: ${err}` );
       }
 
-      // Feedback Submissions
       if ( !message.mentions.members.size ) {
         return;
       }
 
-      const mentioned = message.mentions.members.first();
-
-      if ( mentioned.id === message.author.id || mentioned.user.bot ) {
-        return;
-      }
-
+      // Feedback Submissions
       try {
-        const user = await this.client.feedback.verifyUser( jID, message.author.tag ),
-          oldMessages = await this.client.db.fetchMessages( gID, 5 );
+        const mentioned = message.mentions.members.first();
 
-        if ( !oldMessages.find( ( msg ) => msg.author === mentioned.id ) ) {
+        if ( mentioned.id === message.author.id || mentioned.user.bot ) {
           return;
         }
 
-        const score = this.client.feedback.score( message ),
-          data = {
-            current: user.current + score.points,
-            total: user.total + score.points,
-            tokens: user.tokens + score.tokens,
-            submissions: user.submissions + 1,
-            keywords: user.keywords + score.keywords
-          };
-
-        if ( data.current >= user.next ) {
-          data.current = 0;
-          data.level = user.level + 1;
-          data.next = user.next + this.client.feedback.nextLevel( data.level );
-
-          message.channel.send( `${message.author.username} just reached level ${data.level}! 🎵` );
-        } else {
-          data.level = user.level;
-          data.next = user.next;
-        }
-
-        // update users
-        await this.client.db.updateUserSubmission( jID, data );
-
-        if ( data.keywords > message.settings.threshold ) {
-          message.reply( 'You can now request feedback! <:cactuar:537604635687518245>' );
-        }
+        this.client.feedback.processSubmission( jID, gID, message, mentioned );
       } catch ( err ) {
-        return this.client.log.error( err );
+        return this.client.log.error( `Feedback Submission fault: ${err}` );
       }
     }
   }
