@@ -25,7 +25,7 @@ module.exports = class Token extends Command {
       try {
         const target = message.mentions.members.first(),
           jID = `${message.guild.id}-${target.id}`,
-          user = await this.client.feedback.verifyUser( jID );
+          user = await this.client.feedback.verifyUser( jID, target.tag );
 
         if ( action === 'check' ) {
           return message.channel.send( `${user.name} has: ${user.tokens} tokens.` );
