@@ -37,7 +37,7 @@ export default class Feedback {
   score( message ) {
     const regex = /\s+/gi,
       score = {
-        multiplier: 1, // TODO
+        multiplier: 1,
         wordCount: message.cleanContent.replace( regex, ' ' ).split( ' ' ).length,
         charCount: message.cleanContent.replace( regex, '' ).length,
         keywords: this.countKeywords( message.cleanContent )

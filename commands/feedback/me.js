@@ -40,7 +40,7 @@ module.exports = class Me extends Command {
           true
         )
         .addField( 'Last Request', user.last_request, true )
-        .addField( 'Status:', feedbackStatus );
+        .addField( 'Status:', feedbackStatus, true );
 
       return message.channel.send( { embed } );
     } catch ( err ) {
