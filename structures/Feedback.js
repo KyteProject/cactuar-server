@@ -147,7 +147,7 @@ export default class Feedback {
       this.client.log.error( err );
 
       return message.channel.send(
-        'Feedback has been denied! The previous request message cannot be found, try scrolling up and finding some older tracks to give feedback to 😄'
+        'Feedback has been denied! The previous message cannot be found, ask a mod to update the database.'
       );
     }
   }

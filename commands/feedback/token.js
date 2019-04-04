@@ -6,7 +6,7 @@ module.exports = class Token extends Command {
     super( ...args, {
       name: 'token',
       description: 'Add, remove, or check tokens',
-      usage: '',
+      usage: '.token add @Dan',
       category: 'Feedback',
       permLevel: 'Moderator'
     } );
