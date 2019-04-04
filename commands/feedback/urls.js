@@ -47,7 +47,7 @@ module.exports = class Urls extends Command {
         return message.react( '✅' );
       } catch ( err ) {
         this.client.log.error( err );
-        return message.message.react( '❌' );
+        return message.react( '❌' );
       }
     }
 
