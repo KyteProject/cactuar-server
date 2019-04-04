@@ -5,15 +5,16 @@ export default class Config {
 
     this.defaultSettings = {
       prefix: '.',
-      feedbackchannel: 'insert channel ID',
-      modRole: 'Moderator',
-      adminRole: 'Administrator',
-      badges: true, // Enables badges/acheivements
+      modrole: 'Moderator',
+      adminrole: 'Administrator',
+      feedbackchannel: 'Insert channel ID',
       delete: true, // Enables auto removal of failed requests
-      tokens: true, // Enables the token gain use system
       pin: true, // Enables pinning of latest feedback msg
+      badges: true, // Enables badges/acheivements
+      tokens: true, // Enables the token gain use system
+      threshold: 5,
       response: 'Have you thought about giving feedback to others before asking for feedback yourself?', // Sets bots response message
-      messageID: 'insert msg ID'
+      respond: true
     };
 
     this.permLevels = [
