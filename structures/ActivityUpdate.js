@@ -6,7 +6,7 @@ class ActivityUpdate {
       status: 'online',
       afk: 0,
       activity: {
-        name: 'feedback',
+        name: '',
         type: 'LISTENING'
       }
     };
@@ -41,6 +41,10 @@ class ActivityUpdate {
   }
 
   update( client, track ) {
+    if ( this.presence.activity.name === track ) {
+      return;
+    }
+
     this.presence.activity.name = track;
 
     client.user.setPresence( this.presence );
