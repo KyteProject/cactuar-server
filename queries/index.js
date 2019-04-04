@@ -152,6 +152,18 @@ export default class Database {
     }
   }
 
+  async fetchStats() {
+    try {
+      const text =					'SELECT SUM (total) AS points, SUM(submissions) AS submissions, SUM(requests) AS requests FROM bot.users',
+        values = [],
+        res = await this.pool.query( text, values );
+
+      return res.rows[ 0 ];
+    } catch ( err ) {
+      this.client.log.error( err );
+    }
+  }
+
   async fetchRanking( gID, limit ) {
     try {
       const text =					'SELECT jid, name, level, current, next, total FROM bot.users WHERE jid LIKE $1 ORDER BY total DESC LIMIT $2',
