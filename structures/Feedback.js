@@ -110,7 +110,7 @@ export default class Feedback {
     return msgArray;
   }
 
-  rejectMessage( message, oldMsg ) {
+  rejectMessage( message, oldMsg, type ) {
     try {
       let embed = new MessageEmbed();
 
@@ -138,7 +138,11 @@ export default class Feedback {
         .setTimestamp( oldMsg.createdAt )
         .setFooter( oldMsg.author.username, oldMsg.author.avatarURL() );
 
-      return message.reply( `❌ **Feedback Denied!** ❌\n${message.settings.response}`, embed );
+      if ( type !== 'command' ) {
+        return message.reply( `❌ **Feedback Denied!** ❌\n${message.settings.response}`, embed );
+      }
+
+      return message.channel.send( embed );
     } catch ( err ) {
       this.client.log.error( err );
 
