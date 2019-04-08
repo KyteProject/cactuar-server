@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import Command from '../../structures/Command';
 
-module.exports = class Last extends Command {
+module.exports = class Stats extends Command {
   constructor( ...args ) {
     super( ...args, {
       name: 'stats',
