@@ -7,14 +7,16 @@ export default class Config {
       prefix: '.',
       modrole: 'Moderator',
       adminrole: 'Administrator',
-      feedbackchannel: 'Insert channel ID',
+      feedback_channel: 'Insert channel ID',
       delete: true, // Enables auto removal of failed requests
       pin: true, // Enables pinning of latest feedback msg
       badges: true, // Enables badges/acheivements
       tokens: true, // Enables the token gain use system
       threshold: 5,
-      response: 'Have you thought about giving feedback to others before asking for feedback yourself?', // Sets bots response message
-      respond: true
+      respond: true,
+      global_resources: false,
+      resource_channel: 'Insert channel ID',
+      response: 'Have you thought about giving feedback to others before asking for feedback yourself?' // Sets bots response message
     };
 
     this.permLevels = [

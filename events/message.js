@@ -53,7 +53,7 @@ module.exports = class extends Event {
     }
 
     // Handle Feedback
-    if ( message.channel.id === message.settings.feedbackchannel ) {
+    if ( message.channel.id === message.settings.feedback_channel ) {
       const [ jID, mID, gID, aID ] = [
         `${message.guild.id}-${message.author.id}`,
         message.id,
@@ -87,6 +87,13 @@ module.exports = class extends Event {
         return this.client.log.error( `Feedback Submission fault: ${err}` );
       }
     }
+
+    // Handle Resources
+    if ( !message.settings.global_resources || message.channel.id !== message.settings.resources_channel ) {
+      return;
+    }
+
+    this.client.log.info( 'beep' );
   }
 
   async runCommand( message, cmd, args, level ) {

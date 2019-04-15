@@ -32,7 +32,7 @@ module.exports = class Help extends Command {
 - Certain features may be disabled by admins.
 - Tokens can be awarded by command.
 - Use the ${message.settings.prefix}me command to display your feeedback stats.
-- Use the ${message.settings.prefix}commands command to see what commands are available to you.\`\`\`
+- Use the ${message.settings.prefix}cmd command to see what commands are available to you.\`\`\`
 ` );
   }
 };

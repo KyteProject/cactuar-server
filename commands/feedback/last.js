@@ -16,7 +16,7 @@ module.exports = class Last extends Command {
   }
 
   async run( message, [ action ] ) {
-    if ( message.channel.id !== message.settings.feedbackchannel ) {
+    if ( message.channel.id !== message.settings.feedback_channel ) {
       return message.channel.send( 'You can only execute this command in the designated feedback channel.' );
     }
 

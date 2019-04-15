@@ -22,12 +22,14 @@ module.exports = class Conf extends Command {
 
       Object.entries( settings ).forEach( ( [ k, v ] ) => {
         array.push(
-          `| <${k}>${' '.repeat( 16 - k.length )}| < ${v} > ${' '.repeat( 19 - String( v ).slice( 0, 19 ).length )}|`
+          `| <${k}>${' '.repeat( 19 - k.slice( 0, 19 ).length )}| < ${v} > ${' '.repeat(
+            19 - String( v ).slice( 0, 19 ).length
+          )}|`
         );
       } );
 
       message.channel.send(
-        `\`\`\`md\nGuild Settings\n==============\n\n| Key               | Value                   |\n|:-----------------:| -----------------------:|\n${array.join(
+        `\`\`\`md\nGuild Settings\n==============\n\n| Key                  | Value                   |\n|:--------------------:| -----------------------:|\n${array.join(
           '\n'
         )}\n\nTo change use: .conf edit <key> < value >\n> .conf edit adminRole Admin\`\`\``
       );
@@ -57,7 +59,7 @@ module.exports = class Conf extends Command {
       }
 
       // Channel validity checking
-      if ( key === 'feedbackchannel' ) {
+      if ( key === 'feedback_channel' || key === 'resources_channel' ) {
         try {
           value[ 0 ] = await message.verifyChannel( value );
         } catch ( err ) {

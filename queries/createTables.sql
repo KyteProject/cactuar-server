@@ -12,6 +12,8 @@ CREATE TABLE "settings"
   "tokens" bool NOT NULL DEFAULT TRUE,
   "threshold" int2 NOT NULL DEFAULT 5,
   "respond" bool NOT NULL DEFAULT TRUE,
+  "global_resources" bool NOT NULL DEFAULT FALSE,
+  "resources_channel" varchar(255) DEFAULT 'Insert channel ID',
   "response" varchar(255) NOT NULL DEFAULT 'Have you considered giving feedback before makign a request?',
   PRIMARY KEY ("gid")
 )

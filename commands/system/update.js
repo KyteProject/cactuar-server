@@ -17,7 +17,7 @@ module.exports = class Update extends Command {
 
     this.client.settingsCache.forEach( async( guild ) => {
       try {
-        const channelid = await message.verifyChannel( guild.feedbackchannel ),
+        const channelid = await message.verifyChannel( guild.feedback_channel ),
           channel = await message.guild.channels.get( channelid );
 
         setTimeout( () => {
