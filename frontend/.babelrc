@@ -3,7 +3,7 @@
     [
       "@babel/env",
       {
-        "modules": true,
+        "modules": false,
         "targets": {
           "browsers": [
             "last 2 versions",
