@@ -5,7 +5,7 @@
 	"author": "Daniel Smith",
 	"license": "MIT",
 	"scripts": {
-		"start": "webpack-dev-server --inline --history-api-fallback --progress --config webpack/development.js",
+		"dev": "webpack-dev-server --inline --history-api-fallback --progress --config webpack/development.js",
 		"build": "webpack --config webpack/production.js"
 	},
 	"dependencies": {

@@ -37,7 +37,26 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/env',
+                {
+                  modules: false,
+                  targets: {
+                    browsers: [ 'last 2 versions', 'safari >= 7' ]
+                  }
+                }
+              ],
+              '@babel/react'
+            ],
+            plugins: [
+              '@babel/plugin-proposal-class-properties',
+              '@babel/syntax-dynamic-import',
+              '@babel/transform-runtime'
+            ]
+          }
         }
       }
     ]

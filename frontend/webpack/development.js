@@ -1,13 +1,10 @@
-
-
 const webpack = require( 'webpack' ),
   merge = require( 'webpack-merge' ),
   baseConfig = require( './base' ),
-
   MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 const HOST = 'localhost',
-  PORT = 3008;
+  PORT = 3333;
 
 module.exports = merge( baseConfig, {
   mode: 'development',
