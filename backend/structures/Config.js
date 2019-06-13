@@ -31,13 +31,13 @@ export default class Config {
         check: ( message ) => {
           try {
             const modRole = message.guild.roles.find(
-              ( r ) => r.name.toLowerCase() === message.settings.mod_role.toLowerCase()
+              ( role ) => role.name.toLowerCase() === message.settings.mod_role.toLowerCase()
             );
 
             if ( modRole && message.member.roles.has( modRole.id ) ) {
               return true;
             }
-          } catch ( e ) {
+          } catch ( err ) {
             return false;
           }
         }
@@ -48,11 +48,11 @@ export default class Config {
         check: ( message ) => {
           try {
             const adminRole = message.guild.roles.find(
-              ( r ) => r.name.toLowerCase() === message.settings.adminRole.toLowerCase()
+              ( role ) => role.name.toLowerCase() === message.settings.adminRole.toLowerCase()
             );
 
             return adminRole && message.member.roles.has( adminRole.id );
-          } catch ( e ) {
+          } catch ( err ) {
             return false;
           }
         }
