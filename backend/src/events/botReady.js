@@ -1,5 +1,5 @@
 import Event from '../structures/Event.js';
-import ActivityUpdate from './../structures/ActivityUpdate';
+import ActivityUpdate from '../structures/ActivityUpdate';
 
 module.exports = class extends Event {
   async run() {

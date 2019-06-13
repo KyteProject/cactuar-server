@@ -8,28 +8,25 @@
 	"license": "private",
 	"private": true,
 	"scripts": {
-		"test": "eslint .",
-		"lint": "eslint --fix .",
-		"start": "nodemon --exec yarn babel-node app.js",
-		"debug": "nodemon --exec yarn babel-node --inspect app.js",
-		"dev": "nodemon ./app.js --inspect --exec babel-node",
-		"build": "rm -rf .compiled && babel ./ --out-dir .compiled/"
+		"build": "babel src -d dist",
+		"start": "npm run build && node dist/app.js",
+		"serve": "node dist/app.js",
+		"dev": "nodemon ./src/app.js --inspect --exec babel-node"
 	},
 	"engines": {
 		"node": ">=8"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.2.3",
-		"@babel/core": "^7.4.0",
-		"@babel/node": "^7.2.2",
-		"@babel/preset-env": "^7.4.2",
+		"@babel/core": "^7.4.5",
+		"@babel/node": "^7.4.5",
+		"@babel/plugin-transform-classes": "^7.4.4",
+		"@babel/preset-env": "^7.4.5",
 		"eslint": "^5.15.3",
 		"eslint-plugin-import": "^2.16.0",
 		"nodemon": "^1.18.10"
 	},
 	"dependencies": {
-		"@babel/polyfill": "^7.4.0",
-		"better-sqlite-pool": "^0.2.2",
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^7.0.0",
 		"enmap": "^4.8.1",

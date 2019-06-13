@@ -1,10 +1,12 @@
 import { MessageEmbed } from 'discord.js';
+import linksList from '../assets/urls';
+import keywordList from '../assets/keywords';
 
 export default class Feedback {
   constructor( client ) {
     this.client = client;
-    this.urls = require( `${process.cwd()}/assets/urls.json` );
-    this.keywords = require( `${process.cwd()}/assets/keywords.json` );
+    this.urls = linksList;
+    this.keywords = keywordList;
   }
 
   isRequest( message ) {
