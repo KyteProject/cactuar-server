@@ -19,7 +19,7 @@ module.exports = class Set extends Command {
         return message.channel.send( 'This message doesn\'t exist.' );
       }
 
-      if ( msg.guild.id !== message.settings.feedback_channel ) {
+      if ( msg.channel.id !== message.settings.feedback_channel ) {
         return message.channel.send( 'This message is not from your feedback channel' );
       }
 
