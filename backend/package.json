@@ -11,7 +11,9 @@
 		"test": "eslint .",
 		"lint": "eslint --fix .",
 		"start": "nodemon --exec yarn babel-node app.js",
-		"debug": "nodemon --exec yarn babel-node --inspect app.js"
+		"debug": "nodemon --exec yarn babel-node --inspect app.js",
+		"dev": "nodemon ./app.js --inspect --exec babel-node",
+		"build": "rm -rf .compiled && babel ./ --out-dir .compiled/"
 	},
 	"engines": {
 		"node": ">=8"

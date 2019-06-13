@@ -17,7 +17,7 @@ module.exports = class Stats extends Command {
         .setDescription( 'Here are some global stats for the feedback bot :smile:' )
         .setColor( '00d919' )
         .addField( 'Total points earned', stats.points, true )
-        .addField( 'Total feedback given', stats.submissions, true )
+        .addField( 'Total feedbacks given', stats.submissions, true )
         .addField( 'Total tracks submitted', stats.requests, true );
 
     message.channel.send( embed );

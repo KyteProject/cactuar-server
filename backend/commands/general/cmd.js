@@ -27,6 +27,23 @@ module.exports = class Say extends Command {
 
       let currentCategory = '',
         output = `= Command List =\n\n[Use ${settings.prefix}cmd <commandname> for details]\n`;
+
+      const sorted = commands.sort(
+        ( p, c ) => ( p.category > c.category ? 1 : p.name > c.name && p.category === c.category ? 1 : -1 )
+      );
+
+      sorted.forEach( ( c ) => {
+        const cat = c.category.toProperCase();
+
+        if ( currentCategory !== cat ) {
+          output += `\u200b\n== ${cat} ==\n`;
+          currentCategory = cat;
+        }
+        output += `• ${message.settings.prefix}${c.name}${' '.repeat( 8 - c.name.length )} :: ${c.description}\n`;
+      } );
+
+      message.author.send( output, { code: 'asciidoc', split: { char: '\u200b' } } );
+      message.channel.send( 'Command list sent.  Please check your DM\'s.' );
     } else {
       let command = args[ 0 ];
 
@@ -38,17 +55,14 @@ module.exports = class Say extends Command {
         return;
       }
 
-      if ( !message.guild && command.conf.guildOnly === true ) {
+      if ( !message.guild && command.guildOnly === true ) {
         return;
       }
-      if ( level < this.client.levelCache[ command.conf.permLevel ] ) {
+      if ( level < this.client.levelCache[ command.permLevel ] ) {
         return;
       }
       message.channel.send(
-        `= ${command.help.name} = \n${command.help.description}\ncategory:: ${command.help
-          .category}\nusage:: ${command.help.usage}\naliases:: ${command.conf.aliases.join(
-          ', '
-        )}\ndetails:: ${command.help.extended}`,
+        `= ${command.name} = \n${command.description}\ncategory:: ${command.category}\nusage:: ${command.usage}\ndetails:: ${command.extended}`,
         { code: 'asciidoc' }
       );
     }

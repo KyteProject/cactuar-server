@@ -31,7 +31,7 @@ export default class Config {
         check: ( message ) => {
           try {
             const modRole = message.guild.roles.find(
-              ( r ) => r.name.toLowerCase() === message.settings.modRole.toLowerCase()
+              ( r ) => r.name.toLowerCase() === message.settings.mod_role.toLowerCase()
             );
 
             if ( modRole && message.member.roles.has( modRole.id ) ) {

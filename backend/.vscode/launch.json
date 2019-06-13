@@ -2,12 +2,25 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-	  	"smartStep": false,
-      "program": "${workspaceFolder}\\app.js"
-    },
+			"name": "Launch",
+			"type": "node2",
+			"request": "launch",
+			"program": "${workspaceRoot}/app.js",
+			"stopOnEntry": false,
+			"args": [],
+			"cwd": "${workspaceRoot}",
+			"preLaunchTask": null,
+			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
+			"runtimeArgs": [
+				"--nolazy"
+			],
+			"env": {
+				"NODE_ENV": "development"
+			},
+			"console": "internalConsole",
+			"sourceMaps": false,
+			"outFiles": []
+		},
 		{
 			"type": "node",
 			"request": "attach",
@@ -15,6 +28,22 @@
 			"protocol": "inspector",
 			"restart": true,
 			"processId": "${command:PickProcess}",
-		}
+		},
+		{
+      "type": "node2",
+      "request": "attach",
+      "name": "Node.js 6+",
+      "address": "localhost",
+      "port": 9229,
+      "stopOnEntry": false
+    },
+		{
+      "type": "node",
+      "request": "launch",
+      "name": "Start Debug",
+      "program": "${workspaceFolder}/app.js",
+      "preLaunchTask": "build",
+      "stopOnEntry": true
+    }
 	]
 }
