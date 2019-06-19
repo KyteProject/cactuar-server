@@ -1,6 +1,6 @@
 {
 	"name": "cactuar-bot",
-	"version": "1.0.0",
+	"version": "3.0.1",
 	"description": "Custom music feedback bot for Discord servers",
 	"main": "app.js",
 	"repository": "https://github.com/KyteProject/Cactuar",
