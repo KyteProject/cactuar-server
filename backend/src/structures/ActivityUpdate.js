@@ -15,29 +15,19 @@ class ActivityUpdate {
   }
 
   async fetch( client ) {
-    let lastResponse;
-
     try {
-      lastResponse = JSON.parse( await request.get( this.url ) ).recenttracks.track[ 0 ];
+      const lastResponse = JSON.parse( await request.get( this.url ) ).recenttracks.track[ 0 ];
+
+      if ( !lastResponse[ '@attr' ].nowplaying ) {
+        throw new Error();
+      }
+
+      const currentTrack = `${lastResponse.artist[ '#text' ]} - ${lastResponse.name}`;
+
+      return this.update( client, currentTrack );
     } catch ( e ) {
       return this.update( client, 'feedback' );
     }
-
-    if ( !lastResponse[ '@attr' ] ) {
-      return this.update( client, 'feedback' );
-    }
-
-    if ( !lastResponse[ '@attr' ].nowplaying ) {
-      return;
-    }
-
-    const currentTrack = `${lastResponse.artist[ '#text' ]} - ${lastResponse.name}`;
-
-    if ( this.presence.activity.name === currentTrack ) {
-      return;
-    }
-
-    return this.update( client, currentTrack );
   }
 
   update( client, track ) {

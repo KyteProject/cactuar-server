@@ -1,0 +1,7 @@
+# Ignore these files
+*/*.md
+*/.git
+node_modules/
+*/*.log
+*/tests/
+.vscode/

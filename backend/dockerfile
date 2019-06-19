@@ -1,0 +1,17 @@
+# Create an image for the weather-app using multi-stage build
+FROM node AS build
+RUN mkdir -p /var/node/
+ADD . /var/node/
+WORKDIR /var/node
+RUN npm install
+RUN npm run build
+
+FROM node:alpine
+ARG VERSION=V1.1
+LABEL org.label-schema.version=$VERSION
+COPY --from=build /var/node/dist /var/node
+COPY --from=build /var/node/.env /var/node
+RUN mkdir -p /var/node/node_modules
+COPY --from=build /var/node/node_modules /var/node/node_modules
+WORKDIR /var/node
+CMD ["node", "app.js"]
