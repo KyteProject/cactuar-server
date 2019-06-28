@@ -48,7 +48,7 @@ export default class Config {
         check: ( message ) => {
           try {
             const adminRole = message.guild.roles.find(
-              ( role ) => role.name.toLowerCase() === message.settings.adminRole.toLowerCase()
+              ( role ) => role.name.toLowerCase() === message.settings.admin_role.toLowerCase()
             );
 
             return adminRole && message.member.roles.has( adminRole.id );

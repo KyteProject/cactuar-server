@@ -41,11 +41,11 @@ CREATE TABLE "bot"."settings" (
   "pin" bool NOT NULL DEFAULT true,
   "badges" bool NOT NULL DEFAULT true,
   "tokens" bool NOT NULL DEFAULT true,
-  "threshold" int2 NOT NULL DEFAULT 5,
+  "threshold" int4 NOT NULL DEFAULT 5,
   "respond" bool NOT NULL DEFAULT true,
   "global_resources" bool NOT NULL DEFAULT false,
   "resources_channel" varchar(255) COLLATE "pg_catalog"."default" DEFAULT 'Insert channel ID'::character varying,
-  "response" varchar(255) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'Have you considered giving feedback before makign a request?'::character varying
+  "response" varchar(255) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'Have you considered giving feedback before making a request?'::character varying
 )
 ;
 
@@ -57,9 +57,9 @@ CREATE TABLE "bot"."users" (
   "jid" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL DEFAULT ''::character varying,
   "level" int4 NOT NULL DEFAULT 1,
-  "current" int8 NOT NULL DEFAULT 0,
-  "next" int8 NOT NULL DEFAULT 83,
-  "total" int8 NOT NULL DEFAULT 0,
+  "current" int4 NOT NULL DEFAULT 0,
+  "next" int4 NOT NULL DEFAULT 83,
+  "total" int4 NOT NULL DEFAULT 0,
   "tokens" int4 NOT NULL DEFAULT 0,
   "last_request" varchar(255) COLLATE "pg_catalog"."default",
   "submissions" int4 NOT NULL DEFAULT 0,
