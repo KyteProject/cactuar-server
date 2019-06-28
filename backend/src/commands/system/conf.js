@@ -68,7 +68,7 @@ module.exports = class Conf extends Command {
       }
 
       // Role validity checking
-      if ( key === 'adminrole' || key === 'modrole' ) {
+      if ( key === 'admin_role' || key === 'mod_role' ) {
         const match = /([0-9]{17,20})/.exec( value );
 
         if ( !match ) {
