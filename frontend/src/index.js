@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { StoreProvider } from './Store';
+import { render } from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Application from './components/Application';
 
-ReactDOM.render(
-  <StoreProvider>
-    <App />
-  </StoreProvider>,
-  document.getElementById( 'root' )
+render(
+	<Router>
+		<Application />
+	</Router>,
+	document.getElementById( 'root' )
 );
