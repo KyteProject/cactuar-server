@@ -11,7 +11,7 @@ module.exports = class extends Event {
       return;
     }
 
-    if ( message.mentions.members.first().user.bot ) {
+    if ( message.mentions.members.size && message.mentions.members.first().user.bot ) {
       const attachment = new MessageAttachment( './src/assets/cac-respond.png' );
 
       return message.channel.send( `*uses **10,000 needles** on <@${message.author.id}>*`, attachment );
