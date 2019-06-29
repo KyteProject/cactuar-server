@@ -258,4 +258,15 @@ export default class Database {
       this.client.log.error( `schemaSize() query failed: ${err}` );
     }
   }
+
+  block( jID ) {
+    try {
+      const text = 'UPDATE bot.users SET disabled = NOT disabled WHERE jid = $1',
+        values = [ jID ];
+
+      this.pool.query( text, values );
+    } catch ( err ) {
+      throw this.client.log.error( `block() query failed: ${err}` );
+    }
+  }
 }

@@ -157,6 +157,10 @@ export default class Feedback {
   async processRequest( jID, mID, gID, aID, message ) {
     const user = await this.verifyUser( jID, message.author.tag );
 
+    if ( user.disabled ) {
+      return message.delete();
+    }
+
     // Process rejection
     if ( user.keywords < message.settings.threshold && user.tokens <= 0 ) {
       if ( message.settings.delete ) {
