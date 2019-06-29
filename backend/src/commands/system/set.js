@@ -7,7 +7,9 @@ module.exports = class Set extends Command {
       description: 'Sets or adds a feedback track by ID',
       category: 'System',
       guildOnly: true,
-      permLevel: 'Moderator'
+      permLevel: 'Moderator',
+      usage: '.set <message ID>',
+      extended: 'This command allows staff to manually add a message as a feeedback request.'
     } );
   }
 

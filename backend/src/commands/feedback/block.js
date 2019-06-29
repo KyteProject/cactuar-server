@@ -7,7 +7,9 @@ module.exports = class Block extends Command {
       description: 'Add or remove user block.',
       usage: '.block @Dan',
       category: 'Feedback',
-      permLevel: 'Moderator'
+      permLevel: 'Moderator',
+      extended:
+				'This command will toggle the feedback blocking system. When enabled a blocked user will not be able to make feedback requests regarless of threshold/tokens.'
     } );
   }
 

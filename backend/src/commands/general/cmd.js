@@ -6,8 +6,8 @@ module.exports = class Say extends Command {
       name: 'cmd',
       description: 'Show the commands available to you or get extended help.',
       usage: '.cmd <command name>',
-      extnded:
-				'If no argument provided this command will list all available commands to you. If used with a command name it will show extended help about that command.',
+      extended:
+				'If no argument provided this command will list all available commands to you. If used with a command name it will show extended help.',
       category: 'General',
       guildOnly: true
     } );

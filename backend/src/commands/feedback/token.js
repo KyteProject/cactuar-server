@@ -6,9 +6,11 @@ module.exports = class Token extends Command {
     super( ...args, {
       name: 'token',
       description: 'Add, remove, or check tokens',
-      usage: '.token add @Dan',
+      usage: '.token <add/remove> @Dan',
       category: 'Feedback',
-      permLevel: 'Moderator'
+      permLevel: 'Moderator',
+      extended:
+				'The token system allows a user to bypass the feedback check. This is useful to bypass issues, or as a reward. It\'s use is cautioned as other users feedback requests may get skipped.'
     } );
   }
 

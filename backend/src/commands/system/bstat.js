@@ -9,7 +9,8 @@ module.exports = class Bstat extends Command {
       name: 'bstat',
       description: 'Bot statistics',
       category: 'System',
-      permLevel: 'Bot Owner'
+      permLevel: 'Bot Owner',
+      usage: '.bstat'
     } );
   }
 

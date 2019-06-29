@@ -8,7 +8,7 @@ module.exports = class Sound extends Command {
       name: 'sound',
       description: 'Search freesound.org for some sounds!',
       category: 'General',
-      PermLevel: 'Bot Owner'
+      permLevel: 'moderator'
     } );
   }
 

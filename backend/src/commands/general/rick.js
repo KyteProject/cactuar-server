@@ -6,7 +6,8 @@ module.exports = class Rick extends Command {
       name: 'rick',
       description: 'Have the bot say a random Rick & Morty quote',
       usage: '.rick',
-      category: 'General'
+      category: 'General',
+      extended: 'A throwback to the bots original version which was a Rick bot instead of Cactuar 😛'
     } );
   }
 

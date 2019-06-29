@@ -6,7 +6,8 @@ module.exports = class Urls extends Command {
     super( ...args, {
       name: 'urls',
       description: 'Fetch list of URL\'s to check for',
-      category: 'Feedback'
+      category: 'Feedback',
+      usage: '.urls'
     } );
   }
 

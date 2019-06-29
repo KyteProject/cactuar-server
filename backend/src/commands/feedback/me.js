@@ -7,7 +7,8 @@ module.exports = class Me extends Command {
       name: 'me',
       description: 'Display your feedback profile.',
       category: 'Feedback',
-      guildOnly: true
+      guildOnly: true,
+      usage: '.me'
     } );
   }
 

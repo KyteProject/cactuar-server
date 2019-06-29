@@ -7,7 +7,8 @@ module.exports = class Keywords extends Command {
       name: 'keywords',
       description: 'Manage bots keywords',
       category: 'Feedback',
-      permLevel: 'Bot Owner'
+      permLevel: 'Bot Owner',
+      usage: '.keywords <add/remove> <keyword>'
     } );
   }
 

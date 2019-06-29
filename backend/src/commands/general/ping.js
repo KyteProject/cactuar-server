@@ -6,7 +6,8 @@ module.exports = class Ping extends Command {
       name: 'ping',
       description: 'Get latency info',
       category: 'General',
-      permLevel: 'Moderator'
+      permLevel: 'Moderator',
+      usage: '.ping'
     } );
   }
 

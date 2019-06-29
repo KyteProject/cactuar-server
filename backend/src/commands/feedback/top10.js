@@ -7,7 +7,8 @@ module.exports = class Top10 extends Command {
       name: 'top10',
       description: 'Display the top 10 users in the guild.',
       category: 'Feedback',
-      guildOnly: true
+      guildOnly: true,
+      usage: '.top10'
     } );
   }
 

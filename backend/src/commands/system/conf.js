@@ -4,10 +4,13 @@ module.exports = class Conf extends Command {
   constructor( ...args ) {
     super( ...args, {
       name: 'conf',
-      description: 'View or change server configuration.',
+      description: 'This is the primary configuration command.',
       category: 'System',
       permLevel: 'Administrator',
-      guildOnly: true
+      guildOnly: true,
+      usage: '.conf <edit> <key> <value>',
+      extended:
+				'This is the primary configuration command. Using it without arguments will list the current guild config, find a value you wish to change and use this command with the edit argument to change it - see usage above.'
     } );
   }
 

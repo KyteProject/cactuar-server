@@ -6,8 +6,11 @@ module.exports = class Song extends Command {
   constructor( ...args ) {
     super( ...args, {
       name: 'song',
-      description: 'Display the current song and attempt to get youtube link.',
-      category: 'General'
+      description: 'Display the bots current song and attempt to get youtube link.',
+      category: 'General',
+      usage: '.song',
+      extended:
+				'The Youtube grab is not 100% accurate as the song may not exist or some other upload has snatched the most relevant result.'
     } );
   }
 

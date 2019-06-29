@@ -6,7 +6,8 @@ module.exports = class Stats extends Command {
     super( ...args, {
       name: 'stats',
       description: 'Shows some feedback bot stats!',
-      category: 'Feedback'
+      category: 'Feedback',
+      usage: '.stats'
     } );
   }
 
@@ -14,7 +15,7 @@ module.exports = class Stats extends Command {
     const stats = await this.client.db.fetchStats(),
       embed = new MessageEmbed()
         .setAuthor( 'Cactuar Stats', this.client.user.avatarURL() )
-        .setDescription( 'Here are some global stats for the feedback bot :smile:' )
+        .setDescription( 'Here are some global stats for the feedback bot!' )
         .setColor( '00d919' )
         .addField( 'Total points earned', stats.points, true )
         .addField( 'Total feedbacks given', stats.submissions, true )

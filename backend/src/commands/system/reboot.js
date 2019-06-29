@@ -6,7 +6,8 @@ module.exports = class Reboot extends Command {
       name: 'reboot',
       description: 'Restarts the bot.',
       category: 'System',
-      permLevel: 'Bot Owner'
+      permLevel: 'Bot Owner',
+      usage: '.reboot'
     } );
   }
 

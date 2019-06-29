@@ -5,7 +5,8 @@ module.exports = class Help extends Command {
     super( ...args, {
       name: 'help',
       description: 'Display the help info',
-      category: 'General'
+      category: 'General',
+      usage: '.help'
     } );
   }
 

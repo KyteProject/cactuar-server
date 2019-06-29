@@ -8,7 +8,8 @@ module.exports = class Audit extends Command {
       description: 'Fetch logs',
       category: 'System',
       permLevel: 'Bot Owner',
-      guildOnly: true
+      guildOnly: true,
+      usage: '.audit'
     } );
   }
 
