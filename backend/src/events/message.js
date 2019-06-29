@@ -1,3 +1,4 @@
+import { MessageAttachment } from 'discord.js';
 import Event from '../structures/Event.js';
 
 module.exports = class extends Event {
@@ -8,6 +9,12 @@ module.exports = class extends Event {
   async run( message ) {
     if ( message.author.bot ) {
       return;
+    }
+
+    if ( message.mentions.members.first().user.bot ) {
+      const attachment = new MessageAttachment( './src/assets/cac-respond.png' );
+
+      return message.channel.send( `*uses **10,000 needles** on <@${message.author.id}>*`, attachment );
     }
 
     if ( message.guild && !message.guild.me ) {
