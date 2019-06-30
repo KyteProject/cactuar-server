@@ -5,17 +5,22 @@ export default class Database {
     this.client = client;
 
     this.pool = new Pool( {
-      user: process.env.DB_USER,
-      host: process.env.DB_HOST,
-      database: process.env.DB_NAME,
-      password: process.env.DB_PASS,
-      port: process.env.DB_PORT
+      user: process.env.NODE_ENV === 'production' ? process.env.DB_USER : process.env.DEV_USER,
+      host: process.env.NODE_ENV === 'production' ? process.env.DB_HOST : process.env.DEV_HOST,
+      database: process.env.NODE_ENV === 'production' ? process.env.DB_NAME : process.env.DEV_NAME,
+      password: process.env.NODE_ENV === 'production' ? process.env.DB_PASS : process.env.DEV_PASS,
+      port: process.env.NODE_ENV === 'production' ? process.env.DB_PORT : process.env.DEV_PORT
     } );
   }
 
   async getSettings() {
     try {
-      const text = 'SELECT * FROM bot.settings',
+      const text = `
+        SELECT
+          *
+        FROM
+          settings
+      `,
         res = await this.pool.query( text );
 
       if ( !res.rowCount ) {
@@ -37,7 +42,14 @@ export default class Database {
         return def;
       }
 
-      const text = 'SELECT * FROM bot.settings where GID = $1',
+      const text = `
+        SELECT
+          *
+        FROM
+          settings
+        WHERE
+          gid = $1
+      `,
         values = [ guild ],
         res = await this.pool.query( text, values );
 
@@ -57,7 +69,14 @@ export default class Database {
 
     try {
       const response = `Wrote setting: ${key} = ${value} for guild: ${guild}`,
-        text = `UPDATE bot.settings SET ${key} = $1 WHERE gid = $2`,
+        text = `
+          UPDATE
+            settings
+          SET
+            ${key} = $1
+          WHERE
+            gid = $2
+        `,
         values = [ value, guild ];
 
       await this.pool.query( text, values );
@@ -77,7 +96,12 @@ export default class Database {
     }
 
     try {
-      const text = 'INSERT INTO bot.settings (GID, NAME) VALUES ($1, $2)',
+      const text = `
+        INSERT INTO
+          settings ( gid, name )
+        VALUES
+          ($1, $2)
+      `,
         values = [ guild, name ],
         res = await this.pool.query( text, values );
 
@@ -91,7 +115,14 @@ export default class Database {
 
   async getUser( user ) {
     try {
-      const text = 'SELECT * FROM bot.users where JID = $1',
+      const text = `
+        SELECT
+          *
+        FROM
+          users
+        WHERE
+          jid = $1
+      `,
         values = [ user ],
         res = await this.pool.query( text, values );
 
@@ -103,7 +134,14 @@ export default class Database {
 
   async addUser( jID, name ) {
     try {
-      const text = 'INSERT INTO bot.users (jid, name) VALUES ($1, $2) RETURNING *',
+      const text = `
+        INSERT INTO
+          users ( jid, name )
+        VALUES
+          ( $1, $2 )
+        RETURNING
+          *
+      `,
         values = [ jID, name ],
         res = await this.pool.query( text, values );
 
@@ -117,9 +155,16 @@ export default class Database {
 
   updateUserRequest( jID, date ) {
     try {
-      // eslint-disable-next-line
-			const text =
-					'UPDATE bot.users SET submissions = submissions + 1, last_request = $2, keywords = 0 WHERE jid = $1',
+      const text = `
+        UPDATE
+          users 
+        SET
+          submissions = submissions + 1,
+          last_request = $2,
+          keywords = 0 
+        WHERE
+          jid = $1
+      `,
         values = [ jID, date ];
 
       this.pool.query( text, values );
@@ -132,7 +177,20 @@ export default class Database {
 
   async updateUserSubmission( jID, data ) {
     try {
-      const text =					'UPDATE bot.users SET level = $1, current = $2, next = $3, total = $4, tokens = $5, submissions = $6, keywords = $7 WHERE jid = $8',
+      const text = `
+        UPDATE
+          users 
+        SET
+          level = $1,
+          current = $2,
+          next = $3,
+          total = $4,
+          tokens = $5,
+          submissions = $6,
+          keywords = $7 
+        WHERE
+          jid = $8
+      `,
         values = [
           data.level,
           data.current,
@@ -154,7 +212,35 @@ export default class Database {
 
   async fetchStats() {
     try {
-      const text =					'SELECT SUM (total) AS points, SUM(submissions) AS submissions, SUM(requests) AS requests FROM bot.users',
+      const text = `
+        SELECT
+          *
+        FROM
+          stats
+      `,
+        values = [],
+        res = await this.pool.query( text, values );
+
+      return res.rows[ 0 ];
+    } catch ( err ) {
+      this.client.log.error( err );
+    }
+  }
+
+  async updateStats() {
+    try {
+      const text = `
+        UPDATE
+          stats 
+        SET 
+          points = sub_q.points,
+          submissions = sub_q.submissions,
+          requests = sub_q.requests,
+          challenges = chal_q.challenges 
+        FROM
+          ( SELECT SUM ( total ) AS points, SUM ( submissions ) AS submissions, SUM ( requests ) AS requests FROM users ) AS sub_q,
+          ( SELECT COUNT ( * ) AS challenges FROM challenges ) AS chal_q
+      `,
         values = [],
         res = await this.pool.query( text, values );
 
@@ -166,7 +252,22 @@ export default class Database {
 
   async fetchRanking( gID, limit ) {
     try {
-      const text =					'SELECT jid, name, level, current, next, total FROM bot.users WHERE jid LIKE $1 ORDER BY total DESC LIMIT $2',
+      const text = `
+        SELECT
+          jid,
+          name,
+          level,
+          current,
+          next,
+          total 
+        FROM
+          users 
+        WHERE
+          jid LIKE $1 
+        ORDER BY
+          total DESC 
+          LIMIT $2
+      `,
         values = [ `${gID}%`, limit ],
         res = await this.pool.query( text, values );
 
@@ -178,7 +279,14 @@ export default class Database {
 
   async addToken( jID ) {
     try {
-      const text = 'UPDATE bot.users SET tokens = tokens + 1 WHERE jid = $1',
+      const text = `
+        UPDATE
+          users 
+        SET
+          tokens = tokens + 1 
+        WHERE
+          jid = $1
+      `,
         values = [ jID ];
 
       await this.pool.query( text, values );
@@ -191,7 +299,14 @@ export default class Database {
 
   async removeToken( jID ) {
     try {
-      const text = 'UPDATE bot.users SET tokens = tokens - 1 WHERE jid = $1',
+      const text = `
+        UPDATE
+          users 
+        SET
+          tokens = tokens - 1 
+        WHERE
+          jid = $1
+      `,
         values = [ jID ];
 
       await this.pool.query( text, values );
@@ -204,7 +319,17 @@ export default class Database {
 
   async fetchMessages( guild, limit ) {
     try {
-      const text = 'SELECT * FROM bot.messages WHERE guild = $1 ORDER BY msg DESC LIMIT $2',
+      const text = `
+        SELECT
+          * 
+        FROM
+          messages 
+        WHERE
+          guild = $1 
+        ORDER BY
+          msg DESC 
+          LIMIT $2
+      `,
         values = [ guild, limit ],
         res = await this.pool.query( text, values );
 
@@ -216,7 +341,12 @@ export default class Database {
 
   removeMessage( message ) {
     try {
-      const text = 'DELETE FROM bot.messages WHERE msg = $1',
+      const text = `
+        DELETE FROM
+          messages 
+        WHERE
+          msg = $1
+      `,
         values = [ message ];
 
       this.pool.query( text, values );
@@ -229,7 +359,12 @@ export default class Database {
 
   insertMessage( message, guild, author ) {
     try {
-      const text = 'INSERT INTO bot.messages (msg, guild, author) VALUES ($1, $2, $3)',
+      const text = `
+        INSERT INTO
+          messages (msg, guild, author)
+        VALUES
+          ($1, $2, $3)
+      `,
         values = [ message, guild, author ];
 
       this.pool.query( text, values );
@@ -242,14 +377,22 @@ export default class Database {
 
   async schemaSize() {
     try {
-      const text = `SELECT nspname || '.' || relname AS "relation",
-      pg_size_pretty(pg_total_relation_size(C.oid)) AS "total_size"
-    FROM pg_class C
-    LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
-    WHERE nspname NOT IN ('pg_catalog', 'information_schema')
-      AND C.relkind <> 'i'
-      AND nspname !~ '^pg_toast'
-    ORDER BY pg_total_relation_size(C.oid) DESC`,
+      const text = `
+        SELECT
+          nspname || '.' || relname AS "relation",
+          pg_size_pretty (
+            pg_total_relation_size ( C.oid )
+          ) AS "total_size" 
+        FROM
+          pg_class
+          C LEFT JOIN pg_namespace N ON ( N.oid = C.relnamespace ) 
+        WHERE
+          nspname NOT IN ( 'pg_catalog', 'information_schema' ) 
+          AND C.relkind <> 'i' 
+          AND nspname !~ '^pg_toast' 
+        ORDER BY
+          pg_total_relation_size ( C.oid ) DESC
+      `,
         values = [],
         res = await this.pool.query( text, values );
 
@@ -261,7 +404,14 @@ export default class Database {
 
   block( jID ) {
     try {
-      const text = 'UPDATE bot.users SET disabled = NOT disabled WHERE jid = $1',
+      const text = `
+        UPDATE
+          users 
+        SET 
+          disabled = NOT disabled
+        WHERE
+          jid = $1
+      `,
         values = [ jID ];
 
       this.pool.query( text, values );

@@ -19,6 +19,10 @@ module.exports = class extends Event {
         await ActivityUpdate.fetch( this.client );
       }, 20000 );
 
+      setInterval( () => {
+        this.client.db.updateStats();
+      }, 1800000 );
+
       this.client.log.data(
         `${this.client.user.tag}, ready to roll! ${this.client.users.size} users in ${this.client.guilds
           .size} servers.`

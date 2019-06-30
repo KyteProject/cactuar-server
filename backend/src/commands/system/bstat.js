@@ -15,7 +15,7 @@ module.exports = class Bstat extends Command {
   }
 
   async run( message ) {
-    const duration = moment.duration( this.client.uptime ).format( ' D [days], H [hrs], m [mins], s [secs]' ),
+    const duration = moment.duration( this.client.uptime ).format( ' D [d], H [h], m [m], s [s]' ),
       dbSize = await this.client.db.schemaSize(),
       stats = {
         Uptime: duration,
@@ -31,7 +31,7 @@ module.exports = class Bstat extends Command {
       array = [];
 
     dbSize.forEach( ( table ) => {
-      stats[ table.relation.replace( 'bot.', 'DB.' ) ] = table.total_size;
+      stats[ table.relation.replace( 'public.', 'DB.' ) ] = table.total_size;
     } );
 
     Object.entries( stats ).forEach( ( [ k, v ] ) => {

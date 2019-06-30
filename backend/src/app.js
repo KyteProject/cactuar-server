@@ -23,6 +23,7 @@ const token = process.env.NODE_ENV === 'production' ? process.env.TOKEN : proces
   } );
 
 client.login( token );
+client.log.warn( `Logged in to: ${process.env.NODE_ENV}` );
 
 client
   .on( 'disconnect', () => client.log.warn( 'Bot is disconnecting...' ) )

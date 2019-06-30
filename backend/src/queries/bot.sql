@@ -1,16 +1,23 @@
 /*
+ Source Server         : cactuar_dev
+ Source Server Type    : PostgreSQL
+ Source Server Version : 100006
+ Source Catalog        : cactuar_dev
+ Source Schema         : public
+
  Target Server Type    : PostgreSQL
  Target Server Version : 100006
- Target Schema         : bot
  File Encoding         : 65001
+
+ Date: 30/06/2019 11:30:15
 */
 
 
 -- ----------------------------
 -- Table structure for challenges
 -- ----------------------------
-DROP TABLE IF EXISTS "bot"."challenges";
-CREATE TABLE "bot"."challenges" (
+DROP TABLE IF EXISTS "challenges";
+CREATE TABLE "challenges" (
 
 )
 ;
@@ -18,8 +25,8 @@ CREATE TABLE "bot"."challenges" (
 -- ----------------------------
 -- Table structure for messages
 -- ----------------------------
-DROP TABLE IF EXISTS "bot"."messages";
-CREATE TABLE "bot"."messages" (
+DROP TABLE IF EXISTS "messages";
+CREATE TABLE "messages" (
   "msg" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "guild" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "author" varchar(255) COLLATE "pg_catalog"."default" NOT NULL
@@ -29,8 +36,8 @@ CREATE TABLE "bot"."messages" (
 -- ----------------------------
 -- Table structure for settings
 -- ----------------------------
-DROP TABLE IF EXISTS "bot"."settings";
-CREATE TABLE "bot"."settings" (
+DROP TABLE IF EXISTS "settings";
+CREATE TABLE "settings" (
   "gid" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL DEFAULT ''::character varying,
   "prefix" varchar(3) COLLATE "pg_catalog"."default" NOT NULL DEFAULT '.'::character varying,
@@ -41,19 +48,32 @@ CREATE TABLE "bot"."settings" (
   "pin" bool NOT NULL DEFAULT true,
   "badges" bool NOT NULL DEFAULT true,
   "tokens" bool NOT NULL DEFAULT true,
-  "threshold" int4 NOT NULL DEFAULT 5,
+  "threshold" int2 NOT NULL DEFAULT 5,
   "respond" bool NOT NULL DEFAULT true,
   "global_resources" bool NOT NULL DEFAULT false,
   "resources_channel" varchar(255) COLLATE "pg_catalog"."default" DEFAULT 'Insert channel ID'::character varying,
-  "response" varchar(255) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'Have you considered giving feedback before making a request?'::character varying
+  "response" varchar(255) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'Have you considered giving feedback before makign a request?'::character varying
+)
+;
+
+-- ----------------------------
+-- Table structure for stats
+-- ----------------------------
+DROP TABLE IF EXISTS "stats";
+CREATE TABLE "stats" (
+  "points" int4,
+  "submissions" int4,
+  "requests" int4,
+  "rejections" int4,
+  "challenges" int4
 )
 ;
 
 -- ----------------------------
 -- Table structure for users
 -- ----------------------------
-DROP TABLE IF EXISTS "bot"."users";
-CREATE TABLE "bot"."users" (
+DROP TABLE IF EXISTS "users";
+CREATE TABLE "users" (
   "jid" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL DEFAULT ''::character varying,
   "level" int4 NOT NULL DEFAULT 1,
@@ -72,26 +92,26 @@ CREATE TABLE "bot"."users" (
 -- ----------------------------
 -- Primary Key structure for table messages
 -- ----------------------------
-ALTER TABLE "bot"."messages" ADD CONSTRAINT "messages_pkey" PRIMARY KEY ("msg");
+ALTER TABLE "messages" ADD CONSTRAINT "messages_pkey" PRIMARY KEY ("msg");
 
 -- ----------------------------
 -- Primary Key structure for table settings
 -- ----------------------------
-ALTER TABLE "bot"."settings" ADD CONSTRAINT "settings_pkey" PRIMARY KEY ("gid");
+ALTER TABLE "settings" ADD CONSTRAINT "settings_pkey" PRIMARY KEY ("gid");
 
 -- ----------------------------
 -- Checks structure for table users
 -- ----------------------------
-ALTER TABLE "bot"."users" ADD CONSTRAINT "keywords_nonnegative" CHECK ((keywords >= 0));
-ALTER TABLE "bot"."users" ADD CONSTRAINT "requests_nonnegative" CHECK ((requests >= 0));
-ALTER TABLE "bot"."users" ADD CONSTRAINT "submissions_nonnegative" CHECK ((submissions >= 0));
-ALTER TABLE "bot"."users" ADD CONSTRAINT "tokens_nonnegative" CHECK ((tokens >= 0));
-ALTER TABLE "bot"."users" ADD CONSTRAINT "total_nonnegative" CHECK ((total >= 0));
-ALTER TABLE "bot"."users" ADD CONSTRAINT "next_nonnegative" CHECK ((next >= 0));
-ALTER TABLE "bot"."users" ADD CONSTRAINT "current_nonnegative" CHECK ((current >= 0));
-ALTER TABLE "bot"."users" ADD CONSTRAINT "level_nonnegative" CHECK ((level >= 0));
+ALTER TABLE "users" ADD CONSTRAINT "current_nonnegative" CHECK ((current >= 0));
+ALTER TABLE "users" ADD CONSTRAINT "level_nonnegative" CHECK ((level >= 0));
+ALTER TABLE "users" ADD CONSTRAINT "next_nonnegative" CHECK ((next >= 0));
+ALTER TABLE "users" ADD CONSTRAINT "total_nonnegative" CHECK ((total >= 0));
+ALTER TABLE "users" ADD CONSTRAINT "keywords_nonnegative" CHECK ((keywords >= 0));
+ALTER TABLE "users" ADD CONSTRAINT "requests_nonnegative" CHECK ((requests >= 0));
+ALTER TABLE "users" ADD CONSTRAINT "submissions_nonnegative" CHECK ((submissions >= 0));
+ALTER TABLE "users" ADD CONSTRAINT "tokens_nonnegative" CHECK ((tokens >= 0));
 
 -- ----------------------------
 -- Primary Key structure for table users
 -- ----------------------------
-ALTER TABLE "bot"."users" ADD CONSTRAINT "users_pkey" PRIMARY KEY ("jid");
+ALTER TABLE "users" ADD CONSTRAINT "users_pkey" PRIMARY KEY ("jid");
