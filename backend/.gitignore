@@ -6,17 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 data/
 logs/
-commands/music
 *.txt
-modules/mineMessage.js
-eventsRaw/*
-events/raw.js
-commands/nsfw/r34.js
-commands/fun/coin.js
-commands/wolke/test.js
 .env
-credentials.json
-token.json
 
 # Runtime data
 pids

@@ -11,11 +11,36 @@ FROM keymetrics/pm2:latest-alpine
 ARG VERSION=V3.1.0
 LABEL org.label-schema.version=$VERSION
 
+# Env 
+ENV NODE_ENV="dev"
+
+# Bot Token
+ENV TOKEN=""
+ENV DEV_TOKEN=""
+
+# Production DB
+ENV DB_USER=""
+ENV DB_NAME=""
+ENV DB_PASS=""
+ENV DB_HOST=""
+ENV DB_PORT=5432
+
+# Dev DB
+ENV DEV_USER=""
+ENV DEV_NAME=""
+ENV DEV_PASS=""
+ENV DEV_HOST=""
+ENV DEV_PORT=5432
+
+# API Keys
+ENV LASTFM=""
+ENV YOUTUBE=""
+ENV FREESOUND=""
+
 # Copy build files
 COPY --from=build /var/node/dist /var/node
 WORKDIR /var/node
 COPY --from=build /var/node/package.json .
-COPY --from=build /var/node/.env .
 COPY --from=build /var/node/pm2.json .
 
 # Install git
