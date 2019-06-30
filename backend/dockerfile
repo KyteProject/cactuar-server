@@ -1,4 +1,4 @@
-# Create an image for the weather-app using multi-stage build
+# Build/Compile Babel
 FROM node AS build
 RUN mkdir -p /var/node/
 ADD . /var/node/
@@ -6,12 +6,28 @@ WORKDIR /var/node
 RUN npm install
 RUN npm run build
 
-FROM node:alpine
-ARG VERSION=V1.1
+# Multi-stage Container
+FROM keymetrics/pm2:latest-alpine
+ARG VERSION=V3.1.0
 LABEL org.label-schema.version=$VERSION
+
+# Copy build files
 COPY --from=build /var/node/dist /var/node
-COPY --from=build /var/node/.env /var/node
-RUN mkdir -p /var/node/node_modules
-COPY --from=build /var/node/node_modules /var/node/node_modules
 WORKDIR /var/node
-CMD ["node", "app.js"]
+COPY --from=build /var/node/package.json .
+COPY --from=build /var/node/.env .
+COPY --from=build /var/node/pm2.json .
+
+# Install git
+RUN apk update && \
+  apk add --update git && \
+  apk add --update openssh
+
+# Install app dependencies
+ENV NPM_CONFIG_LOGLEVEL warn
+RUN npm install --production
+
+# Show current folder structure in logs
+RUN ls -al -R
+
+CMD [ "pm2-runtime", "start", "pm2.json" ]
