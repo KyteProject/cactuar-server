@@ -12,7 +12,7 @@ module.exports = class extends Event {
     }
 
     if ( message.mentions.members.size && message.mentions.members.first().user.bot ) {
-      const attachment = new MessageAttachment( './../assets/cac-respond.png' );
+      const attachment = new MessageAttachment( './assets/cac-respond.png' );
 
       return message.channel.send( `*uses **10,000 needles** on <@${message.author.id}>*`, attachment );
     }
