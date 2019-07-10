@@ -1,5 +1,9 @@
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Container, Row, Col, Button } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiscord } from '@fortawesome/free-brands-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const Header = () => {
 	return (
@@ -13,9 +17,14 @@ const Header = () => {
 							Cactuar is a Discord bot built to assist music production communities on discord. Use the
 							button below to invite it to your server!
 						</h3>
-						<h4>
-							<span className="badge badge-success mt-3">Invite to Discord</span>
-						</h4>
+						<Button size="lg" className="mr-4 ml-4 btn-discord" tag={Link} to="#">
+							<FontAwesomeIcon icon={faDiscord} size="2x" />{' '}
+							<span className="btn-text">Add to Discord</span>
+						</Button>
+						<Button size="lg" color="secondary" className="mr-4 ml-4" tag={Link} to="#">
+							<FontAwesomeIcon icon={faGithub} size="2x" />{' '}
+							<span className="btn-text">Star on Github</span>
+						</Button>
 					</Col>
 				</Row>
 			</Container>
