@@ -1,10 +1,19 @@
 import React from 'react';
+import Navigation from '../components/Navigation';
+import Header from '../components/Header';
+import FAQ from '../components/FAQ';
+import Contact from '../components/Contact';
+import Footer from '../components/Footer';
 
 const Home = () => {
 	return (
-		<div>
-			<p>Cactur</p>
-		</div>
+		<>
+			<Navigation />
+			<Header />
+			<FAQ />
+			<Contact />
+			<Footer />
+		</>
 	);
 };
 
