@@ -74,6 +74,11 @@ p {
 	line-height: 24px;
 }
 
+section {
+	position: relative;
+	padding: 6rem 0;
+}
+
 // Navbar
 .navbar-custom {
 	z-index: 999;
@@ -91,17 +96,11 @@ p {
 	font-family: $font-family-secondary;
 }
 
-.section {
-	position: relative;
-	padding-top: 80px;
-	padding-bottom: 80px;
-}
-
-.section-sm {
-	position: relative;
-	padding-top: 25px;
-	padding-bottom: 25px;
-}
+// .section-sm {
+// 	position: relative;
+// 	padding-top: 25px;
+// 	padding-bottom: 25px;
+// }
 
 .bg-gradient {
 	background: $bg-gradient;
@@ -117,7 +116,7 @@ p {
 
 .bg-home {
 	position: relative;
-	padding: 80px 0px 140px 0px;
+	// padding: 80px 0px 140px 0px;
 
 	h3 {
 		margin-top: 20px;
@@ -140,8 +139,13 @@ p {
 	border-color: #7289da;
 }
 
-.btn-secondary:hover {
-	background-color: $success;
+// .btn-secondary:hover {
+// 	background-color: $success;
+// }
+
+// About
+.about-title {
+	max-width: 800px;
 }
 
 // Footer
