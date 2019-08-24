@@ -12,12 +12,17 @@ module.exports = class Ping extends Command {
   }
 
   run( message ) {
-    message.channel.send( 'Pinging...' ).then( ( msg ) => {
-      msg.edit(
-        `Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API latency is ${Math.round(
-          this.client.ws.ping
-        )}ms`
-      );
-    } );
+    message.channel
+      .send( 'Pinging...' )
+      .then( ( msg ) => {
+        return msg.edit(
+          `Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API latency is ${Math.round(
+            this.client.ws.ping
+          )}ms`
+        );
+      } )
+      .catch( ( err ) => {
+        this.client.logger.log( err );
+      } );
   }
 };

@@ -34,8 +34,9 @@ export default class Database {
   }
 
   async getGuildSettings( guild ) {
+    const def = this.client.config.defaultSettings;
+
     try {
-      const def = this.client.config.defaultSettings;
       let settings = {};
 
       if ( !guild ) {

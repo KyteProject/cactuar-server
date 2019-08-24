@@ -22,7 +22,7 @@ class CommandStore extends Store {
   delete( command ) {
     const exists = this.get( command );
 
-    return !exists ? flase : super.delete( command );
+    return !exists ? false : super.delete( command );
   }
 
   clear() {

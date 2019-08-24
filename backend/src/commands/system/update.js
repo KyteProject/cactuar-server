@@ -17,12 +17,15 @@ module.exports = class Update extends Command {
 
     this.client.settingsCache.forEach( async( guild ) => {
       try {
-        const channelid = await message.verifyChannel( guild.feedback_channel ),
-          channel = await message.guild.channels.get( channelid );
+        const channelid = await message.verifyChannel( guild.feedback_channel );
 
-        setTimeout( () => {
-          channel.send( args.join( ' ' ) );
-        }, 100 * args.join( ' ' ).length / 2 );
+        if ( channelid ) {
+          const channel = await message.guild.channels.get( channelid );
+
+          setTimeout( () => {
+            channel.send( args.join( ' ' ) );
+          }, 100 * args.join( ' ' ).length / 2 );
+        }
       } catch ( err ) {
         return this.client.log.debug( `Failed to send message to: ${guild.name}` );
       }

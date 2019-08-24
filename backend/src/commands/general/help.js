@@ -35,5 +35,7 @@ module.exports = class Help extends Command {
 - Use the ${message.settings.prefix}me command to display your feeedback stats.
 - Use the ${message.settings.prefix}cmd command to see what commands are available to you.\`\`\`
 ` );
+
+    message.channel.send( 'Help sent.  Please check your DM\'s.' );
   }
 };

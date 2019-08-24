@@ -1,5 +1,4 @@
 import Command from '../../structures/Command';
-import * as fs from 'fs-nextra';
 
 module.exports = class Token extends Command {
   constructor( ...args ) {

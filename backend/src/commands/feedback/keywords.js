@@ -12,7 +12,7 @@ module.exports = class Keywords extends Command {
     } );
   }
 
-  async run( message, [ action, ...value ], level ) {
+  async run( message, [ action, ...value ] ) {
     let keywords = this.client.feedback.keywords.sort();
 
     if ( !action ) {
@@ -60,7 +60,7 @@ module.exports = class Keywords extends Command {
           return message.channel.send( 'Keyword doesn\'t exist!' );
         }
 
-        keywords = keywords.filter( ( a ) => a !== word );
+        keywords = keywords.filter( a => a !== word );
 
         fs.writeJson( `${process.cwd()}/assets/keywords.json`, keywords );
 

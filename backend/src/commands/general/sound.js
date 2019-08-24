@@ -8,7 +8,7 @@ module.exports = class Sound extends Command {
       name: 'sound',
       description: 'Search freesound.org for some sounds!',
       category: 'General',
-      permLevel: 'moderator'
+      permLevel: 'user'
     } );
   }
 
@@ -41,7 +41,7 @@ module.exports = class Sound extends Command {
           .addField( 'Channels', `${sound.channels > 1 ? 'Stereo' : 'Mono'}`, true )
           .setFooter( `Search completed with a total of ${res.count} results.` );
 
-      message.channel.send( 'This command is in beta and is quite limited.', embed );
+      message.channel.send( 'This command is in development, it may not work very well... or at all.', embed );
     } catch ( err ) {
       return this.client.log.error( err );
     }

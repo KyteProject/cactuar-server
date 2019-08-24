@@ -64,7 +64,7 @@ module.exports = class Urls extends Command {
           return message.channel.send( 'URL doesn\'t exist!' );
         }
 
-        urls = urls.filter( ( a ) => a !== word );
+        urls = urls.filter( a => a !== word );
 
         fs.writeJson( `${process.cwd()}/assets/urls.json`, urls );
 

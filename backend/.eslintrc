@@ -1,10 +1,14 @@
 {
 	"extends": [
-		"plugin:import/errors"
+		"eslint:recommended",
+		"plugin:import/errors",
+		"plugin:jest/recommended",
+		"plugin:promise/recommended"
 	],
 	"env": {
 		"node": true,
-		"es6": true
+		"es6": true,
+		"jest/globals": true
 	},
 	"ecmaFeatures": {
 		"arrowFunctions": true,
@@ -268,7 +272,9 @@
 		"require-yield": 2
 	},
 	"plugins": [
-		"import"
+		"import",
+		"jest",
+		"promise"
 	],
 	"parserOptions": {
 		"ecmaVersion": 8,
