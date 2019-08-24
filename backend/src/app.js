@@ -28,8 +28,8 @@ client.log.warn( `Logged in to: ${process.env.NODE_ENV}` );
 client
   .on( 'disconnect', () => client.log.warn( 'Bot is disconnecting...' ) )
   .on( 'reconnecting', () => client.log.warn( 'Bot reconnecting...' ) )
-  .on( 'error', ( err ) => client.log.error( err ) )
-  .on( 'warn', ( info ) => client.log.warn( info ) );
+  .on( 'error', err => client.log.error( err ) )
+  .on( 'warn', info => client.log.warn( info ) );
 
 process.on( 'uncaughtException', ( err ) => {
   const errorMsg = err.stack.replace( errorDirnameRegex, './' );

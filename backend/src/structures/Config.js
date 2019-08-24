@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 export default class Config {
   constructor() {
     this.owner = '113226391771717632';
@@ -31,7 +33,7 @@ export default class Config {
         check: ( message ) => {
           try {
             const modRole = message.guild.roles.find(
-              ( role ) => role.name.toLowerCase() === message.settings.mod_role.toLowerCase()
+              role => role.name.toLowerCase() === message.settings.mod_role.toLowerCase()
             );
 
             if ( modRole && message.member.roles.has( modRole.id ) ) {
@@ -48,7 +50,7 @@ export default class Config {
         check: ( message ) => {
           try {
             const adminRole = message.guild.roles.find(
-              ( role ) => role.name.toLowerCase() === message.settings.admin_role.toLowerCase()
+              role => role.name.toLowerCase() === message.settings.admin_role.toLowerCase()
             );
 
             return adminRole && message.member.roles.has( adminRole.id );
@@ -60,13 +62,13 @@ export default class Config {
       {
         level: 3,
         name: 'Server Owner',
-        check: ( message ) =>
+        check: message =>
           ( message.channel.type === 'text' ? message.guild.owner.user.id === message.author.id : false )
       },
       {
         level: 4,
         name: 'Bot Owner',
-        check: ( message ) => this.owner === message.author.id
+        check: message => this.owner === message.author.id
       }
     ];
   }

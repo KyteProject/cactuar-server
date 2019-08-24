@@ -55,8 +55,8 @@ class Store extends Collection {
   async walkFiles() {
     return fs
       .scan( this.dir, { filter: ( stats, filepath ) => stats.isFile() && path.extname( filepath ) === '.js' } )
-      .then( ( files ) => Promise.all( [ ...files.keys() ].map( ( file ) => this.load( path.relative( this.dir, file ) ) ) ) )
-      .catch( ( err ) => console.error( err ) );
+      .then( files => Promise.all( [ ...files.keys() ].map( file => this.load( path.relative( this.dir, file ) ) ) ) )
+      .catch( err => console.error( err ) );
   }
 }
 

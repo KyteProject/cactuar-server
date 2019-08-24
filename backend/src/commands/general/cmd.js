@@ -29,6 +29,7 @@ module.exports = class Say extends Command {
         output = `= Command List =\n\n[Use ${settings.prefix}cmd <commandname> for details]\n`;
 
       const sorted = commands.sort(
+        // eslint-disable-next-line no-nested-ternary
         ( p, c ) => ( p.category > c.category ? 1 : p.name > c.name && p.category === c.category ? 1 : -1 )
       );
 

@@ -211,7 +211,7 @@ export default class Feedback {
       const user = await this.verifyUser( jID, message.author.tag ),
         oldMessages = await this.client.db.fetchMessages( gID, 5 );
 
-      if ( !oldMessages.find( ( msg ) => msg.author === mentioned.id ) ) {
+      if ( !oldMessages.find( msg => msg.author === mentioned.id ) ) {
         return;
       }
 

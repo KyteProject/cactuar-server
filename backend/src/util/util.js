@@ -14,7 +14,7 @@ Array.prototype.random = function() {
 };
 
 String.prototype.toProperCase = function() {
-  return this.replace( /([^\W_]+[^\s-]*) */g, ( txt ) => txt.charAt( 0 ).toUpperCase() + txt.substr( 1 ).toLowerCase() );
+  return this.replace( /([^\W_]+[^\s-]*) */g, txt => txt.charAt( 0 ).toUpperCase() + txt.substr( 1 ).toLowerCase() );
 };
 
 Util.wait = require( 'util' ).promisify( setTimeout );

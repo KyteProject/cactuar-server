@@ -248,7 +248,8 @@
 
 		"arrow-parens": [
 			2,
-			"always"
+			"as-needed",
+			{ "requireForBlockBody": true }
 		],
 		"arrow-spacing": 2,
 		"constructor-super": 2,

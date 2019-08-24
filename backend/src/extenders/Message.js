@@ -2,7 +2,7 @@ import { Structures } from 'discord.js';
 
 module.exports = Structures.extend(
   'Message',
-  ( Message ) =>
+  Message =>
     class extends Message {
       constructor( ...args ) {
         super( ...args );
@@ -50,7 +50,7 @@ module.exports = Structures.extend(
 
         return this.channel
           .awaitMessages( filter, { max: 1, time: limit, errors: [ 'time' ] } )
-          .then( ( collected ) => collected.first().content )
+          .then( collected => collected.first().content )
           .catch( () => false );
       }
     }

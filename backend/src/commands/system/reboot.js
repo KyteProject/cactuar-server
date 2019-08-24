@@ -12,7 +12,7 @@ module.exports = class Reboot extends Command {
   }
 
   async run( message ) {
-    await message.channel.send( 'Bot is shutting down...' ).catch( ( err ) => this.client.log.error( err ) );
+    await message.channel.send( 'Bot is shutting down...' ).catch( err => this.client.log.error( err ) );
     process.exit( 1 );
   }
 };
