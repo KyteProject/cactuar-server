@@ -3,7 +3,7 @@
 export default class Config {
   constructor() {
     this.owner = '113226391771717632';
-    this.version = '3.1.0';
+    this.version = '3.1.1';
 
     this.defaultSettings = {
       prefix: '.',
