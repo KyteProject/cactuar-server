@@ -7,7 +7,7 @@ module.exports = Structures.extend(
       constructor( ...args ) {
         super( ...args );
 
-        this.settings = this.guild					? this.client.getGuildSettings( this.guild.id )					: this.client.getGuildSettings();
+        this.settings = this.guild ? this.client.getGuildSettings( this.guild.id ) : this.client.getGuildSettings();
       }
 
       get member() {
