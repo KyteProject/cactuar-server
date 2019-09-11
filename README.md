@@ -5,7 +5,7 @@
 
 Cactuar is a custom chat bot for music production Discord communities. The bot addresses the need for automating the moderation of feedback channels.
 
-The issue is that in channels dedicated to artist feedback many users do not give others feedback, only dropping their tracks and expecting other people to give them feedback. This causes these channels to just be flooded with spam and provide very little value. The bot prevents anyone from sharing their music unless they pass a requirement of providing feedback to others first. It does this by analyzing the messages in the channel and using an algorithm to assign a score, once the threshold has been passed the bot will allow users to post there track, updating records in the process.
+The issue is that in channels dedicated to artist feedback many users do not give others feedback, only dropping their tracks and expecting other people to give them feedback. This causes these channels to just be flooded with spam and provide very little value. The bot prevents anyone from sharing their music unless they pass a requirement of providing feedback to others first. It does this by analysing the messages in the channel and using an algorithm to assign a score, once the threshold has been passed the bot will allow users to post there track, updating records in the process.
 
 There are several other beneficial commands, and an experience/leveling system in order to 'gamify' the process, in the hopes to encourage and reward those who contribute the most.
 
@@ -101,12 +101,13 @@ yarn dev
 
 ## Release History
 
+* 3.1.1
+    * Added 'About' command
 * 3.1.0
     * Fixed role checking.
     * Added Dockerfile.
     * Added feedback blocking system allowing staff to completely block a user from requests.
     * Updated commands descriptions.
-    * Bot responds to being tagged.
 * 3.0.0
     * Rebuilt to be much much cleaner and fully class based.
 * 2.0.0
@@ -118,7 +119,7 @@ yarn dev
 
 Daniel Smith – daniel.smith@ukemi.ninja
 
-Distributed under the XYZ license. See ``LICENSE`` for more information.
+Distributed under the MIT license. See ``LICENSE`` for more information.
 
 [https://github.com/KyteProject/Cactuar](https://github.com/KyteProject/)
 
