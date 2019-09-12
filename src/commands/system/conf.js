@@ -62,7 +62,7 @@ module.exports = class Conf extends Command {
       }
 
       // Channel validity checking
-      if ( key === 'feedback_channel' || key === 'resources_channel' ) {
+      if ( key === 'feedback_channel' ) {
         try {
           value[ 0 ] = await message.verifyChannel( value );
         } catch ( err ) {

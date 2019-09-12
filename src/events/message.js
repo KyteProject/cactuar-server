@@ -95,11 +95,6 @@ module.exports = class extends Event {
       }
     }
 
-    // Handle Resources
-    if ( !message.settings.global_resources || message.channel.id !== message.settings.resources_channel ) {
-      return;
-    }
-
     this.client.log.info( 'beep' );
   }
 

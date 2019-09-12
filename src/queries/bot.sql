@@ -50,8 +50,6 @@ CREATE TABLE "settings" (
   "tokens" bool NOT NULL DEFAULT true,
   "threshold" int2 NOT NULL DEFAULT 5,
   "respond" bool NOT NULL DEFAULT true,
-  "global_resources" bool NOT NULL DEFAULT false,
-  "resources_channel" varchar(255) COLLATE "pg_catalog"."default" DEFAULT 'Insert channel ID'::character varying,
   "response" varchar(255) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'Have you considered giving feedback before makign a request?'::character varying
 )
 ;

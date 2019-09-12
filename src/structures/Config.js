@@ -16,8 +16,6 @@ export default class Config {
       tokens: true, // Enables the token gain use system
       threshold: 5,
       respond: true,
-      global_resources: false,
-      resource_channel: 'Insert channel ID',
       response: 'Have you thought about giving feedback to others before asking for feedback yourself?' // Sets bots response message
     };
 
