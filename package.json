@@ -1,48 +1,48 @@
 {
-  "name": "cactuar-bot",
-  "version": "3.1.1",
-  "description": "Custom music feedback bot for Discord servers",
-  "main": "app.js",
-  "repository": "https://github.com/KyteProject/Cactuar",
-  "author": "Daniel Smith",
-  "license": "private",
-  "private": true,
-  "scripts": {
-    "build": "babel src -d dist",
-    "deploy": "npm run build && node dist/app.js",
-    "dev": "nodemon ./src/app.js --inspect --exec babel-node",
-    "start": "node app.js",
-    "serve": "node dist/app.js",
-    "test": "jest"
-  },
-  "engines": {
-    "node": ">=8"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.4.5",
-    "@babel/plugin-transform-classes": "^7.4.4",
-    "@babel/preset-env": "^7.5.5",
-    "babel-jest": "^24.9.0",
-    "eslint": "^5.15.3",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jest": "^22.15.2",
-    "eslint-plugin-promise": "^4.2.1",
-    "jest": "^24.9.0",
-    "nodemon": "^1.18.10"
-  },
-  "dependencies": {
-    "discord.js": "discordjs/discord.js",
-    "dotenv": "^7.0.0",
-    "fs-nextra": "^0.4.5",
-    "googleapis": "^38.0.0",
-    "moment": "^2.24.0",
-    "moment-duration-format": "^2.2.2",
-    "path": "^0.12.7",
-    "pg": "^7.9.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4",
-    "winston": "^3.2.1"
-  }
+	"name": "cactuar-server",
+	"version": "3.1.1",
+	"description": "Custom music feedback bot for Discord servers",
+	"main": "app.js",
+	"repository": "https://github.com/KyteProject/cactuar-server",
+	"author": "Daniel Smith",
+	"license": "private",
+	"private": true,
+	"scripts": {
+		"build": "babel src -d dist",
+		"deploy": "npm run build && node dist/app.js",
+		"dev": "nodemon ./src/app.js --inspect --exec babel-node",
+		"start": "node app.js",
+		"serve": "node dist/app.js",
+		"test": "jest"
+	},
+	"engines": {
+		"node": ">=8"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.2.3",
+		"@babel/core": "^7.5.5",
+		"@babel/node": "^7.4.5",
+		"@babel/plugin-transform-classes": "^7.4.4",
+		"@babel/preset-env": "^7.5.5",
+		"babel-jest": "^24.9.0",
+		"eslint": "^5.15.3",
+		"eslint-plugin-import": "^2.16.0",
+		"eslint-plugin-jest": "^22.15.2",
+		"eslint-plugin-promise": "^4.2.1",
+		"jest": "^24.9.0",
+		"nodemon": "^1.18.10"
+	},
+	"dependencies": {
+		"discord.js": "discordjs/discord.js",
+		"dotenv": "^7.0.0",
+		"fs-nextra": "^0.4.5",
+		"googleapis": "^38.0.0",
+		"moment": "^2.24.0",
+		"moment-duration-format": "^2.2.2",
+		"path": "^0.12.7",
+		"pg": "^7.9.0",
+		"request": "^2.88.0",
+		"request-promise": "^4.2.4",
+		"winston": "^3.2.1"
+	}
 }

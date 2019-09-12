@@ -13,12 +13,6 @@ module.exports = class About extends Command {
   }
 
   async run( message ) {
-    let map = [];
-
-    this.client.guilds.each( guild =>
-      map.push( `**Name**: ${guild.name} -- **Owner**: ${guild.owner} -- **Members**: ${guild.memberCount}` )
-    );
-
     const embed = new MessageEmbed()
       .setAuthor( 'About', this.client.user.avatarURL() )
       .setDescription(
@@ -30,8 +24,7 @@ module.exports = class About extends Command {
       )
       .setColor( '00d919' )
       .addField( 'Author:', '<@113226391771717632>', true )
-      .addField( 'Website:', 'In development', true )
-      .addField( 'Current Guilds', map );
+      .addField( 'Website:', 'In development', true );
 
     message.channel.send( embed );
   }

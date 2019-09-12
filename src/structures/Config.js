@@ -48,6 +48,10 @@ export default class Config {
         level: 2,
         name: 'Administrator',
         check: ( message ) => {
+          if ( message.member.permissions.has( 'ADMINISTRATOR', true ) ) {
+            return true;
+          }
+
           try {
             const adminRole = message.guild.roles.find(
               role => role.name.toLowerCase() === message.settings.admin_role.toLowerCase()
