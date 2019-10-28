@@ -117,13 +117,7 @@ export default class Feedback {
       let embed = new MessageEmbed();
 
       if ( oldMsg.attachments.size > 0 ) {
-        let files = [];
-
-        oldMsg.attachments.each( ( file ) => {
-          files.push( file );
-        } );
-
-        embed.setDescription( oldMsg.cleanContent ).attachFiles( files );
+        embed.setDescription( oldMsg.cleanContent );
       }
 
       if ( oldMsg.embeds.length > 0 ) {
@@ -138,6 +132,7 @@ export default class Feedback {
         .setAuthor( 'Last Request:', this.client.user.avatarURL() )
         .setColor( '00d919' )
         .setTimestamp( oldMsg.createdAt )
+        .addField( '\u200B', `[🔗 Jump to post](${oldMsg.url})`, true )
         .setFooter( oldMsg.author.username, oldMsg.author.avatarURL() );
 
       if ( type !== 'command' ) {
