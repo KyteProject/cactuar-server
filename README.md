@@ -102,7 +102,9 @@ yarn dev
 ## Release History
 
 * 3.1.1
-    * Added 'About' command
+    * Added 'About' command.
+    * Added link to original feedback message.
+    * Removed embedding attachments to responses in favour of the link.
 * 3.1.0
     * Fixed role checking.
     * Added Dockerfile.

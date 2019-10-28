@@ -15,7 +15,7 @@ module.exports = class Bstat extends Command {
   }
 
   async run( message ) {
-    const duration = moment.duration( this.client.uptime ).format( ' D [d], H [h], m [m], s [s]' ),
+    const duration = moment.duration( this.client.uptime ).format( ' D[d], H[h], m[m], s[s]' ),
       dbSize = await this.client.db.schemaSize(),
       stats = {
         Uptime: duration,
