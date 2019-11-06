@@ -24,7 +24,7 @@ module.exports = class Last extends Command {
     const oldMessages = await this.client.db.fetchMessages( message.guild.id, 5 );
 
     if ( !oldMessages.length ) {
-      return message.channel.send( 'No feedback mesages stored, ask a mod to update.' );
+      return message.channel.send( 'No feedback messages stored, ask a mod to update.' );
     }
 
     if ( action === 'all' ) {

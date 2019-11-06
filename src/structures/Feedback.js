@@ -81,7 +81,7 @@ export default class Feedback {
   }
 
   async verifyMessage( message, input ) {
-    for ( let i = 0; i < input.length; i++ ) {
+    for ( let i = 0; i < input.length + 1; i++ ) {
       try {
         const oldMsg = await message.channel.messages.fetch( input[ i ].msg );
 
@@ -113,33 +113,34 @@ export default class Feedback {
   }
 
   rejectMessage( message, oldMsg, type ) {
+    const oldMessage = oldMsg;
+    let embed = new MessageEmbed();
+
     try {
-      let embed = new MessageEmbed();
-
-      if ( oldMsg.attachments.size > 0 ) {
-        embed.setDescription( oldMsg.cleanContent );
+      if ( oldMessage.attachments.size > 0 ) {
+        embed.setDescription( oldMessage.cleanContent );
       }
 
-      if ( oldMsg.embeds.length > 0 ) {
-        embed = oldMsg.embeds[ 0 ];
+      if ( oldMessage.embeds.length > 0 ) {
+        embed = oldMessage.embeds[ 0 ];
+        embed.fields = [];
       }
 
-      if ( oldMsg.embeds.length === 0 && oldMsg.attachments.size === 0 ) {
-        embed.setDescription( oldMsg.cleanContent );
+      if ( oldMessage.embeds.length === 0 && oldMessage.attachments.size === 0 ) {
+        embed.setDescription( oldMessage.cleanContent );
       }
 
       embed
         .setAuthor( 'Last Request:', this.client.user.avatarURL() )
         .setColor( '00d919' )
-        .setTimestamp( oldMsg.createdAt )
-        .addField( '\u200B', `[🔗 Jump to post](${oldMsg.url})`, true )
-        .setFooter( oldMsg.author.username, oldMsg.author.avatarURL() );
+        .setTimestamp( oldMessage.createdAt )
+        .setFooter( oldMessage.author.username, oldMessage.author.avatarURL() );
+
+      embed.addField( '\u200B', `[🔗 Jump to post](${oldMessage.url})`, true );
 
       if ( type !== 'command' ) {
         return message.reply( `❌ **Feedback Denied!** ❌\n${message.settings.response}`, embed );
       }
-
-      return message.channel.send( embed );
     } catch ( err ) {
       this.client.log.error( err );
 
@@ -147,6 +148,8 @@ export default class Feedback {
         'Feedback has been denied! The previous message cannot be found, ask a mod to update the database.'
       );
     }
+
+    return message.channel.send( embed );
   }
 
   async processRequest( jID, mID, gID, aID, message ) {
