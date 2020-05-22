@@ -246,7 +246,7 @@ export default class Feedback {
       await this.client.db.updateUserSubmission( jID, data );
 
       if (
-        user.keywords < message.settings.threshold &&				data.keywords >= message.settings.threshold
+        user.keywords < message.settings.threshold &&	data.keywords >= message.settings.threshold
       ) {
         message.reply(
           'You can now request feedback! <:cactuar:537604635687518245>'
