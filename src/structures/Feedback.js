@@ -7,6 +7,7 @@ export default class Feedback {
     this.client = client;
     this.urls = linksList;
     this.keywords = keywordList;
+    this.urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[~%/.\w-_]*)?\??(?:[-=&;%@.\w_]*)#?(?:[\w]*))?)/;
   }
 
   isRequest( message ) {
@@ -15,7 +16,9 @@ export default class Feedback {
     let ret;
 
     for ( let i = 0; i < this.urls.length; i++ ) {
-      if ( message.content.match( urlRegex ) && message.cleanContent.includes( this.urls[ i ] ) ) {
+      const link = message.cleanContent.match( this.urlRegex );
+      
+      if ( link[0] && link[0].includes( this.urls[ i ] ) ) {
         return true;
       }
     }
@@ -32,7 +35,7 @@ export default class Feedback {
   }
 
   nextLevel( level ) {
-    const nextPoints = 1 / 4 * Math.floor( level + 300 * Math.pow( 1.5, level / 7 ) );
+    const nextPoints = ( 1 / 4 ) * Math.floor( level + 300 * Math.pow( 1.5, level / 7 ) );
 
     return Math.floor( nextPoints );
   }
@@ -47,11 +50,13 @@ export default class Feedback {
       };
 
     score.points = Math.round(
-      ( score.wordCount * 0.2 + score.charCount / 100 + score.keywords * 9 ) * score.multiplier
+      ( score.wordCount * 0.2 + score.charCount / 100 + score.keywords * 9 ) *				score.multiplier
     );
     score.tokens = score.points >= 300 && message.settings.tokens ? 1 : 0;
 
-    this.client.log.info( `${message.author.tag} Feedback score: ${score.points}` );
+    this.client.log.info(
+      `${message.author.tag} Feedback score: ${score.points}`
+    );
     return score;
   }
 
@@ -140,7 +145,10 @@ export default class Feedback {
       embed.addField( '\u200B', `[🔗 Jump to post](${oldMessage.url})`, true );
 
       if ( type !== 'command' ) {
-        return message.reply( `❌ **Feedback Denied!** ❌\n${message.settings.response}`, embed );
+        return message.reply(
+          `❌ **Feedback Denied!** ❌\n${message.settings.response}`,
+          embed
+        );
       }
     } catch ( err ) {
       this.client.log.error( err );
@@ -228,7 +236,9 @@ export default class Feedback {
         data.level = user.level + 1;
         data.next = user.next + this.nextLevel( data.level );
 
-        message.channel.send( `${message.author.username} just reached level ${data.level}! 🎵` );
+        message.channel.send(
+          `${message.author.username} just reached level ${data.level}! 🎵`
+        );
       } else {
         data.level = user.level;
         data.next = user.next;
@@ -236,8 +246,12 @@ export default class Feedback {
 
       await this.client.db.updateUserSubmission( jID, data );
 
-      if ( user.keywords < message.settings.threshold && data.keywords >= message.settings.threshold ) {
-        message.reply( 'You can now request feedback! <:cactuar:537604635687518245>' );
+      if (
+        user.keywords < message.settings.threshold &&	data.keywords >= message.settings.threshold
+      ) {
+        message.reply(
+          'You can now request feedback! <:cactuar:537604635687518245>'
+        );
       }
 
       return;
