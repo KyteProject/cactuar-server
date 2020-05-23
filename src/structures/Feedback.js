@@ -11,10 +11,11 @@ export default class Feedback {
 
   isRequest( message ) {
     const fileRegex = /\.(mp3|wav|wma|flac|ogg|m4a|mp4|m4b|aac)/gim;
+    const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
     let ret;
 
     for ( let i = 0; i < this.urls.length; i++ ) {
-      if ( message.cleanContent.includes( this.urls[ i ] ) ) {
+      if ( message.content.match( urlRegex ) && message.cleanContent.includes( this.urls[ i ] ) ) {
         return true;
       }
     }

@@ -94,8 +94,6 @@ module.exports = class extends Event {
         return this.client.log.error( `Feedback Submission fault: ${err}` );
       }
     }
-
-    this.client.log.info( 'beep' );
   }
 
   async runCommand( message, cmd, args, level ) {

@@ -1,15 +1,12 @@
 # Build/Compile Babel
-FROM node AS build
-RUN mkdir -p /var/node/
-ADD . /var/node/
+FROM node:12-alpine
+RUN mkdir -p /var/node/  && chown -R node:node /var/node/
 WORKDIR /var/node
+COPY package*.json ./
+USER node
 RUN npm install
+COPY --chown=node:node . .
 RUN npm run build
-
-# Multi-stage Container
-FROM keymetrics/pm2:latest-alpine
-ARG VERSION=V3.1.0
-LABEL org.label-schema.version=$VERSION
 
 # Env 
 ENV NODE_ENV="dev"
@@ -37,20 +34,4 @@ ENV LASTFM=""
 ENV YOUTUBE=""
 ENV FREESOUND=""
 
-# Copy build files
-WORKDIR /var/node
-COPY --from=build /var/node/dist .
-COPY --from=build /var/node/package.json .
-COPY --from=build /var/node/pm2.json .
-
-# Install git
-RUN apk update && \
-  apk add --update git
-
-# Install app dependencies
-RUN npm install --production
-
-# Show current folder structure in logs
-RUN ls -al -R
-
-CMD [ "pm2-runtime", "start", "pm2.json" ]
+CMD [ "node", "./dist/app.js" ]
