@@ -26,7 +26,7 @@ module.exports = class Say extends Command {
         args.shift();
       }
 
-      const channel = message.guild.channels.get( channelid );
+      const channel = message.guild.channels.cache.get( channelid );
 
       channel.startTyping();
       setTimeout( () => {

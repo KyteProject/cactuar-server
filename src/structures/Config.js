@@ -30,11 +30,11 @@ export default class Config {
         name: 'Moderator',
         check: ( message ) => {
           try {
-            const modRole = message.guild.roles.find(
+            const modRole = message.guild.roles.cache.find(
               role => role.name.toLowerCase() === message.settings.mod_role.toLowerCase()
             );
 
-            if ( modRole && message.member.roles.has( modRole.id ) ) {
+            if ( modRole && message.member.roles.cache.has( modRole.id ) ) {
               return true;
             }
           } catch ( err ) {
@@ -46,16 +46,16 @@ export default class Config {
         level: 2,
         name: 'Administrator',
         check: ( message ) => {
-          if ( message.member.permissions.has( 'ADMINISTRATOR', true ) ) {
+          if ( message.member.permissions.cache.has( 'ADMINISTRATOR', true ) ) {
             return true;
           }
 
           try {
-            const adminRole = message.guild.roles.find(
+            const adminRole = message.guild.roles.cache.find(
               role => role.name.toLowerCase() === message.settings.admin_role.toLowerCase()
             );
 
-            return adminRole && message.member.roles.has( adminRole.id );
+            return adminRole && message.member.roles.cache.has( adminRole.id );
           } catch ( err ) {
             return false;
           }

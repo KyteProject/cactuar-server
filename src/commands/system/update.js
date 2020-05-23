@@ -20,7 +20,7 @@ module.exports = class Update extends Command {
         const channelid = await message.verifyChannel( guild.feedback_channel );
 
         if ( channelid ) {
-          const channel = await message.guild.channels.get( channelid );
+          const channel = await message.guild.channels.cache.get( channelid );
 
           setTimeout( () => {
             channel.send( args.join( ' ' ) );

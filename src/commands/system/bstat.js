@@ -19,9 +19,9 @@ module.exports = class Bstat extends Command {
       dbSize = await this.client.db.schemaSize(),
       stats = {
         Uptime: duration,
-        Users: this.client.users.size.toLocaleString(),
-        Servers: this.client.guilds.size.toLocaleString(),
-        Channels: this.client.channels.size.toLocaleString(),
+        Users: this.client.users.cache.size.toLocaleString(),
+        Servers: this.client.guilds.cache.size.toLocaleString(),
+        Channels: this.client.channels.cache.size.toLocaleString(),
         Commands: this.client.commands.size.toLocaleString(),
         Bot: `v${this.client.config.version}`,
         Discord: `v${version}`,
