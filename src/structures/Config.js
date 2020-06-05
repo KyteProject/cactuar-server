@@ -46,7 +46,7 @@ export default class Config {
         level: 2,
         name: 'Administrator',
         check: ( message ) => {
-          if ( message.member.permissions.cache.has( 'ADMINISTRATOR', true ) ) {
+          if ( message.member.permissions.has( 'ADMINISTRATOR', true ) ) {
             return true;
           }
 
