@@ -29,11 +29,10 @@
 		"eslint-plugin-import": "^2.16.0",
 		"eslint-plugin-jest": "^22.15.2",
 		"eslint-plugin-promise": "^4.2.1",
-		"jest": "^24.9.0",
 		"nodemon": "^1.18.10"
 	},
 	"dependencies": {
-		"discord.js": "^12.2.0",
+		"discord.js": "^12.5.3",
 		"dotenv": "^7.0.0",
 		"fs-nextra": "^0.4.5",
 		"googleapis": "^39.1.0",
